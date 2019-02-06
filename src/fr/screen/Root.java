@@ -75,8 +75,6 @@ public class Root extends JPanel implements Runnable {
 
 	public void closeSocket() {
 		try {
-			sOut.writeObject(null);
-			sOut.reset();
 			System.out.println("FIN");
 			if (socket != null)
 				socket.close();
@@ -115,9 +113,9 @@ public class Root extends JPanel implements Runnable {
 	public void run() {
 		try {
 			List<Drawable> ld;
-			;
+
 			while (!Thread.currentThread().isInterrupted()) {
-				ld = (List<Drawable>) sIn.readObject();
+				ld = (List<Drawable>) sIn.readUnshared();
 				synchronized (transfer) {
 					listD = new ArrayList<>(ld);
 				}

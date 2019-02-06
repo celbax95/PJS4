@@ -69,16 +69,11 @@ public class Service implements Runnable {
 				sOut.writeUnshared(a.getDrawables());
 				sOut.flush();
 				sOut.reset();
-				List<Integer> keys = (List<Integer>) sIn.readObject();
-				if (keys == null) {
-					s.close(this);
-					socket.close();
-					thread.interrupt();
-				} else {
-					a.managePlayer(myPlayer, keys);
-				}
+				List<Integer> keys = (List<Integer>) sIn.readUnshared();
+				a.managePlayer(myPlayer, keys);
 			}
 		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
 			try {
 				socket.close();
 			} catch (IOException e1) {

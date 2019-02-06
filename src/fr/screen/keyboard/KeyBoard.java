@@ -30,7 +30,7 @@ public class KeyBoard implements KeyListener {
 	}
 
 	public static List<Integer> getKeys() {
-		return keys;
+		return new LinkedList<>(keys);
 	}
 
 	public static boolean isPressed() {

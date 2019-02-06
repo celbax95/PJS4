@@ -4,7 +4,7 @@ import javax.swing.JPanel;
 
 public class Repainter implements Runnable {
 
-	private static final int PAUSE = 10;
+	private static final int PAUSE = 17;
 
 	private JPanel jp;
 

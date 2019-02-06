@@ -10,40 +10,47 @@ import fr.screen.Drawable;
 
 public class Ball implements Drawable, Serializable {
 	private static final long serialVersionUID = 1L;
-	private int x, y, r, spd;
+	private int r, spd;
+	private double x, y;
+	private int mx, my;
 	private Color c;
 
 	public Ball(Ball b) {
-		this.x = b.x;
-		this.y = b.y;
-		this.r = b.r;
-		this.c = b.c;
-		this.spd = b.spd;
+		this(b.x, b.y, b.r, b.spd, b.c);
 	}
 
-	public Ball(int x, int y, int r, int spd, Color c) {
+	public Ball(double x, double y, int r, int spd, Color c) {
 		this.x = x;
 		this.y = y;
 		this.r = r;
 		this.c = c;
 		this.spd = spd;
+		this.mx = 0;
+		this.my = 0;
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(c);
-		g.fillOval(x, y, r, r);
+		g.fillOval((int) Math.round(x), (int) Math.round(y), r, r);
 	}
 
-	public void move(List<Integer> keys) {
+	public void move(double t) {
+		x = x + (mx * spd * t);
+		y = y + (my * spd * t);
+		mx = 0;
+		my = 0;
+	}
+
+	public void setMove(List<Integer> keys) {
 		if (keys.contains(KeyEvent.VK_Z))
-			this.y -= spd;
+			this.my = (this.my > 0 ? 0 : -1);
 		if (keys.contains(KeyEvent.VK_S))
-			this.y += spd;
+			this.my = (this.my < 0 ? 0 : 1);
 		if (keys.contains(KeyEvent.VK_Q))
-			this.x -= spd;
+			this.mx = (this.mx > 0 ? 0 : -1);
 		if (keys.contains(KeyEvent.VK_D))
-			this.x += spd;
+			this.mx = (this.mx < 0 ? 0 : 1);
 	}
 
 	@Override

@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.Random;
 
 import fr.screen.Drawable;
+import fr.util.time.Timer;
 
-public class Application {
+public class Application implements Runnable {
 	private final static int spawnPlaces[][] = { { 100, 100 }, { 500, 500 }, { 100, 500 }, { 500, 100 },
 			{ 250, 250 }, };
 
@@ -17,9 +18,13 @@ public class Application {
 
 	private List<Drawable> listD;
 
+	private Timer timer;
+
 	public Application(int width, int height) {
 		players = new HashMap<>();
 		listD = new ArrayList<>();
+		timer = new Timer();
+		(new Thread(this)).start();
 	}
 
 	public int addPlayer(Color c) {
@@ -28,7 +33,7 @@ public class Application {
 			id++;
 
 		int sp[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
-		players.put(id, new Ball(sp[0], sp[1], 50, 10, c));
+		players.put(id, new Ball(sp[0], sp[1], 50, 1000, c));
 		listD.add(players.get(id));
 		return id;
 	}
@@ -38,6 +43,23 @@ public class Application {
 	}
 
 	public void managePlayer(int id, List<Integer> keys) {
-		players.get(id).move(keys);
+		players.get(id).setMove(keys);
+	}
+
+	@Override
+	public void run() {
+		while (!Thread.currentThread().isInterrupted()) {
+
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			timer.tick();
+			for (Ball b : players.values()) {
+				b.move(timer.lastTickS());
+			}
+		}
+
 	}
 }
