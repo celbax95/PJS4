@@ -4,7 +4,9 @@ import javax.swing.JPanel;
 
 public class Repainter implements Runnable {
 
-	private static final int PAUSE = 17;
+	private static final int FPS30 = 33;
+	@SuppressWarnings("unused")
+	private static final int FPS60 = 17;
 
 	private JPanel japanel;
 
@@ -18,7 +20,7 @@ public class Repainter implements Runnable {
 		while (true) {
 			japanel.repaint();
 			try {
-				Thread.sleep(PAUSE);
+				Thread.sleep(FPS30);
 			} catch (InterruptedException e) {
 			}
 		}

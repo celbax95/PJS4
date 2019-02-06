@@ -1,23 +1,27 @@
 package fr.application;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Vector;
 
 import fr.drawables.Character;
 import fr.drawables.Drawable;
+import fr.map.GameMap;
 import fr.util.time.Timer;
 
 public class Application implements Runnable {
-	private final static int spawnPlaces[][] = { { 100, 100 }, { 500, 500 }, { 100, 500 }, { 500, 100 },
-			{ 250, 250 }, };
+	private final static int spawnPlaces[][] = { { 120, 120 } };
+
+	private static final int TILE_SIZE = 120;
 
 	private Map<Integer, Character> players;
 
 	private List<Drawable> drawables;
+
+	private GameMap map;
 
 	private Timer timerApploop;
 
@@ -25,9 +29,10 @@ public class Application implements Runnable {
 
 	public Application(int width, int height) {
 		players = new HashMap<>();
-		drawables = new ArrayList<>();
+		drawables = new Vector<>();
 		timerApploop = new Timer();
 		myThread = new Thread(this);
+		map = new GameMap("/maps/1.bmap", TILE_SIZE);
 	}
 
 	public int addPlayer(Color c) {
@@ -46,8 +51,18 @@ public class Application implements Runnable {
 		return id;
 	}
 
+	public void deletePlayer(int id) {
+		Character c = players.get(id);
+		players.remove(id);
+		drawables.remove(c);
+	}
+
 	public List<Drawable> getDrawables() {
 		return drawables;
+	}
+
+	public GameMap getMap() {
+		return map;
 	}
 
 	public void managePlayer(int id, List<Integer> cliKeys) {
@@ -56,17 +71,19 @@ public class Application implements Runnable {
 
 	@Override
 	public void run() {
+		timerApploop.tick();
 		while (!Thread.currentThread().isInterrupted()) {
 
+			for (Character b : players.values()) {
+				b.manage(this, timerApploop.lastTickS());
+			}
+
+			// wait
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
 			timerApploop.tick();
-			for (Character b : players.values()) {
-				b.move(timerApploop.lastTickS());
-			}
 		}
 	}
 

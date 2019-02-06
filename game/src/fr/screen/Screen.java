@@ -14,6 +14,20 @@ public class Screen extends JFrame {
 
 	private static Screen single = null;
 
+	public static Screen getInstance() {
+		return single;
+	}
+
+	public static Screen getInstance(AppliScreen appScreen, int width, int height, int marginX, int marginY,
+			int margin) {
+		if (single == null) {
+			single = new Screen(appScreen, width, height, marginX, marginY, margin);
+			return single;
+		} else
+			return single;
+	}
+
+	@SuppressWarnings("unused")
 	private MainJPanel mainJpanel;
 
 	private Screen(AppliScreen appScreen, int width, int height, int marginX, int marginY, int margin) {
@@ -41,18 +55,5 @@ public class Screen extends JFrame {
 		jp.add((mainJpanel = MainJPanel.getInstance(this, appScreen, width, height, margin)));
 		this.setContentPane(jp);
 		this.setVisible(true);
-	}
-
-	public static Screen getInstance() {
-		return single;
-	}
-
-	public static Screen getInstance(AppliScreen appScreen, int width, int height, int marginX, int marginY,
-			int margin) {
-		if (single == null) {
-			single = new Screen(appScreen, width, height, marginX, marginY, margin);
-			return single;
-		} else
-			return single;
 	}
 }

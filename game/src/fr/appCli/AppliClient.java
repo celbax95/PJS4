@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.drawables.Drawable;
+import fr.map.GameMap;
+import fr.map.MapTile;
 import fr.screen.AppliScreen;
 import fr.screen.EndApp;
 import fr.screen.keyboard.KeyBoard;
@@ -24,6 +26,8 @@ public class AppliClient implements AppliScreen, Runnable {
 	private Object transfer;
 	private Socket socket;
 	private Thread myThread;
+
+	GameMap map;
 
 	public AppliClient(String name, String ip, int port) {
 		this.transfer = new Object();
@@ -76,6 +80,16 @@ public class AppliClient implements AppliScreen, Runnable {
 		synchronized (transfer) {
 			ld = listD;
 		}
+		if (map != null) {
+			MapTile[][] mt = map.getMap();
+			if (mt != null) {
+				for (MapTile[] mapTiles : mt) {
+					for (MapTile mapTile : mapTiles) {
+						mapTile.draw(g);
+					}
+				}
+			}
+		}
 		if (listD != null) {
 			for (Drawable drawable : ld) {
 				drawable.draw(g);
@@ -100,6 +114,9 @@ public class AppliClient implements AppliScreen, Runnable {
 			List<Drawable> ld;
 			ObjectOutputStream sOut = new ObjectOutputStream((socket.getOutputStream()));
 			ObjectInputStream sIn = new ObjectInputStream((socket.getInputStream()));
+
+			map = (GameMap) sIn.readObject();
+
 			while (!Thread.currentThread().isInterrupted()) {
 				ld = (List<Drawable>) sIn.readUnshared();
 				synchronized (transfer) {
@@ -108,10 +125,6 @@ public class AppliClient implements AppliScreen, Runnable {
 				sOut.writeUnshared(KeyBoard.getKeys());
 				sOut.flush();
 				sOut.reset();
-				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-				}
 			}
 		} catch (IOException e) {
 			// e.printStackTrace();

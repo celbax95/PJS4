@@ -15,6 +15,7 @@ public class Server implements Runnable {
 
 	private Application application;
 
+	@SuppressWarnings("unused")
 	private Server() {
 	}
 
@@ -58,7 +59,7 @@ public class Server implements Runnable {
 				System.out.println("Connecte !");
 			} catch (IOException e) {
 				System.err.println("Serveur ferme");
-				//e.printStackTrace();
+				// e.printStackTrace();
 			}
 			if (socket != null) {
 				if (first == null)

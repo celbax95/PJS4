@@ -11,10 +11,21 @@ public class MainJPanel extends JPanel {
 
 	private static MainJPanel single = null;
 
+	public static MainJPanel getInstance() {
+		return single;
+	}
+
+	public static MainJPanel getInstance(Screen screen, AppliScreen appScreen, int width, int height, int margin) {
+		if (single == null) {
+			single = new MainJPanel(screen, appScreen, width, height, margin);
+			return single;
+		} else
+			return single;
+	}
+
 	private int WIDTH, HEIGHT;
 
 	private Screen screen;
-
 	private AppliScreen appScreen;
 
 	private MainJPanel(Screen screen, AppliScreen appScreen, int width, int height, int margin) {
@@ -23,16 +34,18 @@ public class MainJPanel extends JPanel {
 		WIDTH = width;
 		HEIGHT = height;
 		this.setLocation(margin, margin);
-		this.setSize(width, height);
+		this.setSize(WIDTH, HEIGHT);
 
 		(this.appScreen = appScreen).start();
 
 		Thread repainter = new Thread(new Repainter(this));
 		repainter.start();
 	}
+
 	public void closeScr() {
 		screen.dispatchEvent(new WindowEvent(screen, WindowEvent.WINDOW_CLOSING));
 	}
+
 	@Override
 	public void paintComponent(Graphics g2) {
 		super.paintComponent(g2);
@@ -44,17 +57,5 @@ public class MainJPanel extends JPanel {
 			System.err.println(e.getMessage());
 			closeScr();
 		}
-	}
-
-	public static MainJPanel getInstance() {
-		return single;
-	}
-
-	public static MainJPanel getInstance(Screen screen, AppliScreen appScreen, int width, int height, int margin) {
-		if (single == null) {
-			single = new MainJPanel(screen, appScreen, width, height, margin);
-			return single;
-		} else
-			return single;
 	}
 }

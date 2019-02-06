@@ -18,12 +18,14 @@ public class Service implements Runnable {
 
 	private Thread myThread;
 
+	@SuppressWarnings("unused")
 	private Server server;
 
 	private Application application;
 
 	private int myPlayer;
 
+	@SuppressWarnings("unused")
 	private Service() {
 	}
 
@@ -57,6 +59,10 @@ public class Service implements Runnable {
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 
+			sOut.writeObject(application.getMap());
+			sOut.flush();
+			sOut.reset();
+
 			while (!Thread.currentThread().isInterrupted()) {
 				sOut.writeUnshared(application.getDrawables());
 				sOut.flush();
@@ -71,6 +77,7 @@ public class Service implements Runnable {
 			} catch (IOException e1) {
 			}
 			myThread.interrupt();
+			application.deletePlayer(myPlayer);
 			System.err.println("Service termine");
 		}
 	}
