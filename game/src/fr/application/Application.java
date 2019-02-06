@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import fr.drawables.Ball;
+import fr.drawables.Character;
 import fr.drawables.Drawable;
 import fr.util.time.Timer;
 
@@ -15,7 +15,7 @@ public class Application implements Runnable {
 	private final static int spawnPlaces[][] = { { 100, 100 }, { 500, 500 }, { 100, 500 }, { 500, 100 },
 			{ 250, 250 }, };
 
-	private Map<Integer, Ball> players;
+	private Map<Integer, Character> players;
 
 	private List<Drawable> drawables;
 
@@ -35,13 +35,13 @@ public class Application implements Runnable {
 		while (players.containsKey(id))
 			id++;
 
-		double spd = 1000;
+		int spd = 500;
 
 		int sp[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
 		if (players.size() == 0)
-			players.put(id, new Ball(sp[0], sp[1], 50, 1000, c));
+			players.put(id, new Character(sp[0], sp[1], spd));
 		else
-			players.put(id, new Ball(sp[0], sp[1], 50, 1000, c));
+			players.put(id, new Character(sp[0], sp[1], spd));
 		drawables.add(players.get(id));
 		return id;
 	}
@@ -64,8 +64,7 @@ public class Application implements Runnable {
 				e.printStackTrace();
 			}
 			timerApploop.tick();
-			System.out.println(timerApploop.lastTickS());
-			for (Ball b : players.values()) {
+			for (Character b : players.values()) {
 				b.move(timerApploop.lastTickS());
 			}
 		}

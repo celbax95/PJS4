@@ -4,13 +4,6 @@ public class PointCalc {
 	private PointCalc() {
 	};
 
-	public double getAngle(Point p) {
-		double a = Math.acos(p.x);
-		if (p.y < 0)
-			a *= -1;
-		return (a + Math.PI * 2) % (Math.PI * 2);
-	}
-
 	public static Point add(Point p1, double p2) {
 		return new Point(p1.x + p2, p1.y + p2);
 	}
@@ -34,6 +27,13 @@ public class PointCalc {
 
 	public static Point div(Point p1, Point p2) {
 		return new Point(p1.x / p2.x, p1.y / p2.y);
+	}
+
+	public static double getAngle(Point p) {
+		double a = Math.acos(p.x);
+		if (p.y < 0)
+			a *= -1;
+		return (a + Math.PI * 2) % (Math.PI * 2);
 	}
 
 	public static Point getNormalized(Point p) {

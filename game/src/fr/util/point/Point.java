@@ -1,6 +1,9 @@
 package fr.util.point;
 
-public class Point {
+import java.io.Serializable;
+
+public class Point implements Serializable {
+	private static final long serialVersionUID = 1L;
 	public double x;
 	public double y;
 
@@ -40,6 +43,13 @@ public class Point {
 		return true;
 	}
 
+	public double getAngle() {
+		double a = Math.acos(x);
+		if (y < 0)
+			a *= -1;
+		return (a + Math.PI * 2) % (Math.PI * 2);
+	}
+
 	public int getIX() {
 		return (int) x;
 	}
@@ -75,6 +85,14 @@ public class Point {
 	public void move(double x, double y) {
 		this.x = x;
 		this.y = y;
+	}
+
+	public void normalize() {
+		double tmp = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+		if (tmp != 0) {
+			x /= tmp;
+			y /= tmp;
+		}
 	}
 
 	public void setLocation(double x, double y) {
