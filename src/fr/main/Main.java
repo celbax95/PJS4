@@ -31,7 +31,7 @@ public class Main {
 				(new Serveur(5000, WIDTH, HEIGHT)).start();
 				Screen.create(WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T, null);
 			} else if (c == 2) {
-				String ip = "localhost"; // sc.next();
+				String ip = sc.next();
 				Screen.create(WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T, ip);
 
 			} else {

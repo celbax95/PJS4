@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -16,27 +17,21 @@ import fr.screen.keyboard.KeyBoard;
 import fr.util.time.Timer;
 
 @SuppressWarnings("serial")
-public class Root extends JPanel {
+public class Root extends JPanel implements Runnable {
 
 	private static Root single;
 
 	private static int WIDTH, HEIGHT;
 
-	public static Root create(Screen scr, int w, int h, int m, String ip) {
-		if (single == null) {
-			single = new Root(scr, w, h, m, ip);
-			return single;
-		} else
-			return null;
-	}
-
 	private Socket socket;
 
 	private Screen scr;
 
-	private List<Drawable> listD;
-	private ObjectOutputStream sOut;
+	private Object transfer;
 
+	private List<Drawable> listD;
+
+	private ObjectOutputStream sOut;
 	private ObjectInputStream sIn;
 
 	Timer t;
@@ -50,9 +45,16 @@ public class Root extends JPanel {
 		this.setSize(w, h);
 
 		t = new Timer();
+
 		if (ip == null)
 			ip = "localhost";
-		socket = connexion(ip, 5000);
+
+		if ((socket = connexion(ip, 5000)) == null)
+			closeScr();
+
+		transfer = new Object();
+		listD = new ArrayList<>();
+
 		try {
 			sOut = new ObjectOutputStream((socket.getOutputStream()));
 			sIn = new ObjectInputStream((socket.getInputStream()));
@@ -62,6 +64,8 @@ public class Root extends JPanel {
 
 		Thread repainter = new Thread(new Repainter(this));
 		repainter.start();
+
+		(new Thread(this)).start();
 
 	}
 
@@ -91,28 +95,51 @@ public class Root extends JPanel {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void paintComponent(Graphics g2) {
 		super.paintComponent(g2);
 		Graphics2D g = (Graphics2D) g2;
 
-		if (socket == null) {
-			closeScr();
-		}
-
-		try {
-			listD = (List<Drawable>) sIn.readObject();
-			this.setBackground(new Color(240, 240, 240));
-			for (Drawable drawable : listD) {
-				drawable.draw(g);
+		this.setBackground(new Color(240, 240, 240));
+		synchronized (transfer) {
+			if (listD != null) {
+				for (Drawable drawable : listD) {
+					drawable.draw(g);
+				}
 			}
-			sOut.writeUnshared(KeyBoard.getKeys());
-
-		} catch (IOException | ClassNotFoundException e) {
-			System.out.println("Tu as ete kick. (Serveur ferme)");
-			// e.printStackTrace();
-			closeScr();
 		}
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public void run() {
+		try {
+			List<Drawable> ld;
+			;
+			while (!Thread.currentThread().isInterrupted()) {
+				ld = (List<Drawable>) sIn.readObject();
+				synchronized (transfer) {
+					listD = new ArrayList<>(ld);
+				}
+				sOut.writeUnshared(KeyBoard.getKeys());
+				sOut.flush();
+				sOut.reset();
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static Root create(Screen scr, int w, int h, int m, String ip) {
+		if (single == null) {
+			single = new Root(scr, w, h, m, ip);
+			return single;
+		} else
+			return null;
 	}
 }
