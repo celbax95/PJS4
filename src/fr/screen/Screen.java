@@ -12,20 +12,19 @@ import fr.screen.keyboard.KeyBoard;
 @SuppressWarnings("serial")
 public class Screen extends JFrame {
 
-	private static Screen single;
+	private static Screen single = null;
 
 	private Root r;
 
-	private Screen(int w, int h, int mx, int my, int m, String ip) {
-		this.setTitle("DefaultName");
+	private Screen(AppliScreen appScr, int w, int h, int mx, int my, int m) {
+		this.setTitle(appScr.getName());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				r.closeSocket();
 				super.windowClosing(e);
+				appScr.close();
 			}
-
 		});
 		this.setResizable(false);
 		this.setSize(mx + w + m * 2, my + h + m * 2);
@@ -39,16 +38,20 @@ public class Screen extends JFrame {
 		JPanel jp = new JPanel();
 		jp.setLayout(null);
 		jp.setBackground(Color.black);
-		jp.add((r = Root.create(this, w, h, m, ip)));
+		jp.add((r = Root.getInstance(this, appScr, w, h, m)));
 		this.setContentPane(jp);
 		this.setVisible(true);
 	}
 
-	public static Screen create(int w, int h, int mx, int my, int m, String ip) {
+	public static Screen getInstance() {
+		return single;
+	}
+
+	public static Screen getInstance(AppliScreen appScr, int w, int h, int mx, int my, int m) {
 		if (single == null) {
-			single = new Screen(w, h, mx, my, m, ip);
+			single = new Screen(appScr, w, h, mx, my, m);
 			return single;
 		} else
-			return null;
+			return single;
 	}
 }

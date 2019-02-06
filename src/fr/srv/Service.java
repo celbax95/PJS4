@@ -11,6 +11,8 @@ import java.net.SocketException;
 import java.util.List;
 import java.util.Random;
 
+import fr.application.Application;
+
 public class Service implements Runnable {
 
 	private Socket socket;
@@ -73,12 +75,13 @@ public class Service implements Runnable {
 				a.managePlayer(myPlayer, keys);
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			try {
 				socket.close();
 			} catch (IOException e1) {
 			}
 			thread.interrupt();
+			System.err.println("Service termine");
 		}
 	}
 

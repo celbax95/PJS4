@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import fr.application.Application;
+
 public class Serveur implements Runnable {
 
 	private ServerSocket serveur;
