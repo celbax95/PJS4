@@ -16,7 +16,7 @@ public class Main {
 		Scale.setScale(1);
 	}
 
-	private static final String VERSION = "0.1.0"; // beta=0.version.sousVersion
+	private static final String VERSION = "0.1.1"; // beta=0.version.sousVersion
 
 	private static final int MARGE_H = 35;
 	private static final int MARGE_T = 2;

@@ -11,10 +11,11 @@ import fr.drawables.Character;
 import fr.drawables.Drawable;
 import fr.drawables.Manageable;
 import fr.map.GameMap;
+import fr.scale.Scale;
 import fr.util.time.Timer;
 
 public class Application implements Runnable {
-	private final static int spawnPlaces[][] = { { 120, 120 } };
+	private final static int spawnPlaces[][] = { { (int) (120 * Scale.getScale()), (int) (120 * Scale.getScale()) } };
 
 	private Map<Integer, Character> players;
 
@@ -53,9 +54,9 @@ public class Application implements Runnable {
 
 		int sp[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
 		if (players.size() == 0)
-			players.put(id, new Character(sp[0], sp[1], spd));
+			players.put(id, new Character(sp[0], sp[1], 900, spd));
 		else
-			players.put(id, new Character(sp[0], sp[1], spd));
+			players.put(id, new Character(sp[0], sp[1], 900, spd));
 		drawables.add(players.get(id));
 		manageables.add(players.get(id));
 		return id;

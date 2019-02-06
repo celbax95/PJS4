@@ -14,11 +14,12 @@ import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.scale.Scale;
 import fr.util.point.Point;
+import fr.util.time.Cooldown;
 
 public class Character implements Drawable, Serializable, Manageable {
 	private static final long serialVersionUID = 1L;
 	private static final int DEFAULT_SIZE = 110;
-	private static final int collideMargin = 8;
+	private static final int collideMargin = (int) (8 * Scale.getScale());
 
 	private static int SIZE = (int) (DEFAULT_SIZE * Scale.getScale());
 
@@ -37,22 +38,32 @@ public class Character implements Drawable, Serializable, Manageable {
 
 	private int step;
 
+	private Cooldown bombCoolDown;
+
 	private Point pos;
 	private Point mouv;
 
 	private Bomb b;
 
-	public Character(Character b) {
-		this(b.pos.x, b.pos.y, b.speed);
+	public Character(Character c) {
+		super();
+		this.speed = c.speed;
+		this.angle = c.angle;
+		this.step = c.step;
+		this.bombCoolDown = c.bombCoolDown;
+		this.pos = c.pos;
+		this.mouv = c.mouv;
+		this.b = c.b;
 	}
 
-	public Character(double x, double y, int speed) {
+	public Character(double x, double y, int bombCoolDown, int speed) {
 		b = new Bomb(0, 0, -1, 1, 0);
 		pos = new Point(x, y);
-		this.speed = speed;
+		this.speed = (int) (speed * Scale.getScale());
 		mouv = new Point(0, 0);
 		angle = 0;
 		step = 0;
+		this.bombCoolDown = new Cooldown(bombCoolDown);
 	}
 
 	public void actions(Application a, List<Integer> keys) {
@@ -74,12 +85,15 @@ public class Character implements Drawable, Serializable, Manageable {
 
 	public void dropBomb(Application a, List<Integer> keys) {
 		if (keys.contains(KeyEvent.VK_R)) {
-			Bomb ab = b.clone();
-			Point t = a.getMap().getTileFor(pos.x, pos.y);
-			ab.setTile(t.getIX(), t.getIY(), 120);
-			a.addDrawable(ab);
-			a.addManageable(ab);
-			ab.start();
+			if (bombCoolDown.resetOnDone()) {
+				Bomb ab = b.clone();
+				Point t = getCenter(); // tmp
+				t = a.getMap().getTileFor(t.x, t.y);
+				ab.setTile(t.getIX(), t.getIY(), 120);
+				a.addDrawable(ab);
+				a.addManageable(ab);
+				ab.start();
+			}
 		}
 	}
 
