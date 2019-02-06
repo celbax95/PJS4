@@ -17,15 +17,17 @@ public class Application implements Runnable {
 
 	private Map<Integer, Ball> players;
 
-	private List<Drawable> listD;
+	private List<Drawable> drawables;
 
-	private Timer timer;
+	private Timer timerApploop;
+
+	private Thread myThread;
 
 	public Application(int width, int height) {
 		players = new HashMap<>();
-		listD = new ArrayList<>();
-		timer = new Timer();
-		(new Thread(this)).start();
+		drawables = new ArrayList<>();
+		timerApploop = new Timer();
+		myThread = new Thread(this);
 	}
 
 	public int addPlayer(Color c) {
@@ -33,18 +35,23 @@ public class Application implements Runnable {
 		while (players.containsKey(id))
 			id++;
 
+		double spd = 1000;
+
 		int sp[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
-		players.put(id, new Ball(sp[0], sp[1], 50, 1000, c));
-		listD.add(players.get(id));
+		if (players.size() == 0)
+			players.put(id, new Ball(sp[0], sp[1], 50, 1000, c));
+		else
+			players.put(id, new Ball(sp[0], sp[1], 50, 1000, c));
+		drawables.add(players.get(id));
 		return id;
 	}
 
 	public List<Drawable> getDrawables() {
-		return listD;
+		return drawables;
 	}
 
-	public void managePlayer(int id, List<Integer> keys) {
-		players.get(id).setMove(keys);
+	public void managePlayer(int id, List<Integer> cliKeys) {
+		players.get(id).setMove(cliKeys);
 	}
 
 	@Override
@@ -56,11 +63,15 @@ public class Application implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			timer.tick();
+			timerApploop.tick();
+			System.out.println(timerApploop.lastTickS());
 			for (Ball b : players.values()) {
-				b.move(timer.lastTickS());
+				b.move(timerApploop.lastTickS());
 			}
 		}
+	}
 
+	public void start() {
+		myThread.start();
 	}
 }

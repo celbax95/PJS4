@@ -14,20 +14,20 @@ public class Screen extends JFrame {
 
 	private static Screen single = null;
 
-	private Root r;
+	private MainJPanel mainJpanel;
 
-	private Screen(AppliScreen appScr, int w, int h, int mx, int my, int m) {
-		this.setTitle(appScr.getName());
+	private Screen(AppliScreen appScreen, int width, int height, int marginX, int marginY, int margin) {
+		this.setTitle(appScreen.getName());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				super.windowClosing(e);
-				appScr.close();
+				appScreen.close();
 			}
 		});
 		this.setResizable(false);
-		this.setSize(mx + w + m * 2, my + h + m * 2);
+		this.setSize(marginX + width + margin * 2, marginY + height + margin * 2);
 		this.setLocationRelativeTo(null);
 
 		// Clavier
@@ -38,7 +38,7 @@ public class Screen extends JFrame {
 		JPanel jp = new JPanel();
 		jp.setLayout(null);
 		jp.setBackground(Color.black);
-		jp.add((r = Root.getInstance(this, appScr, w, h, m)));
+		jp.add((mainJpanel = MainJPanel.getInstance(this, appScreen, width, height, margin)));
 		this.setContentPane(jp);
 		this.setVisible(true);
 	}
@@ -47,9 +47,10 @@ public class Screen extends JFrame {
 		return single;
 	}
 
-	public static Screen getInstance(AppliScreen appScr, int w, int h, int mx, int my, int m) {
+	public static Screen getInstance(AppliScreen appScreen, int width, int height, int marginX, int marginY,
+			int margin) {
 		if (single == null) {
-			single = new Screen(appScr, w, h, mx, my, m);
+			single = new Screen(appScreen, width, height, marginX, marginY, margin);
 			return single;
 		} else
 			return single;

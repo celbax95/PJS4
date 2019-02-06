@@ -5,7 +5,7 @@ import java.util.Scanner;
 import fr.appCli.AppliClient;
 import fr.screen.AppliScreen;
 import fr.screen.Screen;
-import fr.srv.Serveur;
+import fr.server.Server;
 
 public class Main {
 
@@ -21,8 +21,6 @@ public class Main {
 	public static final String IP = "localhost";
 	public static final int PORT = 5000;
 
-	Screen scr;
-
 	public static void main(String[] args) {
 
 		String question = "Action :\n\t-1 : Host\n\t-2 : Connect";
@@ -34,7 +32,7 @@ public class Main {
 		int c = sc.nextInt();
 		do {
 			if (c == 1) {
-				(new Serveur(5000, WIDTH, HEIGHT)).start();
+				(new Server(5000, WIDTH, HEIGHT)).start();
 				AppliScreen appScr = new AppliClient(NAME, IP, PORT);
 				Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 			} else if (c == 2) {

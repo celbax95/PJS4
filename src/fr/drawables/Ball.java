@@ -8,52 +8,47 @@ import java.util.List;
 
 public class Ball implements Drawable, Serializable {
 	private static final long serialVersionUID = 1L;
-	private int r, spd;
+	private int radius, speed;
 	private double x, y;
-	private int mx, my;
-	private Color c;
+	private byte mouvXP, mouvXN, mouvYP, mouvYN;
+	private Color color;
 
 	public Ball(Ball b) {
-		this(b.x, b.y, b.r, b.spd, b.c);
+		this(b.x, b.y, b.radius, b.speed, b.color);
 	}
 
-	public Ball(double x, double y, int r, int spd, Color c) {
+	public Ball(double x, double y, int radius, int speed, Color color) {
 		this.x = x;
 		this.y = y;
-		this.r = r;
-		this.c = c;
-		this.spd = spd;
-		this.mx = 0;
-		this.my = 0;
+		this.radius = radius;
+		this.color = color;
+		this.speed = speed;
+		this.mouvXP = 0;
+		this.mouvXN = 0;
+		this.mouvYP = 0;
+		this.mouvYN = 0;
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(c);
-		g.fillOval((int) Math.round(x), (int) Math.round(y), r, r);
+		g.setColor(color);
+		g.fillOval((int) Math.round(x), (int) Math.round(y), radius, radius);
 	}
 
 	public void move(double t) {
-		x = x + (mx * spd * t);
-		y = y + (my * spd * t);
-		mx = 0;
-		my = 0;
+		x = x + ((mouvXN + mouvXP) * speed * t);
+		y = y + ((mouvYN + mouvYP) * speed * t);
 	}
 
 	public void setMove(List<Integer> keys) {
-		if (keys.contains(KeyEvent.VK_Z))
-			this.my = (this.my > 0 ? 0 : -1);
-		if (keys.contains(KeyEvent.VK_S))
-			this.my = (this.my < 0 ? 0 : 1);
-		if (keys.contains(KeyEvent.VK_Q))
-			this.mx = (this.mx > 0 ? 0 : -1);
-		if (keys.contains(KeyEvent.VK_D))
-			this.mx = (this.mx < 0 ? 0 : 1);
+		mouvYN = (byte) ((keys.contains(KeyEvent.VK_Z)) ? -1 : 0);
+		mouvYP = (byte) ((keys.contains(KeyEvent.VK_S)) ? 1 : 0);
+		mouvXN = (byte) ((keys.contains(KeyEvent.VK_Q)) ? -1 : 0);
+		mouvXP = (byte) ((keys.contains(KeyEvent.VK_D)) ? 1 : 0);
 	}
 
 	@Override
 	public String toString() {
-		return x + " " + y + " " + r;
+		return x + " " + y + " " + radius;
 	}
-
 }

@@ -6,17 +6,17 @@ public class Repainter implements Runnable {
 
 	private static final int PAUSE = 17;
 
-	private JPanel jp;
+	private JPanel japanel;
 
-	public Repainter(JPanel jp) {
+	public Repainter(JPanel jpanel) {
 		super();
-		this.jp = jp;
+		this.japanel = jpanel;
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			jp.repaint();
+			japanel.repaint();
 			try {
 				Thread.sleep(PAUSE);
 			} catch (InterruptedException e) {
