@@ -9,17 +9,17 @@ import java.util.Vector;
 
 import fr.drawables.Character;
 import fr.drawables.Drawable;
+import fr.drawables.Manageable;
 import fr.map.GameMap;
 import fr.util.time.Timer;
 
 public class Application implements Runnable {
 	private final static int spawnPlaces[][] = { { 120, 120 } };
 
-	private static final int TILE_SIZE = 120;
-
 	private Map<Integer, Character> players;
 
 	private List<Drawable> drawables;
+	private List<Manageable> manageables;
 
 	private GameMap map;
 
@@ -30,9 +30,18 @@ public class Application implements Runnable {
 	public Application(int width, int height) {
 		players = new HashMap<>();
 		drawables = new Vector<>();
+		manageables = new Vector<>();
 		timerApploop = new Timer();
 		myThread = new Thread(this);
-		map = new GameMap("/maps/1.bmap", TILE_SIZE);
+		map = new GameMap("/maps/1.bmap");
+	}
+
+	public void addDrawable (Drawable d) {
+		drawables.add(d);
+	}
+
+	public void addManageable(Manageable m) {
+		manageables.add(m);
 	}
 
 	public int addPlayer(Color c) {
@@ -48,6 +57,7 @@ public class Application implements Runnable {
 		else
 			players.put(id, new Character(sp[0], sp[1], spd));
 		drawables.add(players.get(id));
+		manageables.add(players.get(id));
 		return id;
 	}
 
@@ -61,23 +71,33 @@ public class Application implements Runnable {
 		return drawables;
 	}
 
+	public List<Manageable> getManageables() {
+		return manageables;
+	}
+
 	public GameMap getMap() {
 		return map;
 	}
 
 	public void managePlayer(int id, List<Integer> cliKeys) {
-		players.get(id).setMove(cliKeys);
+		players.get(id).actions(this, cliKeys);
+	}
+
+	public void removeDrawable(Drawable d) {
+		drawables.remove(d);
+	}
+
+	public void removeManageable(Manageable m) {
+		manageables.remove(m);
 	}
 
 	@Override
 	public void run() {
 		timerApploop.tick();
 		while (!Thread.currentThread().isInterrupted()) {
-
-			for (Character b : players.values()) {
-				b.manage(this, timerApploop.lastTickS());
+			for (int i = 0; i < manageables.size(); i++) {
+				manageables.get(i).manage(this, timerApploop.lastTickS());
 			}
-
 			// wait
 			try {
 				Thread.sleep(10);

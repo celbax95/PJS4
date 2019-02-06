@@ -8,20 +8,20 @@ public class FactoryTile implements IFactoryTile {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public MapTile create(char type, int x, int y, int tileSize) {
+	public MapTile create(char type, int x, int y) {
 		switch (type) {
 		case '_':
-			return new Floor(x, y, tileSize);
+			return new Floor(x, y);
 		case 'W':
-			return new SideWall(x, y, tileSize);
+			return new SideWall(x, y);
 		case 'X':
-			return new UnbreakableWall(x, y, tileSize);
+			return new UnbreakableWall(x, y);
 		case '+':
-			return new BreakableWall(x, y, tileSize);
+			return new BreakableWall(x, y);
 		case 'G':
-			return new Spawner(x, y, tileSize);
+			return new Spawner(x, y);
 		case 'S':
-			return new SpawnPoint(x, y, tileSize);
+			return new SpawnPoint(x, y);
 		default:
 			return null;
 		}

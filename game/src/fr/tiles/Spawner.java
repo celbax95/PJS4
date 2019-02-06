@@ -10,14 +10,14 @@ public class Spawner extends MapTileSuper {
 	private static final long serialVersionUID = 1L;
 	private static Color c = new Color(0, 100, 255);
 
-	public Spawner(int x, int y, int size) {
-		super(x, y, size);
+	public Spawner(int x, int y) {
+		super(x, y);
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(c);
-		g.fillRect(pos.getIX(), pos.getIY(), size, size);
+		g.fillRect(pos.getIX(), pos.getIY(), SIZE, SIZE);
 	}
 
 	@Override

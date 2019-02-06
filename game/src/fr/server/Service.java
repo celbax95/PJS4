@@ -18,14 +18,12 @@ public class Service implements Runnable {
 
 	private Thread myThread;
 
-	@SuppressWarnings("unused")
 	private Server server;
 
 	private Application application;
 
 	private int myPlayer;
 
-	@SuppressWarnings("unused")
 	private Service() {
 	}
 
@@ -71,7 +69,7 @@ public class Service implements Runnable {
 				application.managePlayer(myPlayer, cliKeys);
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			try {
 				socket.close();
 			} catch (IOException e1) {

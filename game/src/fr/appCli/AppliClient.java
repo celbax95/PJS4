@@ -2,6 +2,7 @@ package fr.appCli;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.drawables.Drawable;
+import fr.main.Main;
 import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.screen.AppliScreen;
@@ -27,7 +29,7 @@ public class AppliClient implements AppliScreen, Runnable {
 	private Socket socket;
 	private Thread myThread;
 
-	GameMap map;
+	private GameMap map;
 
 	public AppliClient(String name, String ip, int port) {
 		this.transfer = new Object();
@@ -36,6 +38,8 @@ public class AppliClient implements AppliScreen, Runnable {
 		this.endApp = false;
 
 		socket = connexion(ip, port);
+		testVersion(socket);
+
 		myThread = new Thread(this);
 
 		listD = new ArrayList<>();
@@ -140,5 +144,16 @@ public class AppliClient implements AppliScreen, Runnable {
 	@Override
 	public void start() {
 		myThread.start();
+	}
+
+	public void testVersion(Socket socket) {
+		try {
+			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+			sOut.writeObject(Main.getVersion());
+			sOut.flush();
+			sOut.reset();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

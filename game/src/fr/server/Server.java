@@ -1,10 +1,13 @@
 package fr.server;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import fr.application.Application;
+import fr.main.Main;
 
 public class Server implements Runnable {
 
@@ -15,7 +18,6 @@ public class Server implements Runnable {
 
 	private Application application;
 
-	@SuppressWarnings("unused")
 	private Server() {
 	}
 
@@ -61,16 +63,33 @@ public class Server implements Runnable {
 				System.err.println("Serveur ferme");
 				// e.printStackTrace();
 			}
-			if (socket != null) {
-				if (first == null)
-					(first = new Service(this, socket, application)).start();
-				else
-					(new Service(socket, application)).start();
+			if (testVersion(socket)) {
+				if (socket != null) {
+					if (first == null)
+						(first = new Service(this, socket, application)).start();
+					else
+						(new Service(socket, application)).start();
+				}
 			}
 		}
 	}
 
 	public void start() {
 		threadServ.start();
+	}
+
+	public boolean testVersion(Socket socket) {
+		try {
+			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+			String version = (String) sIn.readObject();
+			if (!version.equals(Main.getVersion())) {
+				socket.close();
+				return false;
+			}
+
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 }

@@ -9,14 +9,12 @@ import fr.application.Application;
 
 public class Floor extends MapTileSuper {
 
-	private static final int scale = 120;
-
 	private static final long serialVersionUID = 1L;
 	private static Image img = (new ImageIcon(Floor.class.getResource("/images/map/floor/floor.png"))).getImage()
-			.getScaledInstance(scale, scale, Image.SCALE_DEFAULT);
+			.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
 
-	public Floor(int x, int y, int size) {
-		super(x, y, size);
+	public Floor(int x, int y) {
+		super(x, y);
 	}
 
 	@Override

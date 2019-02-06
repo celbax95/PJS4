@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import fr.scale.Scale;
 import fr.tiles.FactoryTile;
 import fr.util.point.Point;
 
@@ -11,20 +12,21 @@ public class GameMap implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int DEFAULT_TILE_SIZE = 120;
+
+	private static int TILE_SIZE = (int) (DEFAULT_TILE_SIZE * Scale.getScale());
+
 	private int width, height;
 
 	private MapTile[][] map;
-
-	private int tileSize;
 
 	private IFactoryTile factory;
 
 	private ArrayList<Point> spawnPoints;
 
-	public GameMap(String s, int tileSize) {
+	public GameMap(String s) {
 		factory = new FactoryTile();
 		spawnPoints = new ArrayList<>();
-		this.tileSize = tileSize;
 		map = loadMap(s);
 	}
 
@@ -37,7 +39,7 @@ public class GameMap implements Serializable {
 	}
 
 	public Point getTileFor(double x, double y) {
-		return new Point(((int) x) / tileSize, ((int) y) / tileSize);
+		return new Point(((int) x) / TILE_SIZE, ((int) y) / TILE_SIZE);
 	}
 
 	public int getWidth() {
@@ -67,7 +69,7 @@ public class GameMap implements Serializable {
 		for (int y = 0; y < height; y++) {
 			String str = sc.nextLine();
 			for (int x = 0; x < width; x++) {
-				map[x][y] = factory.create(str.charAt(x), x, y, tileSize);
+				map[x][y] = factory.create(str.charAt(x), x, y);
 			}
 		}
 		return map;
