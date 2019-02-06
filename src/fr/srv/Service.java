@@ -17,13 +17,14 @@ public class Service implements Runnable {
 
 	private Ball b;
 
-	List<Drawable> listD;
+	private List<Drawable> listD;
 
 	public Service(Socket serverSocket) {
 		this.socket = serverSocket;
 		listD = new ArrayList<>();
-		b = new Ball(50, 50, 20, new Color(255, 0, 0));
+		b = new Ball(50, 50, 20, 10, new Color(255, 0, 0));
 		listD.add(b);
+
 		thread = new Thread(this);
 	}
 
@@ -32,24 +33,30 @@ public class Service implements Runnable {
 		socket.close();
 	}
 
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void run() {
 		try {
 			ObjectOutputStream sOut = new ObjectOutputStream(socket.getOutputStream());
 			ObjectInputStream sIn = new ObjectInputStream(socket.getInputStream());
 			while (true) {
-				Thread.sleep(1000);
+				Thread.sleep(17);
+				for (Drawable d : listD) {
+					sOut.writeObject(d);
+				}
+				sOut.writeObject(null);
+				sOut.reset();
 
-				sOut.writeObject(listD);
-				b.move(10, 0);
-				listD = new ArrayList<>();
-				listD.add(b);
-				// sIn.readObject();
+				List<Integer> keys = (List<Integer>) sIn.readObject();
+				b.move(keys);
 
 			}
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
+		} catch (IOException | InterruptedException | ClassNotFoundException e) {
+			try {
+				socket.close();
+			} catch (IOException e1) {
+			}
+			thread = null;
 		}
 	}
 

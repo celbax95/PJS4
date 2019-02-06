@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import fr.screen.keyboard.KeyBoard;
 import fr.util.time.Timer;
 
 @SuppressWarnings("serial")
@@ -28,8 +29,10 @@ public class Root extends JPanel {
 
 	private Timer t;
 
-	ObjectOutputStream sOut;
-	ObjectInputStream sIn;
+	private List<Drawable> listD;
+
+	private ObjectOutputStream sOut;
+	private ObjectInputStream sIn;
 
 	private Root(Screen scr, int w, int h, int m) {
 		super();
@@ -82,7 +85,6 @@ public class Root extends JPanel {
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void paintComponent(Graphics g2) {
-		System.out.println("repaint !");
 		super.paintComponent(g2);
 		Graphics2D g = (Graphics2D) g2;
 		this.setBackground(new Color(240, 240, 240));
@@ -91,15 +93,14 @@ public class Root extends JPanel {
 			closeScr();
 		}
 
+		Drawable d;
 		try {
-			List<Drawable> listD = (List<Drawable>) sIn.readObject();
-			System.out.println(listD.get(0));
-			for (Drawable d : listD) {
+			while ((d = (Drawable) sIn.readObject()) != null) {
 				d.draw(g);
 			}
-			listD = null;
 
-			// sOut.writeObject(KeyBoard.getKeys());
+			sOut.writeObject(KeyBoard.getKeys());
+			sOut.reset();
 
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
