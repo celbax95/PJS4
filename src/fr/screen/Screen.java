@@ -1,6 +1,8 @@
 package fr.screen;
 
 import java.awt.Color;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,12 +14,19 @@ public class Screen extends JFrame {
 
 	private static Screen single;
 
-	private Screen(ScreenApp scrApp, int w, int h, int mx, int my, int m) {
-		if (scrApp != null)
-			this.setTitle(scrApp.getScreenTitle());
-		else
-			this.setTitle("DefaultName");
+	Root r;
+
+	private Screen(int w, int h, int mx, int my, int m) {
+		this.setTitle("DefaultName");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				r.closeSocket();
+				super.windowClosing(e);
+			}
+
+		});
 		this.setResizable(false);
 		this.setSize(mx + w + m * 2, my + h + m * 2);
 		this.setLocationRelativeTo(null);
@@ -30,22 +39,16 @@ public class Screen extends JFrame {
 		JPanel jp = new JPanel();
 		jp.setLayout(null);
 		jp.setBackground(Color.black);
-		jp.add(Root.create(scrApp, w, h, m));
+		jp.add((r = Root.create(this, w, h, m)));
 		this.setContentPane(jp);
 		this.setVisible(true);
 	}
 
-	public void addScreenApp(ScreenApp scrApp) {
-		Root.addScreenApp(scrApp);
-		single.setName(scrApp.getScreenTitle());
-	}
-
-	public static Screen create(ScreenApp scrApp, int w, int h, int mx, int my, int m) {
+	public static Screen create(int w, int h, int mx, int my, int m) {
 		if (single == null) {
-			single = new Screen(scrApp, w, h, mx, my, m);
+			single = new Screen(w, h, mx, my, m);
 			return single;
 		} else
 			return null;
 	}
-
 }

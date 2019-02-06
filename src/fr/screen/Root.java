@@ -1,7 +1,14 @@
 package fr.screen;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -10,23 +17,37 @@ import fr.util.time.Timer;
 @SuppressWarnings("serial")
 public class Root extends JPanel {
 
-	private static ScreenApp scrApp;
-
 	private static Root single;
 
 	private static int WIDTH, HEIGHT;
 
+	private SendItem si;
+
+	private Socket socket;
+	private Screen scr;
+
 	private Timer t;
 
-	private Root(ScreenApp scrApp, int w, int h, int m) {
+	ObjectOutputStream sOut;
+	ObjectInputStream sIn;
+
+	private Root(Screen scr, int w, int h, int m) {
 		super();
+		this.scr = scr;
 		WIDTH = w;
 		HEIGHT = h;
 		this.setLocation(m, m);
 		this.setSize(w, h);
-		Root.scrApp = scrApp;
-		if (scrApp != null)
-			scrApp.init(w, h);
+
+		si = new SendItem();
+
+		socket = connexion("localhost", 5000);
+		try {
+			sOut = new ObjectOutputStream(socket.getOutputStream());
+			sIn = new ObjectInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		Thread repainter = new Thread(new Repainter(this));
 		repainter.start();
@@ -34,26 +55,63 @@ public class Root extends JPanel {
 		t = new Timer();
 	}
 
+	public void closeScr() {
+		scr.dispatchEvent(new WindowEvent(scr, WindowEvent.WINDOW_CLOSING));
+	}
+
+	public void closeSocket() {
+		try {
+			System.out.println("FIN");
+			if (socket != null)
+				socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Socket connexion(String ip, int port) {
+		try {
+			return new Socket(ip, port);
+		} catch (IOException e) {
+			System.err.println("Impossible de se connecter au serveur");
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void paintComponent(Graphics g2) {
+		System.out.println("repaint !");
 		super.paintComponent(g2);
 		Graphics2D g = (Graphics2D) g2;
-		this.setBackground(scrApp.getBackgroundColor());
+		this.setBackground(new Color(240, 240, 240));
 
-		if (scrApp != null)
-			scrApp.appLoop(g, t.lastTick());
+		if (socket == null) {
+			closeScr();
+		}
+
+		try {
+			List<Drawable> listD = (List<Drawable>) sIn.readObject();
+			System.out.println(listD.get(0));
+			for (Drawable d : listD) {
+				d.draw(g);
+			}
+			listD = null;
+
+			// sOut.writeObject(KeyBoard.getKeys());
+
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+			closeScr();
+		}
 
 		t.tick();
 	}
 
-	protected static void addScreenApp(ScreenApp scrApp) {
-		Root.scrApp = scrApp;
-		scrApp.init(WIDTH, HEIGHT);
-	}
-
-	public static Root create(ScreenApp scrApp, int w, int h, int m) {
+	public static Root create(Screen scr, int w, int h, int m) {
 		if (single == null) {
-			single = new Root(scrApp, w, h, m);
+			single = new Root(scr, w, h, m);
 			return single;
 		} else
 			return null;

@@ -13,6 +13,7 @@ public class Repainter implements Runnable {
 		this.jp = jp;
 	}
 
+	@Override
 	public void run() {
 		while (true) {
 			jp.repaint();

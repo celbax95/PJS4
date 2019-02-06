@@ -19,6 +19,7 @@ public class PointD {
 		this(p.x, p.y);
 	}
 
+	@Override
 	public PointD clone() {
 		return new PointD(this);
 	}
@@ -39,11 +40,11 @@ public class PointD {
 		return true;
 	}
 
-	public int getIntX() {
+	public int getIX() {
 		return (int) x;
 	}
 
-	public int getIntY() {
+	public int getIY() {
 		return (int) y;
 	}
 
