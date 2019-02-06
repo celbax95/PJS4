@@ -1,30 +1,46 @@
 package fr.srv;
 
 import java.awt.Color;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.net.SocketException;
 import java.util.List;
-
-import fr.screen.Drawable;
+import java.util.Random;
 
 public class Service implements Runnable {
 
 	private Socket socket;
+
 	private Thread thread;
 
-	private Ball b;
+	private Serveur s;
 
-	private List<Drawable> listD;
+	private Application a;
 
-	public Service(Socket serverSocket) {
+	private int myPlayer;
+
+	private Service() {
+	}
+
+	public Service(Serveur s, Socket serverSocket, Application a) {
+		this(serverSocket, a);
+		this.s = s;
+	}
+
+	public Service(Socket serverSocket, Application a) {
+		s = null;
 		this.socket = serverSocket;
-		listD = new ArrayList<>();
-		b = new Ball(50, 50, 20, 10, new Color(255, 0, 0));
-		listD.add(b);
-
+		try {
+			socket.setReceiveBufferSize(30000);
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+		this.a = a;
+		myPlayer = a.addPlayer(randomColor());
 		thread = new Thread(this);
 	}
 
@@ -33,30 +49,41 @@ public class Service implements Runnable {
 		socket.close();
 	}
 
+	private double msTime() {
+		return (double) (System.nanoTime()) / 1000000;
+	}
+
+	public Color randomColor() {
+		Random r = new Random();
+		return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
+	}
+
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void run() {
 		try {
-			ObjectOutputStream sOut = new ObjectOutputStream(socket.getOutputStream());
-			ObjectInputStream sIn = new ObjectInputStream(socket.getInputStream());
-			while (true) {
-				Thread.sleep(17);
-				for (Drawable d : listD) {
-					sOut.writeObject(d);
-				}
-				sOut.writeObject(null);
+			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+
+			while (!Thread.currentThread().isInterrupted()) {
+				sOut.writeUnshared(a.getDrawables());
+				sOut.flush();
 				sOut.reset();
-
 				List<Integer> keys = (List<Integer>) sIn.readObject();
-				b.move(keys);
-
+				if (keys == null) {
+					s.close(this);
+					socket.close();
+					thread.interrupt();
+				} else {
+					a.managePlayer(myPlayer, keys);
+				}
 			}
-		} catch (IOException | InterruptedException | ClassNotFoundException e) {
+		} catch (IOException | ClassNotFoundException e) {
 			try {
 				socket.close();
 			} catch (IOException e1) {
 			}
-			thread = null;
+			thread.interrupt();
 		}
 	}
 

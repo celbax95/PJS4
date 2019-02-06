@@ -22,19 +22,26 @@ public class Root extends JPanel {
 
 	private static int WIDTH, HEIGHT;
 
-	private SendItem si;
+	public static Root create(Screen scr, int w, int h, int m, String ip) {
+		if (single == null) {
+			single = new Root(scr, w, h, m, ip);
+			return single;
+		} else
+			return null;
+	}
 
 	private Socket socket;
+
 	private Screen scr;
 
-	private Timer t;
-
 	private List<Drawable> listD;
-
 	private ObjectOutputStream sOut;
+
 	private ObjectInputStream sIn;
 
-	private Root(Screen scr, int w, int h, int m) {
+	Timer t;
+
+	private Root(Screen scr, int w, int h, int m, String ip) {
 		super();
 		this.scr = scr;
 		WIDTH = w;
@@ -42,12 +49,13 @@ public class Root extends JPanel {
 		this.setLocation(m, m);
 		this.setSize(w, h);
 
-		si = new SendItem();
-
-		socket = connexion("localhost", 5000);
+		t = new Timer();
+		if (ip == null)
+			ip = "localhost";
+		socket = connexion(ip, 5000);
 		try {
-			sOut = new ObjectOutputStream(socket.getOutputStream());
-			sIn = new ObjectInputStream(socket.getInputStream());
+			sOut = new ObjectOutputStream((socket.getOutputStream()));
+			sIn = new ObjectInputStream((socket.getInputStream()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -55,7 +63,6 @@ public class Root extends JPanel {
 		Thread repainter = new Thread(new Repainter(this));
 		repainter.start();
 
-		t = new Timer();
 	}
 
 	public void closeScr() {
@@ -64,11 +71,13 @@ public class Root extends JPanel {
 
 	public void closeSocket() {
 		try {
+			sOut.writeObject(null);
+			sOut.reset();
 			System.out.println("FIN");
 			if (socket != null)
 				socket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -82,39 +91,28 @@ public class Root extends JPanel {
 		return null;
 	}
 
-	@SuppressWarnings({ "unchecked" })
+	@SuppressWarnings("unchecked")
 	@Override
 	public void paintComponent(Graphics g2) {
 		super.paintComponent(g2);
 		Graphics2D g = (Graphics2D) g2;
-		this.setBackground(new Color(240, 240, 240));
 
 		if (socket == null) {
 			closeScr();
 		}
 
-		Drawable d;
 		try {
-			while ((d = (Drawable) sIn.readObject()) != null) {
-				d.draw(g);
+			listD = (List<Drawable>) sIn.readObject();
+			this.setBackground(new Color(240, 240, 240));
+			for (Drawable drawable : listD) {
+				drawable.draw(g);
 			}
-
-			sOut.writeObject(KeyBoard.getKeys());
-			sOut.reset();
+			sOut.writeUnshared(KeyBoard.getKeys());
 
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("Tu as ete kick. (Serveur ferme)");
+			// e.printStackTrace();
 			closeScr();
 		}
-
-		t.tick();
-	}
-
-	public static Root create(Screen scr, int w, int h, int m) {
-		if (single == null) {
-			single = new Root(scr, w, h, m);
-			return single;
-		} else
-			return null;
 	}
 }

@@ -14,9 +14,9 @@ public class Screen extends JFrame {
 
 	private static Screen single;
 
-	Root r;
+	private Root r;
 
-	private Screen(int w, int h, int mx, int my, int m) {
+	private Screen(int w, int h, int mx, int my, int m, String ip) {
 		this.setTitle("DefaultName");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
@@ -39,14 +39,14 @@ public class Screen extends JFrame {
 		JPanel jp = new JPanel();
 		jp.setLayout(null);
 		jp.setBackground(Color.black);
-		jp.add((r = Root.create(this, w, h, m)));
+		jp.add((r = Root.create(this, w, h, m, ip)));
 		this.setContentPane(jp);
 		this.setVisible(true);
 	}
 
-	public static Screen create(int w, int h, int mx, int my, int m) {
+	public static Screen create(int w, int h, int mx, int my, int m, String ip) {
 		if (single == null) {
-			single = new Screen(w, h, mx, my, m);
+			single = new Screen(w, h, mx, my, m, ip);
 			return single;
 		} else
 			return null;
