@@ -2,7 +2,7 @@ package fr.main;
 
 import fr.app.App;
 
-public class Main {
+public class MainMapLoader {
 
 	public static void main(String[] args) {
 		App.convert("C:/Users/Loïc/Desktop/colorScheme.txt", "C:/Users/Loïc/Desktop/map.png",
