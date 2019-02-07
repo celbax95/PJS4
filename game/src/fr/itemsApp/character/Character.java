@@ -1,4 +1,4 @@
-package fr.drawables;
+package fr.itemsApp.character;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -10,6 +10,9 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import fr.application.Application;
+import fr.itemsApp.Drawable;
+import fr.itemsApp.Manageable;
+import fr.itemsApp.bomb.Bomb;
 import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.scale.Scale;

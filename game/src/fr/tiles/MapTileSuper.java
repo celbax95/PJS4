@@ -2,7 +2,7 @@ package fr.tiles;
 
 import java.io.Serializable;
 
-import fr.drawables.Drawable;
+import fr.itemsApp.Drawable;
 import fr.map.MapTile;
 import fr.scale.Scale;
 import fr.util.point.Point;

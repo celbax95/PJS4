@@ -3,7 +3,7 @@ package fr.map;
 import java.io.Serializable;
 
 import fr.application.Application;
-import fr.drawables.Drawable;
+import fr.itemsApp.Drawable;
 import fr.util.point.Point;
 
 public interface MapTile extends Drawable, Serializable {

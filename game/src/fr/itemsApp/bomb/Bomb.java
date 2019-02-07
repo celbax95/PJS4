@@ -1,10 +1,12 @@
-package fr.drawables;
+package fr.itemsApp.bomb;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.Serializable;
 
 import fr.application.Application;
+import fr.itemsApp.Drawable;
+import fr.itemsApp.Manageable;
 import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;

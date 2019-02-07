@@ -1,4 +1,4 @@
-package fr.drawables;
+package fr.itemsApp;
 
 import java.awt.Graphics2D;
 

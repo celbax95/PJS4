@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
-import fr.drawables.Character;
-import fr.drawables.Drawable;
-import fr.drawables.Manageable;
+import fr.itemsApp.Drawable;
+import fr.itemsApp.Manageable;
+import fr.itemsApp.character.Character;
 import fr.map.GameMap;
 import fr.scale.Scale;
 import fr.util.time.Timer;
