@@ -10,6 +10,10 @@ public class Spawner extends MapTileSuper {
 	private static final long serialVersionUID = 1L;
 	private static Color c = new Color(0, 100, 255);
 
+	private static final boolean walkable = true;
+
+	private static final boolean destroyable = false;
+
 	public Spawner(int x, int y) {
 		super(x, y);
 	}
@@ -27,7 +31,12 @@ public class Spawner extends MapTileSuper {
 	}
 
 	@Override
+	public boolean isDestroyable() {
+		return destroyable;
+	}
+
+	@Override
 	public boolean isWalkable() {
-		return true;
+		return walkable;
 	}
 }

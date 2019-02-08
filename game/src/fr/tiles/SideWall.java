@@ -10,6 +10,10 @@ public class SideWall extends MapTileSuper {
 	private static final long serialVersionUID = 1L;
 	private static Color c = new Color(0, 0, 0);
 
+	private static final boolean walkable = false;
+
+	private static final boolean destroyable = false;
+
 	public SideWall(int x, int y) {
 		super(x, y);
 	}
@@ -27,7 +31,12 @@ public class SideWall extends MapTileSuper {
 	}
 
 	@Override
+	public boolean isDestroyable() {
+		return destroyable;
+	}
+
+	@Override
 	public boolean isWalkable() {
-		return false;
+		return walkable;
 	}
 }

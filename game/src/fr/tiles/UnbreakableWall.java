@@ -10,6 +10,9 @@ public class UnbreakableWall extends MapTileSuper {
 	private static final long serialVersionUID = 1L;
 	private static Color c = new Color(50, 50, 50);
 
+	private static final boolean walkable = false;
+	private static final boolean destroyable = false;
+
 	public UnbreakableWall(int x, int y) {
 		super(x, y);
 	}
@@ -27,7 +30,12 @@ public class UnbreakableWall extends MapTileSuper {
 	}
 
 	@Override
+	public boolean isDestroyable() {
+		return destroyable;
+	}
+
+	@Override
 	public boolean isWalkable() {
-		return false;
+		return walkable;
 	}
 }

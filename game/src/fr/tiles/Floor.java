@@ -13,6 +13,10 @@ public class Floor extends MapTileSuper {
 	private static Image img = (new ImageIcon(Floor.class.getResource("/images/map/floor/floor.png"))).getImage()
 			.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
 
+	private static final boolean walkable = true;
+
+	private static final boolean destroyable = false;
+
 	public Floor(int x, int y) {
 		super(x, y);
 	}
@@ -29,7 +33,12 @@ public class Floor extends MapTileSuper {
 	}
 
 	@Override
+	public boolean isDestroyable() {
+		return destroyable;
+	}
+
+	@Override
 	public boolean isWalkable() {
-		return true;
+		return walkable;
 	}
 }
