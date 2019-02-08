@@ -47,7 +47,6 @@ public class StandardExplosion implements IExplosion {
 
 	@Override
 	public void draw(Graphics2D g) {
-		System.out.println(pos.x + " " + pos.y);
 		g.drawImage(img[type], pos.getIX(), pos.getIY(), null);
 	}
 
