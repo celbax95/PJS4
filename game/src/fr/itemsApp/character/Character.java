@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 import fr.application.Application;
 import fr.itemsApp.Drawable;
 import fr.itemsApp.Manageable;
-import fr.itemsApp.bomb.Bomb;
+import fr.itemsApp.bomb.BombStd;
 import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.scale.Scale;
@@ -44,9 +44,9 @@ public class Character implements Drawable, Serializable, Manageable {
 	private Cooldown bombCoolDown;
 
 	private Point pos;
-	private Point mouv;
 
-	private Bomb b;
+	private Point mouv;
+	private BombStd b;
 
 	public Character(Character c) {
 		super();
@@ -60,7 +60,7 @@ public class Character implements Drawable, Serializable, Manageable {
 	}
 
 	public Character(double x, double y, int bombCoolDown, int speed) {
-		b = new Bomb(0, 0, -1, 1, 0);
+		b = new BombStd(0, 0, -1, 1, 0);
 		pos = new Point(x, y);
 		this.speed = (int) (speed * Scale.getScale());
 		mouv = new Point(0, 0);
@@ -89,7 +89,7 @@ public class Character implements Drawable, Serializable, Manageable {
 	public void dropBomb(Application a, List<Integer> keys) {
 		if (keys.contains(KeyEvent.VK_R)) {
 			if (bombCoolDown.resetOnDone()) {
-				Bomb ab = b.clone();
+				BombStd ab = b.clone();
 				Point t = getCenter(); // tmp
 				t = a.getMap().getTileFor(t.x, t.y);
 				ab.setTile(t.getIX(), t.getIY(), 120);
@@ -98,6 +98,10 @@ public class Character implements Drawable, Serializable, Manageable {
 				ab.start();
 			}
 		}
+	}
+
+	public Cooldown getBombCoolDown() {
+		return bombCoolDown;
 	}
 
 	public Point getCenter() {

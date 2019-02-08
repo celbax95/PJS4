@@ -2,16 +2,13 @@ package fr.itemsApp.bomb;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.Serializable;
 
 import fr.application.Application;
-import fr.itemsApp.Drawable;
-import fr.itemsApp.Manageable;
 import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;
 
-public class Bomb implements Drawable, Serializable, Manageable {
+public class BombStd implements IBomb {
 
 	private static final long serialVersionUID = 1L;
 	private static final int DEFAULT_COOLDOWN = 4000;
@@ -27,32 +24,42 @@ public class Bomb implements Drawable, Serializable, Manageable {
 
 	private int explosionSize;
 
-	public Bomb(Bomb b) {
+	public BombStd(BombStd b) {
 		this.pos = b.pos.clone();
 		this.tile = b.tile.clone();
 		this.cd = b.cd.clone();
 		this.explosionSize = b.explosionSize;
 	}
 
-	public Bomb(int x, int y, int tileSize) {
+	public BombStd(int x, int y, int tileSize) {
 		tile = new Point(x, y);
 		pos = new Point(x * tileSize + (tileSize - SIZE) / 2, y * tileSize + (tileSize - SIZE) / 2);
 		cd = new Cooldown(5000);
 	}
 
-	public Bomb(int tileX, int tileY, int cooldown, int explosionSize, int tileSize) {
+	public BombStd(int tileX, int tileY, int cooldown, int explosionSize, int tileSize) {
 		tile = new Point(tileX, tileY);
 		pos = getPosFromTile(tile, tileSize);
 		cd = new Cooldown(cooldown < 0 ? DEFAULT_COOLDOWN : cooldown);
 		this.explosionSize = explosionSize;
 	}
 
+	public BombStd(Point tile, int cooldown, int explosionSize) {
+		super();
+		this.tile = tile;
+		this.cd = new Cooldown(5000);
+		this.explosionSize = explosionSize;
+	}
+
 	@Override
-	public Bomb clone() {
-		return new Bomb(this);
+	public BombStd clone() {
+		return new BombStd(this);
 	}
 
 
+	/* (non-Javadoc)
+	 * @see fr.itemsApp.bomb.IBomb#draw(java.awt.Graphics2D)
+	 */
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(c);
@@ -60,6 +67,10 @@ public class Bomb implements Drawable, Serializable, Manageable {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.itemsApp.bomb.IBomb#explode(fr.application.Application)
+	 */
+	@Override
 	public void explode(Application a) {
 		a.removeDrawable(this);
 		a.removeManageable(this);
@@ -69,6 +80,9 @@ public class Bomb implements Drawable, Serializable, Manageable {
 		return new Point(t.x * tileSize + (tileSize - SIZE) / 2, t.y * tileSize + (tileSize - SIZE) / 2);
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.itemsApp.bomb.IBomb#manage(fr.application.Application, double)
+	 */
 	@Override
 	public void manage(Application a, double t) {
 		if (cd.isDone()) {
@@ -85,6 +99,10 @@ public class Bomb implements Drawable, Serializable, Manageable {
 		pos = getPosFromTile(tile, tileSize);
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.itemsApp.bomb.IBomb#start()
+	 */
+	@Override
 	public void start() {
 		cd.start();
 	}
