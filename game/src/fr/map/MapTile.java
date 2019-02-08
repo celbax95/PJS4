@@ -16,5 +16,7 @@ public interface MapTile extends Drawable, Serializable {
 
 	public void interact(Application m);
 
+	public boolean isDestroyable();
+
 	public boolean isWalkable();
 }
