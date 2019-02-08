@@ -119,9 +119,9 @@ public class AppliClient implements AppliScreen, Runnable {
 			ObjectOutputStream sOut = new ObjectOutputStream((socket.getOutputStream()));
 			ObjectInputStream sIn = new ObjectInputStream((socket.getInputStream()));
 
-			map = (GameMap) sIn.readObject();
 
 			while (!Thread.currentThread().isInterrupted()) {
+				map = (GameMap) sIn.readUnshared();
 				ld = (List<Drawable>) sIn.readUnshared();
 				synchronized (transfer) {
 					listD = new ArrayList<>(ld);
