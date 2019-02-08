@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import fr.application.Application;
+import fr.explosion.ExplosionCreator;
 import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;
@@ -18,10 +19,11 @@ public class BombStd implements IBomb {
 
 	private static Color c = Color.black;
 
+	private static final int EXPLOSION_TIME = 1400;
+
 	private Point pos, tile;
 
 	private Cooldown cd;
-
 	private int explosionSize;
 	private int tileSize;
 
@@ -42,6 +44,10 @@ public class BombStd implements IBomb {
 
 	@Override
 	public void explode(Application a) {
+		ExplosionCreator ec = new ExplosionCreator();
+
+		// TODO Explosion damage
+		ec.create(a, tile, explosionSize, 0, EXPLOSION_TIME);
 		a.removeDrawable(this);
 		a.removeManageable(this);
 	}
