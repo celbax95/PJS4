@@ -12,7 +12,8 @@ import javax.swing.ImageIcon;
 import fr.application.Application;
 import fr.itemsApp.Drawable;
 import fr.itemsApp.Manageable;
-import fr.itemsApp.bomb.BombStd;
+import fr.itemsApp.bomb.BombFactory;
+import fr.itemsApp.bomb.IBomb;
 import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.scale.Scale;
@@ -46,27 +47,17 @@ public class Character implements Drawable, Serializable, Manageable {
 	private Point pos;
 
 	private Point mouv;
-	private BombStd b;
 
-	public Character(Character c) {
-		super();
-		this.speed = c.speed;
-		this.angle = c.angle;
-		this.step = c.step;
-		this.bombCoolDown = c.bombCoolDown;
-		this.pos = c.pos;
-		this.mouv = c.mouv;
-		this.b = c.b;
-	}
+	private BombFactory bombFactory;
 
 	public Character(double x, double y, int bombCoolDown, int speed) {
-		b = new BombStd(0, 0, -1, 1, 0);
 		pos = new Point(x, y);
 		this.speed = (int) (speed * Scale.getScale());
 		mouv = new Point(0, 0);
 		angle = 0;
 		step = 0;
 		this.bombCoolDown = new Cooldown(bombCoolDown);
+		this.bombFactory = new BombFactory();
 	}
 
 	public void actions(Application a, List<Integer> keys) {
@@ -89,13 +80,10 @@ public class Character implements Drawable, Serializable, Manageable {
 	public void dropBomb(Application a, List<Integer> keys) {
 		if (keys.contains(KeyEvent.VK_R)) {
 			if (bombCoolDown.resetOnDone()) {
-				BombStd ab = b.clone();
-				Point t = getCenter(); // tmp
-				t = a.getMap().getTileFor(t.x, t.y);
-				ab.setTile(t.getIX(), t.getIY(), 120);
-				a.addDrawable(ab);
-				a.addManageable(ab);
-				ab.start();
+				IBomb b = bombFactory.create("std", a, this);
+				a.addDrawable(b);
+				a.addManageable(b);
+				b.start();
 			}
 		}
 	}

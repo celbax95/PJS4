@@ -23,88 +23,43 @@ public class BombStd implements IBomb {
 	private Cooldown cd;
 
 	private int explosionSize;
+	private int tileSize;
 
-	public BombStd(BombStd b) {
-		this.pos = b.pos.clone();
-		this.tile = b.tile.clone();
-		this.cd = b.cd.clone();
-		this.explosionSize = b.explosionSize;
-	}
-
-	public BombStd(int x, int y, int tileSize) {
-		tile = new Point(x, y);
-		pos = new Point(x * tileSize + (tileSize - SIZE) / 2, y * tileSize + (tileSize - SIZE) / 2);
-		cd = new Cooldown(5000);
-	}
-
-	public BombStd(int tileX, int tileY, int cooldown, int explosionSize, int tileSize) {
-		tile = new Point(tileX, tileY);
-		pos = getPosFromTile(tile, tileSize);
-		cd = new Cooldown(cooldown < 0 ? DEFAULT_COOLDOWN : cooldown);
-		this.explosionSize = explosionSize;
-	}
-
-	public BombStd(Point tile, int cooldown, int explosionSize) {
+	public BombStd(Point tile, int tileSize, int cooldown, int explosionSize) {
 		super();
 		this.tile = tile;
-		this.cd = new Cooldown(5000);
+		this.pos = new Point((tile.getIX() * tileSize) + (tileSize - SIZE) / 2,
+				(tile.getIY() * tileSize) + (tileSize - SIZE) / 2);
+		this.cd = new Cooldown(cooldown);
 		this.explosionSize = explosionSize;
 	}
 
-	@Override
-	public BombStd clone() {
-		return new BombStd(this);
-	}
-
-
-	/* (non-Javadoc)
-	 * @see fr.itemsApp.bomb.IBomb#draw(java.awt.Graphics2D)
-	 */
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(c);
 		g.fillRect(pos.getIX(), pos.getIY(), SIZE, SIZE);
-
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.itemsApp.bomb.IBomb#explode(fr.application.Application)
-	 */
 	@Override
 	public void explode(Application a) {
 		a.removeDrawable(this);
 		a.removeManageable(this);
 	}
 
-	public Point getPosFromTile(Point t, int tileSize) {
-		return new Point(t.x * tileSize + (tileSize - SIZE) / 2, t.y * tileSize + (tileSize - SIZE) / 2);
-	}
-
-	/* (non-Javadoc)
-	 * @see fr.itemsApp.bomb.IBomb#manage(fr.application.Application, double)
-	 */
 	@Override
 	public void manage(Application a, double t) {
 		if (cd.isDone()) {
+			tileSize = a.getMap().getTileSize();
 			explode(a);
 		}
 	}
 
-	public void setCooldown(int time) {
-		cd.setFreq(time);
-	}
-
-	public void setTile(int x, int y, int tileSize) {
-		tile = new Point(x, y);
-		pos = getPosFromTile(tile, tileSize);
-	}
-
-	/* (non-Javadoc)
-	 * @see fr.itemsApp.bomb.IBomb#start()
-	 */
 	@Override
 	public void start() {
 		cd.start();
 	}
 
+	public static int getSIZE() {
+		return SIZE;
+	}
 }

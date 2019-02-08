@@ -42,6 +42,10 @@ public class GameMap implements Serializable {
 		return new Point(((int) x) / TILE_SIZE, ((int) y) / TILE_SIZE);
 	}
 
+	public int getTileSize() {
+		return TILE_SIZE;
+	}
+
 	public int getWidth() {
 		return width;
 	}
