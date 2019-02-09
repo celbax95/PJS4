@@ -58,4 +58,16 @@ public class StandardExplosion implements IExplosion {
 			a.removeManageable(this);
 		}
 	}
+
+	public void setCooldown(int cd) {
+		this.cd = new Cooldown(cd);
+	}
+
+	public void setDamage(double damage) {
+		this.damage = damage;
+	}
+
+	public void setTile(Point tile) {
+		this.tile = tile;
+	}
 }
