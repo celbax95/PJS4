@@ -43,6 +43,8 @@ public class Character implements Drawable, Serializable, Manageable {
 
 	private int step;
 
+	private String defaultBomb;
+
 	private Cooldown bombCoolDown;
 
 	private Point pos;
@@ -59,6 +61,7 @@ public class Character implements Drawable, Serializable, Manageable {
 		step = 0;
 		this.bombCoolDown = new Cooldown(bombCoolDown);
 		this.bombFactory = new BombFactory();
+		defaultBomb = "std";
 	}
 
 	public void actions(Application a, List<Integer> keys) {
@@ -81,7 +84,7 @@ public class Character implements Drawable, Serializable, Manageable {
 	public void dropBomb(Application a, List<Integer> keys) {
 		if (keys.contains(KeyEvent.VK_R)) {
 			if (bombCoolDown.resetOnDone()) {
-				IBomb b = bombFactory.create("std", a, this);
+				IBomb b = bombFactory.create(defaultBomb, a, this);
 				a.addDrawable(b);
 				a.addManageable(b);
 				b.start();
