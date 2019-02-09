@@ -37,7 +37,12 @@ public class StandardExplosion implements IExplosion {
 	private Cooldown cd;
 
 	public StandardExplosion() {
-
+		tileSize = TILE_SIZE;
+		type = 0;
+		tile = new Point(0, 0);
+		this.pos = new Point(tile.x * tileSize, tile.y * tileSize);
+		this.damage = 0;
+		this.cd = new Cooldown(0);
 	}
 
 	public StandardExplosion(int type, int tileX, int tileY, int tileSize, double damage, int time) {
