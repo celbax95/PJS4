@@ -36,6 +36,10 @@ public class StandardExplosion implements IExplosion {
 
 	private Cooldown cd;
 
+	public StandardExplosion() {
+
+	}
+
 	public StandardExplosion(int type, int tileX, int tileY, int tileSize, double damage, int time) {
 		this.type = type;
 		this.tile = new Point(tileX, tileY);
@@ -59,14 +63,17 @@ public class StandardExplosion implements IExplosion {
 		}
 	}
 
+	@Override
 	public void setCooldown(int cd) {
 		this.cd = new Cooldown(cd);
 	}
 
+	@Override
 	public void setDamage(double damage) {
 		this.damage = damage;
 	}
 
+	@Override
 	public void setTile(Point tile) {
 		this.tile = tile;
 	}

@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 
 import fr.application.Application;
 import fr.explosion.ExplosionCreator;
+import fr.explosion.IExplosion;
+import fr.explosion.StandardExplosion;
 import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;
@@ -50,6 +52,14 @@ public class BombStd implements IBomb {
 		ec.create(a, tile, explosionSize, DAMAGE, TIME);
 		a.removeDrawable(this);
 		a.removeManageable(this);
+	}
+
+	@Override
+	public IExplosion getExplosion() {
+		IExplosion ex = new StandardExplosion();
+		ex.setDamage(DAMAGE);
+		ex.setCooldown(TIME);
+		return ex;
 	}
 
 	@Override
