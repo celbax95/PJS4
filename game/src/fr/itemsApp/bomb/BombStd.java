@@ -62,6 +62,14 @@ public class BombStd implements IBomb {
 		return ex;
 	}
 
+	public int getExplosionSize() {
+		return explosionSize;
+	}
+
+	public Point getTile() {
+		return tile;
+	}
+
 	@Override
 	public void manage(Application a, double t) {
 		if (cd.isDone()) {
