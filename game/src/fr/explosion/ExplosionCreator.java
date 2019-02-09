@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.application.Application;
+import fr.itemsApp.bomb.IBomb;
 import fr.map.MapTile;
 import fr.tiles.Floor;
 import fr.util.point.Point;
@@ -14,7 +15,7 @@ public class ExplosionCreator implements Serializable {
 
 	private List<IExplosion> explosions;
 
-	public void create(Application a, Point tile, int size, double damage, int time) {
+	public void create(Application a, IBomb b) {
 
 		explosions = new ArrayList<>();
 
@@ -24,18 +25,26 @@ public class ExplosionCreator implements Serializable {
 
 		// horizontal
 
+		Point tile = b.getTile();
+
+		int size = b.getExplosionSize();
+
 		boolean l = true, r = true, u = true, d = true;
 
-		explosions.add(new StandardExplosion(0, tile.getIX(), tile.getIY(), tileSize, damage, time));
+		IExplosion ex = b.getExplosion();
+		ex.setTile(tile.clone());
+		ex.setType(0);
+
+		explosions.add(ex);
 
 		for (int i = 1; i <= size; i++) {
-			if (r && (r = setExplosion(m, 1, tile.getIX() + i, tile.getIY(), tileSize, damage, time)))
+			if (r && (r = setExplosion(m, b, 1, tile.getIX() + i, tile.getIY())))
 				;
-			if (l && (l = setExplosion(m, 1, tile.getIX() - i, tile.getIY(), tileSize, damage, time)))
+			if (l && (l = setExplosion(m, b, 1, tile.getIX() - i, tile.getIY())))
 				;
-			if (u && (u = setExplosion(m, 2, tile.getIX(), tile.getIY() - i, tileSize, damage, time)))
+			if (u && (u = setExplosion(m, b, 2, tile.getIX(), tile.getIY() - i)))
 				;
-			if (d && (d = setExplosion(m, 2, tile.getIX(), tile.getIY() + i, tileSize, damage, time)))
+			if (d && (d = setExplosion(m, b, 2, tile.getIX(), tile.getIY() + i)))
 				;
 		}
 		for (IExplosion e : explosions) {
@@ -44,12 +53,16 @@ public class ExplosionCreator implements Serializable {
 		}
 	}
 
-	private boolean setExplosion(MapTile[][] m, int type, int x, int y, int tileSize, double damage, int time) {
+	private boolean setExplosion(MapTile[][] m, IBomb b, int type, int x, int y) {
 		if (x < 0 || x > m.length || y < 0 || y > m[0].length)
 			return false;
 
-		if (m[x][y].isDestroyable() || m[x][y].isWalkable())
-			explosions.add(new StandardExplosion(type, x, y, tileSize, damage, time));
+		if (m[x][y].isDestroyable() || m[x][y].isWalkable()) {
+			IExplosion ex = b.getExplosion();
+			ex.setTile(new Point(x, y));
+			ex.setType(type);
+			explosions.add(ex);
+		}
 
 		if (m[x][y].isDestroyable()) {
 			m[x][y] = new Floor(m[x][y].getTile().getIX(), m[x][y].getTile().getIY());

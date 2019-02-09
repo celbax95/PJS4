@@ -40,7 +40,7 @@ public class StandardExplosion implements IExplosion {
 		tileSize = TILE_SIZE;
 		type = 0;
 		tile = new Point(0, 0);
-		this.pos = new Point(tile.x * tileSize, tile.y * tileSize);
+		this.pos = getPosfromTile(tile);
 		this.damage = 0;
 		this.cd = new Cooldown(0);
 	}
@@ -48,6 +48,10 @@ public class StandardExplosion implements IExplosion {
 	@Override
 	public void draw(Graphics2D g) {
 		g.drawImage(img[type], pos.getIX(), pos.getIY(), null);
+	}
+
+	private Point getPosfromTile(Point tile) {
+		return new Point(tile.x * tileSize, tile.y * tileSize);
 	}
 
 	@Override
@@ -72,6 +76,7 @@ public class StandardExplosion implements IExplosion {
 	@Override
 	public void setTile(Point tile) {
 		this.tile = tile;
+		this.pos = getPosfromTile(tile);
 	}
 
 	@Override

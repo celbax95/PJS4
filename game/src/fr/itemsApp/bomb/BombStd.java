@@ -49,7 +49,7 @@ public class BombStd implements IBomb {
 	public void explode(Application a) {
 		ExplosionCreator ec = new ExplosionCreator();
 
-		ec.create(a, tile, explosionSize, DAMAGE, TIME);
+		ec.create(a, this);
 		a.removeDrawable(this);
 		a.removeManageable(this);
 	}
@@ -62,10 +62,12 @@ public class BombStd implements IBomb {
 		return ex;
 	}
 
+	@Override
 	public int getExplosionSize() {
 		return explosionSize;
 	}
 
+	@Override
 	public Point getTile() {
 		return tile;
 	}
