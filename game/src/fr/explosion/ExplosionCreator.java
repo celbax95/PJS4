@@ -21,8 +21,6 @@ public class ExplosionCreator implements Serializable {
 
 		MapTile[][] m = a.getMap().getMap();
 
-		int tileSize = a.getMap().getTileSize();
-
 		// horizontal
 
 		Point tile = b.getTile();
