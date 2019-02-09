@@ -45,15 +45,6 @@ public class StandardExplosion implements IExplosion {
 		this.cd = new Cooldown(0);
 	}
 
-	public StandardExplosion(int type, int tileX, int tileY, int tileSize, double damage, int time) {
-		this.type = type;
-		this.tile = new Point(tileX, tileY);
-		this.pos = new Point(tileX * TILE_SIZE, tileY * TILE_SIZE);
-		this.damage = damage;
-		this.cd = new Cooldown(time);
-		this.tileSize = tileSize;
-	}
-
 	@Override
 	public void draw(Graphics2D g) {
 		g.drawImage(img[type], pos.getIX(), pos.getIY(), null);
