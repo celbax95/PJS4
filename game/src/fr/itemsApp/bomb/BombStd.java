@@ -19,7 +19,8 @@ public class BombStd implements IBomb {
 
 	private static Color c = Color.black;
 
-	private static final int EXPLOSION_TIME = 1400;
+	private static final int TIME = 1400;
+	private static final int DAMAGE = 333;
 
 	private Point pos, tile;
 
@@ -46,8 +47,7 @@ public class BombStd implements IBomb {
 	public void explode(Application a) {
 		ExplosionCreator ec = new ExplosionCreator();
 
-		// TODO Explosion damage
-		ec.create(a, tile, explosionSize, 0, EXPLOSION_TIME);
+		ec.create(a, tile, explosionSize, DAMAGE, TIME);
 		a.removeDrawable(this);
 		a.removeManageable(this);
 	}
