@@ -12,4 +12,6 @@ public interface IExplosion extends Drawable, Manageable, Serializable {
 	public void setDamage(double damage);
 
 	public void setTile(Point tile);
+
+	public void setType(int type);
 }

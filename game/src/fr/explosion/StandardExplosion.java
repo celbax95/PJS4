@@ -77,4 +77,9 @@ public class StandardExplosion implements IExplosion {
 	public void setTile(Point tile) {
 		this.tile = tile;
 	}
+
+	@Override
+	public void setType(int type) {
+		this.type = type;
+	}
 }
