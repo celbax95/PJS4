@@ -34,7 +34,8 @@ public class Character implements Drawable, Serializable, Manageable {
 			.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT),
 			(new ImageIcon(Character.class.getResource("/images/characters/red/walk_2.png"))).getImage()
 			.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT), };
-	private static int freq = 60;
+
+	private static final int freq = 60;
 
 	private int speed;
 
