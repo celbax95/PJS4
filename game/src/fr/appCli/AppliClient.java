@@ -2,7 +2,6 @@ package fr.appCli;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,7 +12,6 @@ import java.util.List;
 import com.sun.glass.events.KeyEvent;
 
 import fr.itemsApp.Drawable;
-import fr.main.Main;
 import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.scale.Scale;
@@ -39,17 +37,16 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	/**
 	 * @param name : Nom de la fenetre de jeu
-	 * @param ip   : Ip du serveur
-	 * @param port : Port du serveur
+	 * @param socket : Socket liee au serveur
 	 */
-	public AppliClient(String name, String ip, int port) {
+	public AppliClient(String name, Socket socket) {
 		this.transfer = new Object();
 
 		this.name = name;
 		this.endApp = false;
 
-		socket = connexion(ip, port);
-		testVersion(socket);
+		this.socket = socket;
+		//testVersion(socket);
 
 		myThread = new Thread(this);
 
@@ -99,22 +96,6 @@ public class AppliClient implements AppliScreen, Runnable {
 		}
 	}
 
-	/**
-	 * Cree une socket de communication client / serveur
-	 *
-	 * @param ip   : Ip du serveur
-	 * @param port : port du serveur
-	 * @return Socket initialisee
-	 */
-	private Socket connexion(String ip, int port) {
-		try {
-			return new Socket(ip, port);
-		} catch (IOException e) {
-			System.err.println("Impossible de se connecter au serveur");
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 	/**
 	 * Affiche les donnees recues par le serveur (Map et Elements)
@@ -213,11 +194,11 @@ public class AppliClient implements AppliScreen, Runnable {
 		myThread.start();
 	}
 
-	/**
+	/*
 	 * Verifie que le client est a jour par rapport au serveur
 	 *
 	 * @param socket : socket de communication client / serveur
-	 */
+	 *
 	public void testVersion(Socket socket) {
 		try {
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
@@ -227,5 +208,5 @@ public class AppliClient implements AppliScreen, Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 }

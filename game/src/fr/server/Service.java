@@ -2,9 +2,12 @@ package fr.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
 
@@ -16,12 +19,10 @@ import fr.application.Application;
 public class Service implements Runnable {
 
 	private Socket socket;
-
 	private Thread myThread;
-
 	private Server server;
 
-	private Application application;
+	private static Application application;
 
 	private int myPlayer;
 
@@ -36,13 +37,21 @@ public class Service implements Runnable {
 	 *
 	 * @param s            : le serveur
 	 * @param serverSocket : la socket du serveur
-	 * @param application  : l'application
 	 */
-	public Service(Server s, Socket serverSocket, Application application) {
+
+	public Service(Server s, Socket serverSocket) {
+		this(serverSocket);
 		this.server = s;
+	}
+
+	/**
+	 * constructeur Service
+	 *
+	 * @param serverSocket : la socket du serveur
+	 */
+	public Service(Socket serverSocket) {
+		server = null;
 		this.socket = serverSocket;
-		this.application = application;
-		myPlayer = application.addPlayer();
 		myThread = new Thread(this);
 	}
 
@@ -59,16 +68,28 @@ public class Service implements Runnable {
 	}
 
 	/**
-	 * envoie les données de l'application au client
+	 * envoie les donnees de l'application au client
 	 */
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void run() {
 		try {
+			
+
+			while (!server.getGameOn()) {
+				if(Thread.currentThread().isInterrupted()) {
+					return;
+				}
+			}
+			
+			
+			PrintWriter out = new PrintWriter (socket.getOutputStream ( ), true);
+			out.println("Game start");
+			while(application == null) { }
+			myPlayer = application.addPlayer();
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-
-			while (!Thread.currentThread().isInterrupted()) {
+			while(!Thread.currentThread().isInterrupted()) {
 				sOut.writeUnshared(application.getMap());
 				sOut.flush();
 				sOut.reset();
@@ -80,12 +101,18 @@ public class Service implements Runnable {
 					// Quand le joueur est mort
 				}
 			}
-		} catch (Exception e) {
-			// e.printStackTrace();
-			server.close(this);
+		} catch (IOException e) {
+			//e.printStackTrace();
+			System.err.println("Joueur déconnecté");
+			server.playerLeft();
+			try {
+				socket.close();
+			} catch (IOException e1) {}
 			myThread.interrupt();
-			application.deletePlayer(myPlayer);
-			System.err.println("Service termine");
+			//application.deletePlayer(myPlayer);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
@@ -94,5 +121,9 @@ public class Service implements Runnable {
 	 */
 	public void start() {
 		myThread.start();
+	}
+	
+	public static void setApplication(Application app) {
+		Service.application = app;
 	}
 }
