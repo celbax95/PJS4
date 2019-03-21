@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.io.IOException;
 //import java.io.FileWriter;
 //import java.io.IOException;
 //import java.io.PrintWriter;
@@ -22,16 +21,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-//import javax.swing.Timer;
+import fr.gameLauncher.GameLauncher;
+import fr.gameLauncher.Menu;
 
-import fr.client.Client;
-import fr.server.Server;
-
-public class MenuDisplay {
+public class MenuDisplay implements Menu{
+	
+	
+	
 	private static MenuDisplay menu;
 	
-	private static String TITLE;
+	private static String TITLE = "TEST PJS4";
+	private static int windowSize = 500;
+	
 	private static final Color BACKGROUND_COLOR = new Color(50, 54, 57);
 	private static final Color BUTTON_BACKGROUND_COLOR = new Color(59, 89, 182);
 	private static final Color ARROWS_BACKGROUND_COLOR = new Color(80, 100, 190);
@@ -41,8 +42,10 @@ public class MenuDisplay {
 	
 	private static final String IP = "localhost";
 	private static final int PORT = 5000;
-	private ArrayList<Client> clients;
-	private Client cli;
+	
+	static {
+		GameLauncher.setMenu(MenuDisplay.getInstance());
+	}
 	
 	private JFrame f;
 	private JPanel p;
@@ -58,22 +61,21 @@ public class MenuDisplay {
 	private int nbPlayers;
 	private boolean sawIpAdress;
 	
-	private Server server;
-	
-	public static MenuDisplay getInstance(String title, int rw) {
+	public static MenuDisplay getInstance() {
 		if(MenuDisplay.menu == null) {
-			MenuDisplay.menu = new MenuDisplay(title, rw);
+			MenuDisplay.menu = new MenuDisplay();
 			return MenuDisplay.menu;
 		}
 		else { return MenuDisplay.menu; }
 	}
 	
-	private MenuDisplay(String title, int rw) {
-		MenuDisplay.TITLE = title;
-		this.f = new JFrame(title);
-		this.f.setPreferredSize(new Dimension(rw, rw));
+	private MenuDisplay() {
+		this.f = new JFrame(MenuDisplay.TITLE);
+		this.f.setSize(new Dimension(windowSize, 250));
+		
+		this.f.setPreferredSize(new Dimension(windowSize, windowSize));
 		this.f.setBackground(BACKGROUND_COLOR);
-		this.p = new MenuPanel(rw);
+		this.p = new MenuPanel(windowSize);
 		
 		this.hj = 0;
 		this.nbPlayers = 3;
@@ -178,16 +180,12 @@ public class MenuDisplay {
 						sawIpAdress = false;
 						break;
 					case 3:
-					try {
-						cli.close();
-						server.finalize();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
+					GameLauncher.clientClose();
+					GameLauncher.serverClose();
 						hj = 1;
 						break;
 					case 4:
-						cli.close();
+						GameLauncher.clientClose();
 						hj = 2;
 						break;
 				}
@@ -200,17 +198,17 @@ public class MenuDisplay {
 				hideComponents();
 				hj = 3;
 				showComponents();
-				server = new Server(TITLE,PORT, nbPlayers);
-				server.start();
-				cli = new Client(IP,PORT, MenuDisplay.menu);
+				GameLauncher.createServer(TITLE,PORT, nbPlayers);
+				GameLauncher.serverStart();
+				GameLauncher.createClient(IP,PORT, MenuDisplay.menu);
 				
 			}
 		});
 		this.connect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				cli = new Client(IP,PORT, MenuDisplay.menu);
-				if (cli.getSocket()==null) {
+				GameLauncher.createClient(IP,PORT, MenuDisplay.menu);
+				if (GameLauncher.isSocketClientNull()) {
 					return;
 				}
 				hideComponents();
@@ -223,11 +221,11 @@ public class MenuDisplay {
 		this.start.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(server.getNbPlayers() < Integer.parseInt(nbPlayersLabel.getText())) {	
+				if(GameLauncher.getServerNbPlayers() < Integer.parseInt(nbPlayersLabel.getText())) {	
 					return;
 				}
 				hideWindow();
-				server.setGameOn();
+				GameLauncher.serverSetGameOn();
 			}
 
 			

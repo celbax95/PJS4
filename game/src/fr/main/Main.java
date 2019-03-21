@@ -1,17 +1,23 @@
 package fr.main;
 
-import fr.menu.MenuDisplay;
+
+import fr.gameLauncher.GameLauncher;
 
 /**
  * Entrée de l'application
  */
 public class Main {
 	
-	private static final String NAME = "TEST PJS4";
-
 	public static void main(String[] args) {
 		
-		MenuDisplay m = MenuDisplay.getInstance(NAME, 500);
-		m.display();
+		try {
+			
+			Class.forName("fr.menu.MenuDisplay");
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		GameLauncher.menuDisplay();
 	}
 }
