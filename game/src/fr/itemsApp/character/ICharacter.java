@@ -23,9 +23,24 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	 */
 	Point getCenter();
 
+	/**
+	 * Change le cooldown de pose des bombes
+	 * 
+	 * @param bombCoolDown : nouveau cooldown
+	 */
 	void setBombCoolDown(int bombCoolDown);
 
+	/**
+	 * Change la position du ICharacter
+	 * 
+	 * @param pos
+	 */
 	void setPos(Point pos);
 
+	/**
+	 * Change la vitesse du ICharacter
+	 * 
+	 * @param speed : nouvelle vitesse pour le ICharacter
+	 */
 	void setSpeed(int speed);
 }
