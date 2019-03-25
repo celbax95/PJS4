@@ -23,6 +23,8 @@ public class BombStd extends Bomb {
 
 	public BombStd(Point tile, int tileSize, int cooldown, int explosionSize) {
 		this.tile = tile;
+
+		// Calcul de la position de la bombe
 		this.pos = new Point((tile.getIX() * tileSize) + (tileSize - SIZE) / 2,
 				(tile.getIY() * tileSize) + (tileSize - SIZE) / 2);
 		this.cooldown = new Cooldown(cooldown);
@@ -56,6 +58,9 @@ public class BombStd extends Bomb {
 		}
 	}
 
+	/**
+	 * @return Taille de la bombe
+	 */
 	public static int getSIZE() {
 		return SIZE;
 	}
