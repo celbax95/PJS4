@@ -7,7 +7,9 @@ import fr.scale.Scale;
 import fr.screen.AppliScreen;
 import fr.screen.Screen;
 import fr.server.Server;
-
+/**
+ * Entrée de l'application
+ */
 public class Main {
 
 	private static final String NAME = "TEST PJS4";
@@ -28,11 +30,16 @@ public class Main {
 
 	public static final String IP = "localhost";
 	public static final int PORT = 5000;
-
+	/**
+	 * @return une chaine representant la version du jeu actuelle
+	 */
 	public static String getVersion() {
 		return VERSION;
 	}
-
+	/**
+	 * Lance l'application
+	 * @param args : arguments
+	 */
 	public static void main(String[] args) {
 
 		String question = "Action :\n\t-1 : Host\n\t-2 : Connect";
