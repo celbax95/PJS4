@@ -14,6 +14,9 @@ import fr.map.GameMap;
 import fr.scale.Scale;
 import fr.util.time.Timer;
 
+/**
+ * Application (Le jeu)
+ */
 public class Application implements Runnable {
 	private final static int spawnPlaces[][] = { { (int) (120 * Scale.getScale()), (int) (120 * Scale.getScale()) } };
 
@@ -28,78 +31,144 @@ public class Application implements Runnable {
 
 	private Thread myThread;
 
+	/**
+	 * @param width  : Largeur de la fenetre
+	 * @param height : Hauteur de la fenetre
+	 */
 	public Application(int width, int height) {
 		players = new HashMap<>();
 		drawables = new Vector<>();
 		manageables = new Vector<>();
 		timerApploop = new Timer();
 		myThread = new Thread(this);
+
+		// Chargement de la map depuis le fichier "/maps/1.bmap"
 		map = new GameMap("/maps/1.bmap");
 	}
 
-	public void addDrawable (Drawable d) {
-		drawables.add(d);
+	/**
+	 * Ajout d'un element Drawable a l'application
+	 *
+	 * @param drawable : Drawable a ajouter
+	 */
+	public void addDrawable(Drawable drawable) {
+		drawables.add(drawable);
 	}
 
-	public void addManageable(Manageable m) {
-		manageables.add(m);
+	/**
+	 * Ajout d'un element Manageable a l'application
+	 *
+	 * @param manageable : Manageable a ajouter
+	 */
+	public void addManageable(Manageable manageable) {
+		manageables.add(manageable);
 	}
 
+	/**
+	 * Ajout d'un joueur a l'application
+	 *
+	 * @param c : Couleur aleatoire du joueur
+	 * @return : Id du joueur cree
+	 */
 	public int addPlayer(Color c) {
 		int id = Math.abs((new Random()).nextInt());
 		while (players.containsKey(id))
 			id++;
 
-		int spd = 500;
+		int speed = 500;
 
-		int sp[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
+		// Choix aleatoire parmi les emplacements de spawn existants
+		int spawnPlace[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
+
 		if (players.size() == 0)
-			players.put(id, new Character(sp[0], sp[1], 900, spd));
+			players.put(id, new Character(spawnPlace[0], spawnPlace[1], 900, speed));
 		else
-			players.put(id, new Character(sp[0], sp[1], 900, spd));
+			players.put(id, new Character(spawnPlace[0], spawnPlace[1], 900, speed));
+
+		// Ajout du joueur au listes de gestion
 		drawables.add(players.get(id));
 		manageables.add(players.get(id));
+
 		return id;
 	}
 
+	/**
+	 * Supprime un joueur de l'application
+	 *
+	 * @param id
+	 */
 	public void deletePlayer(int id) {
-		Character c = players.get(id);
+		Character character = players.get(id);
 		players.remove(id);
-		drawables.remove(c);
+		drawables.remove(character);
 	}
 
+	/**
+	 * @return Liste des elments Drawbles
+	 */
 	public List<Drawable> getDrawables() {
 		return drawables;
 	}
 
+	/**
+	 * @return Liste des elments Manageable
+	 */
 	public List<Manageable> getManageables() {
 		return manageables;
 	}
 
+	/**
+	 * @return La map du jeu
+	 */
 	public GameMap getMap() {
 		return map;
 	}
 
-	public void managePlayer(int id, List<Integer> cliKeys) {
-		players.get(id).actions(this, cliKeys);
+	/**
+	 * Gere les actions du Joueur
+	 *
+	 * @param id      : Id du joueur
+	 * @param clickedKeys : Touches active du clavier du joueur
+	 */
+	public void managePlayer(int id, List<Integer> clickedKeys) {
+		players.get(id).actions(this, clickedKeys);
 	}
 
-	public void removeDrawable(Drawable d) {
-		drawables.remove(d);
+	/**
+	 * Supprime un Drawable de l'application
+	 *
+	 * @param drawable : Drawable a supprimer
+	 */
+	public void removeDrawable(Drawable drawable) {
+		drawables.remove(drawable);
 	}
 
-	public void removeManageable(Manageable m) {
-		manageables.remove(m);
+	/**
+	 * Supprime un Manageable de l'application
+	 *
+	 * @param manageable : Manageable a supprimer
+	 */
+	public void removeManageable(Manageable manageable) {
+		manageables.remove(manageable);
 	}
 
+	/**
+	 * Gestion de tous les elements de l'application Boucle du jeu
+	 */
 	@Override
 	public void run() {
+
+		// Temps d'un passage dans la boucle while, pour la synchro des elements (ex :
+		// vitesse de deplacement)
 		timerApploop.tick();
 		while (!Thread.currentThread().isInterrupted()) {
+
+			// Gestion des elements
 			for (int i = 0; i < manageables.size(); i++) {
 				manageables.get(i).manage(this, timerApploop.lastTickS());
 			}
-			// wait
+
+			// Pause pour optimisation
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
@@ -108,6 +177,9 @@ public class Application implements Runnable {
 		}
 	}
 
+	/**
+	 * Lancement du jeu
+	 */
 	public void start() {
 		myThread.start();
 	}
