@@ -20,7 +20,11 @@ import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;
 
+/**
+ * Personnage
+ */
 public class Character implements Drawable, Serializable, Manageable {
+
 	private static final long serialVersionUID = 1L;
 	private static final int DEFAULT_SIZE = 110;
 	private static final int collideMargin = (int) (8 * Scale.getScale());
@@ -53,6 +57,12 @@ public class Character implements Drawable, Serializable, Manageable {
 
 	private BombFactory bombFactory;
 
+	/**
+	 * @param x            : Position x
+	 * @param y            : Position y
+	 * @param bombCoolDown : Temps entre chaque pose de bombe
+	 * @param speed        : Vitesse du personnage
+	 */
 	public Character(double x, double y, int bombCoolDown, int speed) {
 		pos = new Point(x, y);
 		this.speed = (int) (speed * Scale.getScale());
@@ -64,6 +74,12 @@ public class Character implements Drawable, Serializable, Manageable {
 		defaultBomb = "std";
 	}
 
+	/**
+	 * Execute les action suivant les touches du clavier
+	 *
+	 * @param a    : Application
+	 * @param keys : Touches appuyees du clavier
+	 */
 	public void actions(Application a, List<Integer> keys) {
 		setMove(keys);
 		dropBomb(a,keys);
@@ -81,6 +97,12 @@ public class Character implements Drawable, Serializable, Manageable {
 		}
 	}
 
+	/**
+	 * Pose une bombe sur la tile sur laquelle est le character
+	 * 
+	 * @param a    : Application
+	 * @param keys : Touches appuyees du clavier
+	 */
 	public void dropBomb(Application a, List<Integer> keys) {
 		if (keys.contains(KeyEvent.VK_R)) {
 			if (bombCoolDown.resetOnDone()) {
@@ -92,10 +114,16 @@ public class Character implements Drawable, Serializable, Manageable {
 		}
 	}
 
+	/**
+	 * @return Temps entre chaque pose de bombe
+	 */
 	public Cooldown getBombCoolDown() {
 		return bombCoolDown;
 	}
 
+	/**
+	 * @return Coordones du centre du personnage
+	 */
 	public Point getCenter() {
 		return new Point(pos.x + SIZE / 2, pos.y + SIZE / 2);
 	}
@@ -105,6 +133,12 @@ public class Character implements Drawable, Serializable, Manageable {
 		move(a.getMap(), t);
 	}
 
+	/**
+	 * Bouge le joueur, et gere les collisions
+	 * 
+	 * @param map : Carte de la partie
+	 * @param t   : Temps entre chaque appel
+	 */
 	public void move(GameMap map, double t) {
 
 		boolean cmx = true, cmy = true; // Can move x / y
@@ -175,6 +209,11 @@ public class Character implements Drawable, Serializable, Manageable {
 		step = (step + 1) % freq;
 	}
 
+	/**
+	 * Demande au character de bouger dans une direction
+	 * 
+	 * @param keys : Touches appuyees du clavier
+	 */
 	public void setMove(List<Integer> keys) {
 		mouv.setLocation(0, 0);
 		if (keys.contains(KeyEvent.VK_Z))
@@ -191,10 +230,27 @@ public class Character implements Drawable, Serializable, Manageable {
 		}
 	}
 
+	/**
+	 * Verification de l'alignement entre deux intervalles
+	 * 
+	 * @param p1 : Position de la premiere borne de l'intervalle 1
+	 * @param s1 : Distance jusqu'a la deuxieme borne de l'intervale 1
+	 * @param p2 : Position de la premiere borne de l'intervalle 2
+	 * @param s2 : Distance jusqu'a la deuxieme borne de l'intervale 2
+	 * @return Intervalles alignees
+	 */
 	private static boolean isAligned(int p1, int s1, int p2, int s2) {
 		return ((p1 < p2 && p2 < p1 + s1) || (p2 < p1 && p1 < p2 + s2) || (p1 < p2 + s2 / 2 && p2 + s2 / 2 < p1 + s1));
 	}
 
+	/**
+	 * Verification qu'un point est entre deux autres points sur une droite
+	 * 
+	 * @param p  : point test
+	 * @param p1 : point 1
+	 * @param p2 : point 2
+	 * @return Le point est entre les deux autres
+	 */
 	public static boolean isBetween(int p, int p1, int p2) {
 		return (p1 < p && p < p2);
 	}
