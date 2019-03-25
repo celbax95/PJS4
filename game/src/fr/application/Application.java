@@ -70,7 +70,7 @@ public class Application implements Runnable {
 	 * @param c : Couleur aleatoire du joueur
 	 * @return : Id du joueur cree
 	 */
-	public int addPlayer(Color c) {
+	public int addPlayer() {
 		int id = Math.abs((new Random()).nextInt());
 		while (players.containsKey(id))
 			id++;

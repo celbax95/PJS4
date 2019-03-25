@@ -49,9 +49,10 @@ public class Service implements Runnable {
 		server = null;
 		this.socket = serverSocket;
 		this.application = application;
-		myPlayer = application.addPlayer(randomColor());
+		myPlayer = application.addPlayer();
 		myThread = new Thread(this);
 	}
+
 	/**
 	 * ferme la socket
 	 */
@@ -59,13 +60,7 @@ public class Service implements Runnable {
 	public void finalize() throws IOException {
 		socket.close();
 	}
-	/**
-	 * @return une couleur aléatoire
-	 */
-	public Color randomColor() {
-		Random r = new Random();
-		return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
-	}
+
 	/**
 	 * envoie les données de l'application au client
 	 */
