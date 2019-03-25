@@ -142,8 +142,6 @@ public class Character implements Drawable, Serializable, Manageable {
 	 */
 	public void move(GameMap map, double t) {
 
-		boolean cmx = true, cmy = true; // Can move x / y
-
 		double x = pos.x + (moves.x * speed * t);
 		double y = pos.y + (moves.y * speed * t);
 
