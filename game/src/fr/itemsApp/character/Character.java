@@ -109,8 +109,7 @@ public class Character implements Drawable, Serializable, Manageable {
 		if (clickedKeys.contains(KeyEvent.VK_R)) {
 			if (bombCoolDown.resetOnDone()) {
 				IBomb bomb = bombFactory.create(defaultBomb, application, this);
-				application.addDrawable(bomb);
-				application.addManageable(bomb);
+				IBomb.addToLists(application, bomb);
 				bomb.start();
 			}
 		}

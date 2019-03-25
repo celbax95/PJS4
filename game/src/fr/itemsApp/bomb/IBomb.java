@@ -45,4 +45,15 @@ public interface IBomb extends Serializable, Manageable, fr.itemsApp.Drawable {
 	 * Lancement du cooldown de la bombe
 	 */
 	void start();
+
+	/**
+	 * Ajoute une bombe au Manageable et au Drawbales
+	 * 
+	 * @param application : application
+	 * @param bomb        : bombe
+	 */
+	public static void addToLists(Application application, IBomb bomb) {
+		application.addDrawable(bomb);
+		application.addManageable(bomb);
+	}
 }
