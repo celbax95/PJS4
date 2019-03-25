@@ -14,11 +14,19 @@ public class BombFactory implements Serializable {
 	public BombFactory() {
 	}
 
-	public IBomb create(String type, Application a, Character c) {
+	/**
+	 * Creation d'un bombe
+	 * 
+	 * @param type        : type de la bombe a creer
+	 * @param application : Application
+	 * @param creator     : Character qui a place la bombe
+	 * @return Bombe creee
+	 */
+	public IBomb create(String type, Application application, Character creator) {
 
-		GameMap map = a.getMap();
+		GameMap map = application.getMap();
 
-		Point tile = c.getCenter();
+		Point tile = creator.getCenter();
 		tile = map.getTileFor(tile.x, tile.y);
 
 		switch (type.trim().toLowerCase()) {
