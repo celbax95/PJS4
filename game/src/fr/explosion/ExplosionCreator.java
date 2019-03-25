@@ -9,63 +9,79 @@ import fr.itemsApp.bomb.IBomb;
 import fr.map.MapTile;
 import fr.tiles.Floor;
 import fr.util.point.Point;
-
+/**
+ * Créer une explosion
+ */
 public class ExplosionCreator implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private List<IExplosion> explosions;
-
-	public void create(Application a, IBomb b) {
+	/**
+	 * Creer une liste d'explosions (dans 4 directions différentes) pour 1 bombe
+	 * et les ajoutes à la liste des drawables et des manageables
+	 * @param application
+	 * @param bombe
+	 */
+	public void create(Application application, IBomb bombe) {
 
 		explosions = new ArrayList<>();
 
-		MapTile[][] m = a.getMap().getMap();
+		MapTile[][] m = application.getMap().getMap();
 
 		// horizontal
 
-		Point tile = b.getTile();
+		Point tile = bombe.getTile();
 
-		int size = b.getExplosionSize();
+		int sizeExplosion = bombe.getExplosionSize();
 
-		boolean l = true, r = true, u = true, d = true;
+		boolean continueLeft = true, continueRight = true, continueUp = true, continueDown = true;
 
-		IExplosion ex = b.getExplosion();
-		ex.setTile(tile.clone());
-		ex.setType(0);
+		IExplosion explosion = bombe.getExplosion();
+		explosion.setTile(tile.clone());
+		explosion.setType(0);
 
-		explosions.add(ex);
+		explosions.add(explosion);
 
-		for (int i = 1; i <= size; i++) {
-			if (r && (r = setExplosion(m, b, 1, tile.getIX() + i, tile.getIY())))
+		for (int i = 1; i <= sizeExplosion; i++) {
+			if (continueRight && (continueRight = setExplosion(m, bombe, 1, tile.getIX() + i, tile.getIY())))
 				;
-			if (l && (l = setExplosion(m, b, 1, tile.getIX() - i, tile.getIY())))
+			if (continueLeft && (continueLeft = setExplosion(m, bombe, 1, tile.getIX() - i, tile.getIY())))
 				;
-			if (u && (u = setExplosion(m, b, 2, tile.getIX(), tile.getIY() - i)))
+			if (continueUp && (continueUp = setExplosion(m, bombe, 2, tile.getIX(), tile.getIY() - i)))
 				;
-			if (d && (d = setExplosion(m, b, 2, tile.getIX(), tile.getIY() + i)))
+			if (continueDown && (continueDown = setExplosion(m, bombe, 2, tile.getIX(), tile.getIY() + i)))
 				;
 		}
 		for (IExplosion e : explosions) {
-			a.addDrawable(e);
-			a.addManageable(e);
+			application.addDrawable(e);
+			application.addManageable(e);
 		}
 	}
-
-	private boolean setExplosion(MapTile[][] m, IBomb b, int type, int x, int y) {
-		if (x < 0 || x > m.length || y < 0 || y > m[0].length)
+	/**
+	 * Vérifie si une explosion peut etre placée à une position (x, y) donnée
+	 * determine également la taille de la serie d'explosions 
+	 * et si l'explosion peut détruire un mur ou non 
+	 * @param mapTile : ensemble des éléments présents sur le terrain
+	 * @param bombe : la bombe qui est déposée sur le terrain
+	 * @param type : type de l'explosion (1 direction droite ou gauche) (2 direction haut ou bas)
+	 * @param x : abscisse du point ou doit etre placee l'explosion
+	 * @param y : ordonnée du point ou doit etre placee l'explosion
+	 */
+	private boolean setExplosion(MapTile[][] mapTile, IBomb bombe, int type, int x, int y) {
+		if (x < 0 || x > mapTile.length || y < 0 || y > mapTile[0].length)
 			return false;
 
-		if (m[x][y].isDestroyable() || m[x][y].isWalkable()) {
-			IExplosion ex = b.getExplosion();
+		if (mapTile[x][y].isDestroyable() || mapTile[x][y].isWalkable()) {
+			IExplosion ex = bombe.getExplosion();
 			ex.setTile(new Point(x, y));
 			ex.setType(type);
 			explosions.add(ex);
 		}
 
-		if (m[x][y].isDestroyable()) {
-			m[x][y] = new Floor(m[x][y].getTile().getIX(), m[x][y].getTile().getIY());
+		if (mapTile[x][y].isDestroyable()) {
+			mapTile[x][y] = new Floor(mapTile[x][y].getTile().getIX(), mapTile[x][y].getTile().getIY());
 		}
 
-		return (!m[x][y].isDestroyable() || m[x][y].isWalkable());
+		return (!mapTile[x][y].isDestroyable() || mapTile[x][y].isWalkable());
 	}
 }
