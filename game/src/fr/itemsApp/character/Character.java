@@ -131,8 +131,8 @@ public class Character implements Drawable, Serializable, Manageable {
 	}
 
 	@Override
-	public void manage(Application application, double TimeSinceLastCall) {
-		move(application.getMap(), TimeSinceLastCall);
+	public void manage(Application application, double timeSinceLastCall) {
+		move(application.getMap(), timeSinceLastCall);
 	}
 
 	/**
