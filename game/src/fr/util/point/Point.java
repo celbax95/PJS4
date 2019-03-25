@@ -58,9 +58,11 @@ public class Point implements Serializable {
 			return false;
 		return true;
 	}
+	
 	/**
 	 * Permet d'orienter le personnage lorsqu'il se déplace
-	 * @return un angle entre x et y places dans un cercle trigonométrique 
+	 * 
+	 * @return un angle entre x et y place dans un cercle trigonométrique
 	 */
 	public double getAngle() {
 		double a = Math.acos(x);
@@ -74,8 +76,9 @@ public class Point implements Serializable {
 	public int getIX() {
 		return (int) x;
 	}
+	
 	/**
-	 * @return y : ordonnée du point caste en int
+	 * @return y : Cordonnee du point caste en int
 	 */
 	public int getIY() {
 		return (int) y;
@@ -113,7 +116,7 @@ public class Point implements Serializable {
 		return result;
 	}
 	/**
-	 * Modifie les coordonnées du point 
+	 * Modifie les coordonnées du point
 	 * @param x : abscisse du point
 	 * @param y : ordonnée du point
 	 */
@@ -121,9 +124,10 @@ public class Point implements Serializable {
 		this.x = x;
 		this.y = y;
 	}
+	
 	/**
-	 * Permet de normaliser la vitesse, et la 
-	 * ramener dans un cercle trigonometrique.
+	 * Permet de normaliser les coordonnees, et la ramener dans un cercle
+	 * trigonometrique.
 	 */
 	public void normalize() {
 		double tmp = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
@@ -132,8 +136,10 @@ public class Point implements Serializable {
 			y /= tmp;
 		}
 	}
+	
 	/**
-	 * Modifie les coordonnées du point 
+	 * Modifie les coordonnees du point
+	 * 
 	 * @param x : abscisse du point
 	 * @param y : ordonnée du point
 	 */
@@ -141,8 +147,10 @@ public class Point implements Serializable {
 		this.x = x;
 		this.y = y;
 	}
+	
 	/**
-	 * Modifie les coordonnées du point
+	 * Modifie les coordonnees du point
+	 * 
 	 * @param p : un point
 	 */
 	public void setLocation(Point p) {
