@@ -27,7 +27,7 @@ public interface IExplosion extends Drawable, Manageable, Serializable {
 	public void setTile(Point tile);
 	/**
 	 * 
-	 * @param type : type de l'explosion
+	 * @param type : type de l'explosion (1 direction droite ou gauche) (2 direction haut ou bas)
 	 */
 	public void setType(int type);
 }

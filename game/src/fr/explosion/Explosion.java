@@ -73,7 +73,7 @@ public abstract class Explosion implements IExplosion {
 	
 	/**
 	 * 
-	 * @param type : type de l'explosion
+	 * @param type : type de l'explosion (1 direction droite ou gauche) (2 direction haut ou bas)
 	 */
 	@Override
 	public void setType(int type) {
