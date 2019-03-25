@@ -45,7 +45,7 @@ public class MainJPanel extends JPanel {
 	}
 
 	/**
-	 * Fermeturede la fenetre
+	 * Fermeture de la fenetre
 	 */
 	public void closeScr() {
 		screen.dispatchEvent(new WindowEvent(screen, WindowEvent.WINDOW_CLOSING));
