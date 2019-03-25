@@ -80,10 +80,7 @@ public class Application implements Runnable {
 		// Choix aleatoire parmi les emplacements de spawn existants
 		int spawnPlace[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
 
-		if (players.size() == 0)
-			players.put(id, new Character(spawnPlace[0], spawnPlace[1], 900, speed));
-		else
-			players.put(id, new Character(spawnPlace[0], spawnPlace[1], 900, speed));
+		players.put(id, new Character(spawnPlace[0], spawnPlace[1], 900, speed));
 
 		// Ajout du joueur au listes de gestion
 		drawables.add(players.get(id));
