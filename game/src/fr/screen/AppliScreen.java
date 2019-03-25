@@ -16,7 +16,7 @@ public interface AppliScreen {
 	void close();
 
 	/**
-	 * Appele par MainJPanel
+	 * Affiche les elements a l'ecran
 	 *
 	 * @see MainJpanel
 	 *
@@ -36,7 +36,7 @@ public interface AppliScreen {
 	String getName();
 
 	/**
-	 * Lance le thread
+	 * Lance l'application
 	 */
 	void start();
 }
