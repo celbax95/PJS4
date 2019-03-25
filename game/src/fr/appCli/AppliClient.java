@@ -106,10 +106,16 @@ public class AppliClient implements AppliScreen, Runnable {
 	public void draw(Graphics2D g) throws EndApp {
 		if (endApp)
 			throw new EndApp();
+
+		// creation d'un cache
 		List<Drawable> ld;
+
+		// initialisation du cache
 		synchronized (transfer) {
 			ld = listD;
 		}
+
+		// Affichage de la map
 		if (map != null) {
 			MapTile[][] mt = map.getMap();
 			if (mt != null) {
@@ -120,6 +126,8 @@ public class AppliClient implements AppliScreen, Runnable {
 				}
 			}
 		}
+
+		// Affichage des elements
 		if (listD != null) {
 			for (Drawable drawable : ld) {
 				drawable.draw(g);
@@ -144,17 +152,27 @@ public class AppliClient implements AppliScreen, Runnable {
 	@Override
 	public void run() {
 		try {
-			List<Drawable> ld;
+			// Creation du cache
+			List<Drawable> listDrawables;
+
+			// Input et Output de la socket
 			ObjectOutputStream sOut = new ObjectOutputStream((socket.getOutputStream()));
 			ObjectInputStream sIn = new ObjectInputStream((socket.getInputStream()));
 
-
+			// Tant que l'application n'est pas terminee
 			while (!Thread.currentThread().isInterrupted()) {
+
+				// Recuperation de la map
 				map = (GameMap) sIn.readUnshared();
-				ld = (List<Drawable>) sIn.readUnshared();
+
+				// Recuperation des elements
+				listDrawables = (List<Drawable>) sIn.readUnshared();
+
+				// Elements dans le cache
 				synchronized (transfer) {
-					listD = new ArrayList<>(ld);
+					listD = new ArrayList<>(listDrawables);
 				}
+
 				sOut.writeUnshared(KeyBoard.getKeys());
 				sOut.flush();
 				sOut.reset();
