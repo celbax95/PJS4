@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Random;
 
 import fr.application.Application;
-
+/**
+ * Le Service du jeu qui communique avec le client via le serveur
+ */
 public class Service implements Runnable {
 
 	private Socket socket;
@@ -23,15 +25,26 @@ public class Service implements Runnable {
 	private Application application;
 
 	private int myPlayer;
-
+	/**
+	 * constructeur Service vide
+	 */
 	private Service() {
 	}
-
+	/**
+	 * constructeur Service
+	 * @param s : le serveur
+	 * @param serverSocket : la socket du serveur
+	 * @param application : l'application
+	 */
 	public Service(Server s, Socket serverSocket, Application application) {
 		this(serverSocket, application);
 		this.server = s;
 	}
-
+	/**
+	 * constructeur Service
+	 * @param serverSocket : la socket du serveur
+	 * @param application : l'application
+	 */
 	public Service(Socket serverSocket, Application application) {
 		server = null;
 		this.socket = serverSocket;
@@ -39,17 +52,23 @@ public class Service implements Runnable {
 		myPlayer = application.addPlayer(randomColor());
 		myThread = new Thread(this);
 	}
-
+	/**
+	 * ferme la socket
+	 */
 	@Override
 	public void finalize() throws IOException {
 		socket.close();
 	}
-
+	/**
+	 * @return une couleur aléatoire
+	 */
 	public Color randomColor() {
 		Random r = new Random();
 		return new Color(r.nextInt(256), r.nextInt(256), r.nextInt(256));
 	}
-
+	/**
+	 * envoie les données de l'application au client
+	 */
 	@SuppressWarnings({ "unchecked" })
 	@Override
 	public void run() {
@@ -78,7 +97,9 @@ public class Service implements Runnable {
 			System.err.println("Service termine");
 		}
 	}
-
+	/**
+	 * lance le thread du service
+	 */
 	public void start() {
 		myThread.start();
 	}
