@@ -8,7 +8,9 @@ import java.net.Socket;
 
 import fr.application.Application;
 import fr.main.Main;
-
+/**
+ * Serveur
+ */
 public class Server implements Runnable {
 
 	private ServerSocket serveur;
@@ -17,10 +19,17 @@ public class Server implements Runnable {
 	private Service first;
 
 	private Application application;
-
+	/**
+	 * constructeur Server vide
+	 */
 	private Server() {
 	}
-
+	/**
+	 * constructeur Server
+	 * @param port : port de connexion avec les clients
+	 * @param width  : Largeur de la fenetre
+	 * @param height : Hauteur de la fenetre
+	 */
 	public Server(int port, int width, int height) {
 		first = null;
 
@@ -33,7 +42,10 @@ public class Server implements Runnable {
 		}
 		threadServ = new Thread(this);
 	}
-
+	/**
+	 * ferme la socket du serveur 
+	 * @param service : un service
+	 */
 	public void close(Service service) {
 		if (service != first)
 			return;
@@ -44,12 +56,17 @@ public class Server implements Runnable {
 		} catch (IOException e) {
 		}
 	}
-
+	/**
+	 * ferme la socket du serveur 
+	 * @param service : un service
+	 */
 	@Override
 	public void finalize() throws IOException {
 		serveur.close();
 	}
-
+	/**
+	 * Accepte les clients et lance le jeu
+	 */
 	@Override
 	public void run() {
 		while (!Thread.currentThread().isInterrupted()) {
@@ -73,11 +90,18 @@ public class Server implements Runnable {
 			}
 		}
 	}
-
+	/**
+	 * lance le Thread du serveur
+	 * et appel la method run du serveur
+	 */
 	public void start() {
 		threadServ.start();
 	}
-
+	/**
+	 * 
+	 * @param socket : une socket
+	 * @return true si la version est valide et false sinon
+	 */
 	public boolean testVersion(Socket socket) {
 		try {
 			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
