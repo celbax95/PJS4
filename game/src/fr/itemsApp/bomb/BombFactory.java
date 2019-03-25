@@ -7,6 +7,9 @@ import fr.itemsApp.character.Character;
 import fr.map.GameMap;
 import fr.util.point.Point;
 
+/**
+ * Factory pour les bombes
+ */
 public class BombFactory implements Serializable {
 
 	private static final long serialVersionUID = 1L;
