@@ -22,12 +22,12 @@ public abstract class Bomb implements IBomb {
 	protected int tileSize;
 
 	@Override
-	public void explode(Application a) {
+	public void explode(Application application) {
 		ExplosionCreator ec = new ExplosionCreator();
 
-		ec.create(a, this);
-		a.removeDrawable(this);
-		a.removeManageable(this);
+		ec.create(application, this);
+		application.removeDrawable(this);
+		application.removeManageable(this);
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public abstract class Bomb implements IBomb {
 	}
 
 	@Override
-	public void manage(Application a, double t) {
+	public void manage(Application a, double timeSinceLastCall) {
 		tileSize = a.getMap().getTileSize();
 	}
 
