@@ -32,7 +32,7 @@ public class StandardExplosion extends Explosion {
 	@Override
 	public void manage(Application a, double t) {
 		tileSize = a.getMap().getTileSize();
-		if (cd.isDone()) {
+		if (explosionTime.isDone()) {
 			a.removeDrawable(this);
 			a.removeManageable(this);
 		}

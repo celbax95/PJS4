@@ -18,7 +18,7 @@ public abstract class Explosion implements IExplosion {
 
 	protected int tileSize;
 
-	protected Cooldown cd;
+	protected Cooldown explosionTime;
 
 	public Explosion() {
 		tileSize = TILE_SIZE;
@@ -26,7 +26,7 @@ public abstract class Explosion implements IExplosion {
 		tile = new Point(0, 0);
 		this.pos = getPosfromTile(tile);
 		this.damage = 0;
-		this.cd = new Cooldown(0);
+		this.explosionTime = new Cooldown(0);
 	}
 
 	private Point getPosfromTile(Point tile) {
@@ -34,8 +34,8 @@ public abstract class Explosion implements IExplosion {
 	}
 
 	@Override
-	public void setCooldown(int cd) {
-		this.cd = new Cooldown(cd);
+	public void setCooldown(int coolDown) {
+		this.explosionTime = new Cooldown(coolDown);
 	}
 
 	@Override
