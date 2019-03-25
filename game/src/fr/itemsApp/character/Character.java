@@ -251,7 +251,7 @@ public class Character implements Drawable, Serializable, Manageable {
 	 * @return Intervalles alignees
 	 */
 	private static boolean isAligned(int p1, int s1, int p2, int s2) {
-		return ((p1 < p2 && p2 < p1 + s1) || (p2 < p1 && p1 < p2 + s2) || (p1 < p2 + s2 / 2 && p2 + s2 / 2 < p1 + s1));
+		return (isBetween(p2, p1, p1 + s1) || isBetween(p1, p2, p2 + s2) || isBetween(p2 + s2 / 2, p1, p1 + s1));
 	}
 
 	/**
