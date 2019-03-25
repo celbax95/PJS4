@@ -18,6 +18,9 @@ import fr.screen.AppliScreen;
 import fr.screen.EndApp;
 import fr.screen.keyboard.KeyBoard;
 
+/**
+ * Application client, recoit et affiche les donnees recues du serveur
+ */
 public class AppliClient implements AppliScreen, Runnable {
 
 	private List<Drawable> listD;
@@ -31,6 +34,11 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	private GameMap map;
 
+	/**
+	 * @param name : Nom de la fenetre de jeu
+	 * @param ip   : Ip du serveur
+	 * @param port : Port du serveur
+	 */
 	public AppliClient(String name, String ip, int port) {
 		this.transfer = new Object();
 
@@ -45,6 +53,9 @@ public class AppliClient implements AppliScreen, Runnable {
 		listD = new ArrayList<>();
 	}
 
+	/**
+	 * Met fin a l'application client
+	 */
 	@Override
 	public void close() {
 		myThread.interrupt();
@@ -56,6 +67,9 @@ public class AppliClient implements AppliScreen, Runnable {
 		}
 	}
 
+	/**
+	 * Ferme la socket Client
+	 */
 	public void closeSocket() {
 		try {
 			System.out.println("FIN");
@@ -66,6 +80,13 @@ public class AppliClient implements AppliScreen, Runnable {
 		}
 	}
 
+	/**
+	 * Cree une socket de communication client / serveur
+	 *
+	 * @param ip   : Ip du serveur
+	 * @param port : port du serveur
+	 * @return Socket initialisee
+	 */
 	private Socket connexion(String ip, int port) {
 		try {
 			return new Socket(ip, port);
@@ -76,6 +97,11 @@ public class AppliClient implements AppliScreen, Runnable {
 		return null;
 	}
 
+	/**
+	 * Affiche les donnees recues par le serveur (Map et Elements)
+	 *
+	 * @see run
+	 */
 	@Override
 	public void draw(Graphics2D g) throws EndApp {
 		if (endApp)
@@ -111,6 +137,9 @@ public class AppliClient implements AppliScreen, Runnable {
 		return name;
 	}
 
+	/**
+	 * Recoit les donnees serveur et envoie les inputs du client (clavier)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void run() {
@@ -146,6 +175,11 @@ public class AppliClient implements AppliScreen, Runnable {
 		myThread.start();
 	}
 
+	/**
+	 * Verifie que le client est a jour par rapport au serveur
+	 *
+	 * @param socket : socket de communication client / serveur
+	 */
 	public void testVersion(Socket socket) {
 		try {
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
