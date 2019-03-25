@@ -9,9 +9,11 @@ import java.util.Vector;
 
 import fr.itemsApp.Drawable;
 import fr.itemsApp.Manageable;
-import fr.itemsApp.character.Character;
+import fr.itemsApp.character.CharacterFactory;
+import fr.itemsApp.character.ICharacter;
 import fr.map.GameMap;
 import fr.scale.Scale;
+import fr.util.point.Point;
 import fr.util.time.Timer;
 
 /**
@@ -20,7 +22,7 @@ import fr.util.time.Timer;
 public class Application implements Runnable {
 	private final static int spawnPlaces[][] = { { (int) (120 * Scale.getScale()), (int) (120 * Scale.getScale()) } };
 
-	private Map<Integer, Character> players;
+	private Map<Integer, ICharacter> players;
 
 	private List<Drawable> drawables;
 	private List<Manageable> manageables;
@@ -75,16 +77,17 @@ public class Application implements Runnable {
 		while (players.containsKey(id))
 			id++;
 
-		int speed = 500;
-
 		// Choix aleatoire parmi les emplacements de spawn existants
 		int spawnPlace[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
 
-		players.put(id, new Character(spawnPlace[0], spawnPlace[1], 900, speed));
+		ICharacter character = CharacterFactory.getInstance().create("red");
+		character.setPos(new Point(spawnPlace[0],spawnPlace[1]));
+
+		players.put(id, character);
 
 		// Ajout du joueur au listes de gestion
-		drawables.add(players.get(id));
-		manageables.add(players.get(id));
+		addDrawable(character);
+		addManageable(character);
 
 		return id;
 	}
@@ -95,9 +98,10 @@ public class Application implements Runnable {
 	 * @param id
 	 */
 	public void deletePlayer(int id) {
-		Character character = players.get(id);
+		ICharacter character = players.get(id);
 		players.remove(id);
-		drawables.remove(character);
+		removeDrawable(character);
+		removeManageable(character);
 	}
 
 	/**

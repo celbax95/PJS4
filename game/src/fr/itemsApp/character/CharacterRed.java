@@ -23,7 +23,7 @@ import fr.util.time.Cooldown;
 /**
  * Personnage
  */
-public class Character implements Drawable, Serializable, Manageable {
+public class CharacterRed implements ICharacter {
 
 	private static final long serialVersionUID = 1L;
 	private static final int DEFAULT_SIZE = 110;
@@ -31,12 +31,12 @@ public class Character implements Drawable, Serializable, Manageable {
 
 	private static int SIZE = (int) (DEFAULT_SIZE * Scale.getScale());
 
-	private static Image imgS = (new ImageIcon(Character.class.getResource("/images/characters/red/stand.png")))
+	private static Image imgS = (new ImageIcon(CharacterRed.class.getResource("/images/characters/red/stand.png")))
 			.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
 	private static Image[] imgD = {
-			(new ImageIcon(Character.class.getResource("/images/characters/red/walk_1.png"))).getImage()
+			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_1.png"))).getImage()
 			.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT),
-			(new ImageIcon(Character.class.getResource("/images/characters/red/walk_2.png"))).getImage()
+			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_2.png"))).getImage()
 			.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT), };
 
 	private static final int walkFrequence = 60;
@@ -63,7 +63,7 @@ public class Character implements Drawable, Serializable, Manageable {
 	 * @param bombCoolDown : Temps entre chaque pose de bombe
 	 * @param speed        : Vitesse du personnage
 	 */
-	public Character(double x, double y, int bombCoolDown, int speed) {
+	public CharacterRed(double x, double y, int bombCoolDown, int speed) {
 		pos = new Point(x, y);
 		this.speed = (int) (speed * Scale.getScale());
 		moves = new Point(0, 0);
@@ -74,12 +74,10 @@ public class Character implements Drawable, Serializable, Manageable {
 		defaultBomb = "std";
 	}
 
-	/**
-	 * Execute les action suivant les touches du clavier
-	 *
-	 * @param application    : Application
-	 * @param clickedKeys : Touches appuyees du clavier
+	/* (non-Javadoc)
+	 * @see fr.itemsApp.character.ICharacter#actions(fr.application.Application, java.util.List)
 	 */
+	@Override
 	public void actions(Application application, List<Integer> clickedKeys) {
 		setMoves(clickedKeys);
 		dropBomb(application,clickedKeys);
@@ -122,13 +120,17 @@ public class Character implements Drawable, Serializable, Manageable {
 		return bombCoolDown;
 	}
 
-	/**
-	 * @return Coordones du centre du personnage
+	/* (non-Javadoc)
+	 * @see fr.itemsApp.character.ICharacter#getCenter()
 	 */
+	@Override
 	public Point getCenter() {
 		return new Point(pos.x + SIZE / 2, pos.y + SIZE / 2);
 	}
 
+	/* (non-Javadoc)
+	 * @see fr.itemsApp.character.ICharacter#manage(fr.application.Application, double)
+	 */
 	@Override
 	public void manage(Application application, double timeSinceLastCall) {
 		move(application.getMap(), timeSinceLastCall);
@@ -214,6 +216,11 @@ public class Character implements Drawable, Serializable, Manageable {
 		walkStep = (walkStep + 1) % walkFrequence;
 	}
 
+	@Override
+	public void setBombCoolDown(int bombCoolDown) {
+		this.bombCoolDown = new Cooldown(bombCoolDown);
+	}
+
 	/**
 	 * Demande au character de bouger dans une direction
 	 *
@@ -236,6 +243,16 @@ public class Character implements Drawable, Serializable, Manageable {
 		if (!(moves.x == 0 && moves.y == 0)) {
 			angleOfView = moves.getAngle();
 		}
+	}
+
+	@Override
+	public void setPos(Point pos) {
+		this.pos = pos;
+	}
+
+	@Override
+	public void setSpeed(int speed) {
+		this.speed = speed;
 	}
 
 	/**

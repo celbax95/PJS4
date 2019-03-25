@@ -3,7 +3,7 @@ package fr.itemsApp.bomb;
 import java.io.Serializable;
 
 import fr.application.Application;
-import fr.itemsApp.character.Character;
+import fr.itemsApp.character.ICharacter;
 import fr.map.GameMap;
 import fr.util.point.Point;
 
@@ -25,7 +25,7 @@ public class BombFactory implements Serializable {
 	 * @param creator     : Character qui a place la bombe
 	 * @return Bombe creee
 	 */
-	public IBomb create(String type, Application application, Character creator) {
+	public IBomb create(String type, Application application, ICharacter creator) {
 
 		GameMap map = application.getMap();
 
