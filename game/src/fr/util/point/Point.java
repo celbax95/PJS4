@@ -115,15 +115,6 @@ public class Point implements Serializable {
 		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
-	/**
-	 * Modifie les coordonnées du point
-	 * @param x : abscisse du point
-	 * @param y : ordonnée du point
-	 */
-	public void move(double x, double y) {
-		this.x = x;
-		this.y = y;
-	}
 	
 	/**
 	 * Permet de normaliser les coordonnees, et la ramener dans un cercle
