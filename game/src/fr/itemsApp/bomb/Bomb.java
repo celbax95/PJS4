@@ -5,6 +5,9 @@ import fr.explosion.ExplosionCreator;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;
 
+/**
+ * Superclass pour les bombes
+ */
 public abstract class Bomb implements IBomb {
 
 	private static final long serialVersionUID = 1L;
