@@ -98,7 +98,8 @@ public class Server implements Runnable {
 		threadServ.start();
 	}
 	/**
-	 * 
+	 * Permet de verifier si le serveur est de la meme version que le service
+	 * En cas de changements majeurs sur le serveur ou sur le service
 	 * @param socket : une socket
 	 * @return true si la version est valide et false sinon
 	 */
