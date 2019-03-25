@@ -75,15 +75,15 @@ public class Application implements Runnable {
 		while (players.containsKey(id))
 			id++;
 
-		int spd = 500;
+		int speed = 500;
 
 		// Choix aleatoire parmi les emplacements de spawn existants
-		int sp[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
+		int spawnPlace[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
 
 		if (players.size() == 0)
-			players.put(id, new Character(sp[0], sp[1], 900, spd));
+			players.put(id, new Character(spawnPlace[0], spawnPlace[1], 900, speed));
 		else
-			players.put(id, new Character(sp[0], sp[1], 900, spd));
+			players.put(id, new Character(spawnPlace[0], spawnPlace[1], 900, speed));
 
 		// Ajout du joueur au listes de gestion
 		drawables.add(players.get(id));
@@ -98,9 +98,9 @@ public class Application implements Runnable {
 	 * @param id
 	 */
 	public void deletePlayer(int id) {
-		Character c = players.get(id);
+		Character character = players.get(id);
 		players.remove(id);
-		drawables.remove(c);
+		drawables.remove(character);
 	}
 
 	/**
@@ -128,28 +128,28 @@ public class Application implements Runnable {
 	 * Gere les actions du Joueur
 	 *
 	 * @param id      : Id du joueur
-	 * @param cliKeys : Touches active du clavier du joueur
+	 * @param clickedKeys : Touches active du clavier du joueur
 	 */
-	public void managePlayer(int id, List<Integer> cliKeys) {
-		players.get(id).actions(this, cliKeys);
+	public void managePlayer(int id, List<Integer> clickedKeys) {
+		players.get(id).actions(this, clickedKeys);
 	}
 
 	/**
 	 * Supprime un Drawable de l'application
 	 *
-	 * @param d : Drawable a supprimer
+	 * @param drawable : Drawable a supprimer
 	 */
-	public void removeDrawable(Drawable d) {
-		drawables.remove(d);
+	public void removeDrawable(Drawable drawable) {
+		drawables.remove(drawable);
 	}
 
 	/**
 	 * Supprime un Manageable de l'application
 	 *
-	 * @param d : Manageable a supprimer
+	 * @param manageable : Manageable a supprimer
 	 */
-	public void removeManageable(Manageable m) {
-		manageables.remove(m);
+	public void removeManageable(Manageable manageable) {
+		manageables.remove(manageable);
 	}
 
 	/**
