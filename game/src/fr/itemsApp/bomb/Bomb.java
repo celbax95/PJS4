@@ -14,7 +14,7 @@ public abstract class Bomb implements IBomb {
 
 	protected Point pos, tile;
 
-	protected Cooldown cd;
+	protected Cooldown cooldown;
 	protected int explosionSize;
 	protected int tileSize;
 
@@ -44,6 +44,6 @@ public abstract class Bomb implements IBomb {
 
 	@Override
 	public void start() {
-		cd.start();
+		cooldown.start();
 	}
 }

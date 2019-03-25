@@ -25,7 +25,7 @@ public class BombStd extends Bomb {
 		this.tile = tile;
 		this.pos = new Point((tile.getIX() * tileSize) + (tileSize - SIZE) / 2,
 				(tile.getIY() * tileSize) + (tileSize - SIZE) / 2);
-		this.cd = new Cooldown(cooldown);
+		this.cooldown = new Cooldown(cooldown);
 		this.explosionSize = explosionSize;
 	}
 
@@ -51,7 +51,7 @@ public class BombStd extends Bomb {
 	@Override
 	public void manage(Application a, double t) {
 		super.manage(a, t);
-		if (cd.isDone()) {
+		if (cooldown.isDone()) {
 			explode(a);
 		}
 	}
