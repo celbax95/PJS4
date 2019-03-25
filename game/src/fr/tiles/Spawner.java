@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import fr.application.Application;
 /**
- * Zone d'apparition
+ * Zone d'apparition des objets
  */
 public class Spawner extends MapTileSuper {
 

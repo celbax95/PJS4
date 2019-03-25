@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import fr.application.Application;
 /**
- * Zone d'apparition
+ * Zone d'apparition des joueurs
  */
 public class SpawnPoint extends MapTileSuper {
 
