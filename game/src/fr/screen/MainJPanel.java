@@ -30,8 +30,11 @@ public class MainJPanel extends JPanel {
 	private MainJPanel(Screen screen, AppliScreen appScreen, int width, int height, int margin) {
 		super();
 		this.screen = screen;
+
+		// taille du panel
 		WIDTH = width;
 		HEIGHT = height;
+
 		this.setLocation(margin, margin);
 		this.setSize(WIDTH, HEIGHT);
 
