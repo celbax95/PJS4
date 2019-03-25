@@ -10,6 +10,9 @@ import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;
 
+/**
+ * Bombe standard
+ */
 public class BombStd extends Bomb {
 
 	private static final long serialVersionUID = 1L;
