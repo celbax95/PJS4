@@ -1,6 +1,5 @@
 package fr.server;
 
-import java.awt.Color;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -8,9 +7,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
-import java.util.Random;
-
 import fr.application.Application;
+
 /**
  * Le Service du jeu qui communique avec le client via le serveur
  */
@@ -82,7 +80,7 @@ public class Service implements Runnable {
 				application.managePlayer(myPlayer, cliKeys);
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			try {
 				socket.close();
 			} catch (IOException e1) {

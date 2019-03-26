@@ -159,6 +159,8 @@ public class AppliClient implements AppliScreen, Runnable {
 			ObjectOutputStream sOut = new ObjectOutputStream((socket.getOutputStream()));
 			ObjectInputStream sIn = new ObjectInputStream((socket.getInputStream()));
 
+			KeyBoard keyBoard = KeyBoard.getInstance();
+
 			// Tant que l'application n'est pas terminee
 			while (!Thread.currentThread().isInterrupted()) {
 
@@ -173,7 +175,7 @@ public class AppliClient implements AppliScreen, Runnable {
 					listD = new ArrayList<>(listDrawables);
 				}
 
-				sOut.writeUnshared(KeyBoard.getKeys());
+				sOut.writeUnshared(keyBoard.getKeys());
 				sOut.flush();
 				sOut.reset();
 			}

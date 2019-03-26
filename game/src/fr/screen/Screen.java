@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import fr.screen.keyboard.KeyBoard;
+import fr.screen.keyboard.KeyBoardHolder;
 
 /**
  * Singloton Screen, une fenetre
@@ -50,7 +50,7 @@ public class Screen extends JFrame {
 		// Clavier
 		this.setFocusable(true);
 		this.requestFocusInWindow();
-		this.addKeyListener(new KeyBoard());
+		this.addKeyListener(new KeyBoardHolder());
 
 		// Interieur de la fenetre
 		JPanel jp = new JPanel();
@@ -70,7 +70,7 @@ public class Screen extends JFrame {
 
 	/**
 	 * Cree ou renvoie l'instance unique de Screen
-	 * 
+	 *
 	 * @param appScreen : Application a lancer dans la fenetre
 	 * @param width     : largeur de la fenetre
 	 * @param height    : hauteur de la fenetre
