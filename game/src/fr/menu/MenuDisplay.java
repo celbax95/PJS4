@@ -38,7 +38,7 @@ public class MenuDisplay implements Menu{
 	private static final Color ARROWS_BACKGROUND_COLOR = new Color(80, 100, 190);
 	private static final Font BUTTON_FONT = new Font("Tahoma", Font.BOLD, 20);
 	private static final int SIZE_BUTTON_X = 210, SIZE_BUTTON_Y = 45; 
-	private static final int NB_MAX_PLAYERS = 4, NB_MIN_PLAYERS = 2;
+	private static final int NB_MAX_PLAYERS = 4, NB_MIN_PLAYERS = 2, NB_INIT_PLAYERS = 3;
 	
 	private static final String IP = "localhost";
 	private static final int PORT = 5000;
@@ -61,7 +61,10 @@ public class MenuDisplay implements Menu{
 	private int nbPlayers;
 	private boolean sawIpAdress;
 	
-	public static MenuDisplay getInstance() {
+	/**
+	 * Récupère l'instance unique du menu
+	 */
+	public static Menu getInstance() {
 		if(MenuDisplay.menu == null) {
 			MenuDisplay.menu = new MenuDisplay();
 			return MenuDisplay.menu;
@@ -69,6 +72,15 @@ public class MenuDisplay implements Menu{
 		else { return MenuDisplay.menu; }
 	}
 	
+	/**
+	 * Génère une nouvelle instance du menu qui remplace l'ancienne
+	 */
+	public void resetInstance() {
+		MenuDisplay.menu = new MenuDisplay();
+	}
+	/**
+	 * Constructeur du menu (initialisation de tous ses composants)
+	 */
 	private MenuDisplay() {
 		this.f = new JFrame(MenuDisplay.TITLE);
 		this.f.setSize(new Dimension(windowSize, 250));
@@ -78,7 +90,7 @@ public class MenuDisplay implements Menu{
 		this.p = new MenuPanel(windowSize);
 		
 		this.hj = 0;
-		this.nbPlayers = 3;
+		this.nbPlayers = NB_INIT_PLAYERS;
 		this.sawIpAdress = false;
 		
 		this.host = new JButton("Host");
@@ -142,6 +154,9 @@ public class MenuDisplay implements Menu{
 		this.ipTF.setForeground(Color.gray);
 	}
 	
+	/**
+	 * Déclaration de tous les listeners des objets du menu et affichage du menu.
+	 */
 	public void init() {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.host.addActionListener(new ActionListener() {
@@ -171,6 +186,8 @@ public class MenuDisplay implements Menu{
 				hideComponents();
 				switch(hj) {
 					case 1:
+						nbPlayers = NB_INIT_PLAYERS;
+						nbPlayersLabel.setText(String.valueOf(nbPlayers));
 						hj = 0;
 						break;
 					case 2:
@@ -306,6 +323,9 @@ public class MenuDisplay implements Menu{
 		f.setVisible(false);
 	}
 	
+	/**
+	 * Cache les composants du menu en fonction de la position dans l'arborescence du menu
+	 */
 	private void hideComponents() {
 		if(hj == 0) {
 			for(JComponent jc : cHList) {
@@ -341,6 +361,9 @@ public class MenuDisplay implements Menu{
 		else { /* ÃƒÆ’Ã‚Â  faire */ }
 		
 	}
+	/**
+	 * Montre les composants du menu en fonction de la position dans l'arborescence du menu
+	 */
 	private void showComponents() {
 		if(hj ==0) {
 			host.setVisible(true);
@@ -367,7 +390,7 @@ public class MenuDisplay implements Menu{
 				jc.setVisible(true);
 			}
 		}
-		else { /* ÃƒÆ’Ã‚Â  faire */ }
+		else { /* éventuellement à rajouter */ }
 	}
 	private void setFocusPaintedButtons() {
 		for(JButton jb : bList) {

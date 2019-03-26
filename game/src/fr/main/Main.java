@@ -2,6 +2,7 @@ package fr.main;
 
 
 import fr.gameLauncher.GameLauncher;
+import fr.gameLauncher.MenuNotSet;
 
 /**
  * Entrée de l'application
@@ -18,6 +19,10 @@ public class Main {
 			e.printStackTrace();
 		}
 		
-		GameLauncher.menuDisplay();
+		try {
+			GameLauncher.menuDisplay();
+		} catch (MenuNotSet e) {
+			e.printStackTrace();
+		}
 	}
 }

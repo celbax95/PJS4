@@ -12,6 +12,7 @@ import java.net.Socket;
 import java.util.List;
 
 import fr.application.Application;
+import fr.gameLauncher.GameLauncher;
 
 /**
  * Le Service du jeu qui communique avec le client via le serveur
@@ -85,8 +86,14 @@ public class Service implements Runnable {
 			
 			PrintWriter out = new PrintWriter (socket.getOutputStream ( ), true);
 			out.println("Game start");
-			while(application == null) { }
-			myPlayer = application.addPlayer();
+			synchronized(server) {
+				while(server.getApplication() == null) {
+					this.wait();
+				}
+				application = server.getApplication();
+				myPlayer = application.addPlayer();
+			}
+			
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 			while(!Thread.currentThread().isInterrupted()) {
@@ -102,17 +109,19 @@ public class Service implements Runnable {
 				}
 			}
 		} catch (IOException e) {
-			//e.printStackTrace();
 			System.err.println("Joueur déconnecté");
 			server.playerLeft();
 			try {
 				socket.close();
-			} catch (IOException e1) {}
+				GameLauncher.resetMenu();
+			} catch (IOException e1) {GameLauncher.resetMenu();}
 			myThread.interrupt();
-			//application.deletePlayer(myPlayer);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			GameLauncher.resetMenu();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			GameLauncher.resetMenu();
 		}
 	}
 

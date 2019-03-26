@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.sun.glass.events.KeyEvent;
 
+import fr.gameLauncher.GameLauncher;
 import fr.itemsApp.Drawable;
 import fr.map.GameMap;
 import fr.map.MapTile;
@@ -182,10 +183,14 @@ public class AppliClient implements AppliScreen, Runnable {
 				sOut.flush();
 				sOut.reset();
 			}
-		} catch (Exception e) {
-			// e.printStackTrace();
+		} catch (IOException e) {
 			System.err.println("Communication avec le serveur terminee");
 			close();
+			GameLauncher.resetMenu();
+		} catch (ClassNotFoundException e1) {
+			System.err.println("Erreur de Reception depuis le serveur");
+			close();
+			GameLauncher.resetMenu(); 
 		}
 	}
 

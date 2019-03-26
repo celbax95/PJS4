@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 
 import fr.appCli.AppliClient;
+import fr.gameLauncher.Menu;
 import fr.menu.MenuDisplay;
 import fr.screen.AppliScreen;
 import fr.screen.Screen;
@@ -14,7 +15,7 @@ public class Client implements Runnable{
 
 	private Socket socket;
 	private Thread myThread;
-	private MenuDisplay menu; 
+	private Menu menu; 
 	
 	private static final String NAME = "TEST PJS4";
 	
@@ -25,7 +26,7 @@ public class Client implements Runnable{
 	public static final int WIDTH = 1728;
 	public static final int HEIGHT = 972;
 	
-	public Client(String ip, int port, MenuDisplay menu) {
+	public Client(String ip, int port, Menu menu) {
 
 		socket = connexion(ip, port);
 		this.menu = menu;

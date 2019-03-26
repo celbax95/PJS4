@@ -137,6 +137,10 @@ public class Server implements Runnable {
 		this.nbPlayers--;
 	}
 	
+	protected Application getApplication() {
+		return application;
+	}
+	
 	public int getNbPlayers() {
 		return this.nbPlayers;
 	}
@@ -146,11 +150,11 @@ public class Server implements Runnable {
 	public void setGameOn() {
 		synchronized(this) {
 			this.gameOn = true;
-			(application = new Application(WIDTH, HEIGHT)).start();
+			(this.application = new Application(WIDTH, HEIGHT)).start();
 			AppliScreen appScr = new AppliClient(title, socketHost);
 			Service.setApplication(application);
+			notifyAll();
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 		}
-		
 	}
 }
