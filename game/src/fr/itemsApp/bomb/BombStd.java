@@ -2,6 +2,7 @@ package fr.itemsApp.bomb;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 import fr.application.Application;
 import fr.explosion.IExplosion;
@@ -34,8 +35,12 @@ public class BombStd extends Bomb {
 
 	@Override
 	public void draw(Graphics2D g) {
+		AffineTransform af = new AffineTransform();
+		af.scale(Scale.getScale(), Scale.getScale());
+		af.translate(pos.getIX(), pos.getIY());
+		g.setTransform(af);
 		g.setColor(c);
-		g.fillRect(pos.getIX(), pos.getIY(), DEFAULT_BOMB_SIZE, DEFAULT_BOMB_SIZE);
+		g.fillRect(0, 0, DEFAULT_BOMB_SIZE, DEFAULT_BOMB_SIZE);
 	}
 
 	@Override
