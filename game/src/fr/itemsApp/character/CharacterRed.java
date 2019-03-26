@@ -203,6 +203,12 @@ public class CharacterRed implements ICharacter {
 	}
 
 	@Override
+	public double getMaxHealth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
 	public void manage(Application application, double timeSinceLastCall) {
 		move(application, timeSinceLastCall);
 		setDamage(application);

@@ -39,11 +39,20 @@ public class Service implements Runnable {
 
 	/**
 	 * constructeur Service
+<<<<<<< HEAD
 	 *
+=======
+	 * 
+>>>>>>> HUD life point feature
 	 * @param s
 	 *            : le serveur
 	 * @param serverSocket
 	 *            : la socket du serveur
+<<<<<<< HEAD
+=======
+	 * @param application
+	 *            : l'application
+>>>>>>> HUD life point feature
 	 */
 
 	public Service(Server s, Socket serverSocket) {
@@ -53,9 +62,17 @@ public class Service implements Runnable {
 
 	/**
 	 * constructeur Service
+<<<<<<< HEAD
 	 *
 	 * @param serverSocket
 	 *            : la socket du serveur
+=======
+	 * 
+	 * @param serverSocket
+	 *            : la socket du serveur
+	 * @param application
+	 *            : l'application
+>>>>>>> HUD life point feature
 	 */
 	public Service(Socket serverSocket) {
 		this.server = null;

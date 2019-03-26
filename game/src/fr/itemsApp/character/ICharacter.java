@@ -38,6 +38,8 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	 */
 	int getHealth();
 
+	double getMaxHealth();
+
 	/**
 	 * Fait regarder le ICharacter dans une direction
 	 *
@@ -84,4 +86,5 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	 *            : nouvelle vitesse pour le ICharacter
 	 */
 	void setSpeed(int speed);
+
 }
