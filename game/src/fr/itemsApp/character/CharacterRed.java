@@ -24,17 +24,14 @@ public class CharacterRed implements ICharacter {
 
 	private static final long serialVersionUID = 1L;
 	private static final int DEFAULT_SIZE = 110;
-	private static final int collideMargin = (int) (8 * Scale.getScale());
-
-	private static int SIZE = (int) (DEFAULT_SIZE * Scale.getScale());
+	private static final int collideMargin = 8;
 
 	private static Image imgS = (new ImageIcon(CharacterRed.class.getResource("/images/characters/red/stand.png")))
-			.getImage().getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
+			.getImage();
 	private static Image[] imgD = {
-			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_1.png"))).getImage()
-			.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT),
+			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_1.png"))).getImage(),
 			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_2.png"))).getImage()
-			.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT), };
+	};
 
 	private static final int walkFrequence = 60;
 
@@ -62,7 +59,7 @@ public class CharacterRed implements ICharacter {
 	 */
 	public CharacterRed(double x, double y, int bombCoolDown, int speed) {
 		pos = new Point(x, y);
-		this.speed = (int) (speed * Scale.getScale());
+		this.speed = speed;
 		moves = new Point(0, 0);
 		angleOfView = 0;
 		walkStep = 0;
@@ -82,16 +79,21 @@ public class CharacterRed implements ICharacter {
 
 	@Override
 	public void draw(Graphics2D g) {
+
 		AffineTransform af = new AffineTransform();
+		af.scale(Scale.getScale(), Scale.getScale());
 		af.translate(pos.x, pos.y);
-		af.rotate(angleOfView, SIZE / 2, SIZE / 2);
+		af.rotate(angleOfView, DEFAULT_SIZE / 2, DEFAULT_SIZE / 2);
 
 		// Affichage du skin statique ou en mouvement
-		if (moves.x == 0 && moves.y == 0)
+		if (moves.x == 0 && moves.y == 0) {
 			g.drawImage(imgS, af, null);
-		else {
-			g.drawImage(imgD[(walkStep < walkFrequence / 2) ? 0 : 1], af, null);
 		}
+		else {
+			g.drawImage(
+					imgD[(walkStep < walkFrequence / 2) ? 0 : 1], af, null);
+		}
+		System.out.println(DEFAULT_SIZE);
 	}
 
 	/**
@@ -122,7 +124,7 @@ public class CharacterRed implements ICharacter {
 	 */
 	@Override
 	public Point getCenter() {
-		return new Point(pos.x + SIZE / 2, pos.y + SIZE / 2);
+		return new Point(pos.x + DEFAULT_SIZE / 2, pos.y + DEFAULT_SIZE / 2);
 	}
 
 	/* (non-Javadoc)
@@ -144,7 +146,7 @@ public class CharacterRed implements ICharacter {
 		double x = pos.x + (moves.x * speed * t);
 		double y = pos.y + (moves.y * speed * t);
 
-		Point tile = map.getTileFor(x + SIZE / 2, y + SIZE / 2);
+		Point tile = map.getTileFor(x + DEFAULT_SIZE / 2, y + DEFAULT_SIZE / 2);
 
 		MapTile[][] mapTiles = map.getMap();
 		MapTile mapTile;
@@ -164,13 +166,15 @@ public class CharacterRed implements ICharacter {
 				// Verification de collision avec les tiles nom walkable
 				if (!mapTile.isWalkable()) {
 					// X
-					if (isAligned(pos.getIY() + collideMargin, SIZE - collideMargin * 2, mapTile.getPos().getIY(),
+					if (isAligned(pos.getIY() + collideMargin, DEFAULT_SIZE - collideMargin * 2,
+							mapTile.getPos().getIY(),
 							mapTile.getSize())) {
 
 						// Droite
 						if (moves.x > 0
-								&& isBetween((int) x + SIZE, mapTile.getPos().getIX(), mapTile.getPos().getIX() + mapTile.getSize())) {
-							x = mapTile.getPos().x - SIZE;
+								&& isBetween((int) x + DEFAULT_SIZE, mapTile.getPos().getIX(),
+										mapTile.getPos().getIX() + mapTile.getSize())) {
+							x = mapTile.getPos().x - DEFAULT_SIZE;
 							// On ne peut pas aller a droite
 						}
 
@@ -183,13 +187,15 @@ public class CharacterRed implements ICharacter {
 					}
 
 					// Y
-					if (isAligned(pos.getIX() + collideMargin, SIZE - collideMargin * 2, mapTile.getPos().getIX(),
+					if (isAligned(pos.getIX() + collideMargin, DEFAULT_SIZE - collideMargin * 2,
+							mapTile.getPos().getIX(),
 							mapTile.getSize())) {
 
 						// Haut
 						if (moves.y > 0
-								&& isBetween((int) y + SIZE, mapTile.getPos().getIY(), mapTile.getPos().getIY() + mapTile.getSize())) {
-							y = mapTile.getPos().y - SIZE;
+								&& isBetween((int) y + DEFAULT_SIZE, mapTile.getPos().getIY(),
+										mapTile.getPos().getIY() + mapTile.getSize())) {
+							y = mapTile.getPos().y - DEFAULT_SIZE;
 							// On ne peut pas aller en haut
 						}
 
