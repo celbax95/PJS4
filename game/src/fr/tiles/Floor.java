@@ -13,7 +13,7 @@ public class Floor extends MapTileSuper {
 
 	private static final long serialVersionUID = 1L;
 	private static Image img = (new ImageIcon(Floor.class.getResource("/images/map/floor/floor.png"))).getImage()
-			.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
+			.getScaledInstance(DEFAULT_SIZE, DEFAULT_SIZE, Image.SCALE_DEFAULT);
 
 	private static final boolean walkable = true;
 

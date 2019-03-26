@@ -14,8 +14,6 @@ public class GameMap implements Serializable {
 
 	private static final int DEFAULT_TILE_SIZE = 120;
 
-	private static int TILE_SIZE = (int) (DEFAULT_TILE_SIZE * Scale.getScale());
-
 	private int width, height;
 
 	private MapTile[][] map;
@@ -39,11 +37,11 @@ public class GameMap implements Serializable {
 	}
 
 	public Point getTileFor(double x, double y) {
-		return new Point(((int) x) / TILE_SIZE, ((int) y) / TILE_SIZE);
+		return new Point(((int) x) / DEFAULT_TILE_SIZE, ((int) y) / DEFAULT_TILE_SIZE);
 	}
 
 	public int getTileSize() {
-		return TILE_SIZE;
+		return DEFAULT_TILE_SIZE;
 	}
 
 	public int getWidth() {

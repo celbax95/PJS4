@@ -2,10 +2,12 @@ package fr.explosion;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
 
 import fr.application.Application;
+import fr.scale.Scale;
 /**
  * Explosion standard
  */
@@ -27,14 +29,17 @@ public class StandardExplosion extends Explosion {
 	public StandardExplosion() {
 		super();
 	}
-	
+
 	/**
 	 * Dessine l'explosion sur le terrain
 	 * @param g : permet l'affichage d'éléments (images, text, ...)
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(img[type], pos.getIX(), pos.getIY(), null);
+		AffineTransform af = new AffineTransform();
+		af.scale(Scale.getScale(), Scale.getScale());
+		af.translate(pos.getIX(), pos.getIY());
+		g.drawImage(img[type], af, null);
 	}
 	/**
 	 * Gestion de l'element

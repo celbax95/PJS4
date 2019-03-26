@@ -30,7 +30,7 @@ public class Spawner extends MapTileSuper {
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(c);
-		g.fillRect(pos.getIX(), pos.getIY(), SIZE, SIZE);
+		g.fillRect(pos.getIX(), pos.getIY(), DEFAULT_SIZE, DEFAULT_SIZE);
 	}
 	/**
 	 * permet d'interagir avec la zone d'apparition
