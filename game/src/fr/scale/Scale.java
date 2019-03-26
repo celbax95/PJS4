@@ -6,6 +6,8 @@ package fr.scale;
  */
 public class Scale {
 
+	private static double step = 0.01;
+
 	private static Scale instance;
 
 	static {
@@ -22,18 +24,40 @@ public class Scale {
 	}
 
 	/**
+	 * diminue le scale
+	 */
+	public void decreaseScale() {
+		scale -= step;
+	}
+
+	/**
 	 * @return l'echelle
 	 */
 	public double getScale() {
 		return scale;
 	}
+
 	/**
-	 *
+	 * @return le pas de changement du scale
+	 */
+	public double getStep() {
+		return scale;
+	}
+
+	/**
+	 * augmente le scale
+	 */
+	public void increaseScale() {
+		scale += step;
+	}
+
+	/**
 	 * @param s : l'echelle
 	 */
 	public void setScale(double s) {
 		scale = s;
 	}
+
 	public static Scale getInstance() {
 		return instance;
 	}
