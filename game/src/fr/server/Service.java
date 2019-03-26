@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.List;
 
 import fr.application.Application;
+import fr.hud.HUDManager;
 
 /**
  * Le Service du jeu qui communique avec le client via le serveur
@@ -58,7 +59,10 @@ public class Service implements Runnable {
 	 */
 	public Service(Socket serverSocket) {
 		this.server = null;
-		this.socket = serverSocket;
+
+		this.application = application;
+		myPlayer = application.addPlayer();
+		HUDManager.getInstance().createHUD(application, myPlayer);
 		myThread = new Thread(this);
 	}
 
@@ -126,6 +130,9 @@ public class Service implements Runnable {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			application.deletePlayer(myPlayer);
+			HUDManager.getInstance().deleteHUD(application, myPlayer);
+			System.err.println("Service termine");
 		}
 	}
 

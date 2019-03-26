@@ -40,8 +40,10 @@ public class Application implements Runnable {
 	private Thread myThread;
 
 	/**
-	 * @param width  : Largeur de la fenetre
-	 * @param height : Hauteur de la fenetre
+	 * @param width
+	 *            : Largeur de la fenetre
+	 * @param height
+	 *            : Hauteur de la fenetre
 	 */
 	public Application(int width, int height) {
 		players = new HashMap<>();
@@ -61,7 +63,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajoute une bombe a la liste des bombes
 	 *
-	 * @param bomb : bombe a ajouter
+	 * @param bomb
+	 *            : bombe a ajouter
 	 */
 	public void addBomb(IBomb bomb) {
 		bombs.add(bomb);
@@ -70,7 +73,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajout d'un element Drawable a l'application
 	 *
-	 * @param drawable : Drawable a ajouter
+	 * @param drawable
+	 *            : Drawable a ajouter
 	 */
 	public void addDrawable(Drawable drawable) {
 		drawables.add(drawable);
@@ -79,7 +83,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajoute une Explosion
 	 *
-	 * @param explosion : Explosion a ajouter
+	 * @param explosion
+	 *            : Explosion a ajouter
 	 */
 	public void addExplosion(IExplosion explosion) {
 		explosions.add(explosion);
@@ -88,7 +93,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajout d'un element Manageable a l'application
 	 *
-	 * @param manageable : Manageable a ajouter
+	 * @param manageable
+	 *            : Manageable a ajouter
 	 */
 	public void addManageable(Manageable manageable) {
 		manageables.add(manageable);
@@ -97,7 +103,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajout d'un joueur a l'application
 	 *
-	 * @param c : Couleur aleatoire du joueur
+	 * @param c
+	 *            : Couleur aleatoire du joueur
 	 * @return : Id du joueur cree
 	 */
 	public int addPlayer() {
@@ -173,11 +180,17 @@ public class Application implements Runnable {
 		return map;
 	}
 
+	public ICharacter getPlayerById(int idPlayer) {
+		return players.get(idPlayer);
+	}
+
 	/**
 	 * Gere les actions du Joueur
 	 *
-	 * @param id          : Id du joueur
-	 * @param clickedKeys : Touches active du clavier du joueur
+	 * @param id
+	 *            : Id du joueur
+	 * @param clickedKeys
+	 *            : Touches active du clavier du joueur
 	 */
 	public boolean managePlayer(int id, List<Integer> clickedKeys) {
 		ICharacter character = players.get(id);
@@ -191,7 +204,8 @@ public class Application implements Runnable {
 	/**
 	 * Supprime une bombe de la liste des bombes
 	 *
-	 * @param bomb : la bombe a supprimer
+	 * @param bomb
+	 *            : la bombe a supprimer
 	 */
 	public void removeBomb(IBomb bomb) {
 		bombs.remove(bomb);
@@ -200,7 +214,8 @@ public class Application implements Runnable {
 	/**
 	 * Supprime un Drawable de l'application
 	 *
-	 * @param drawable : Drawable a supprimer
+	 * @param drawable
+	 *            : Drawable a supprimer
 	 */
 	public void removeDrawable(Drawable drawable) {
 		drawables.remove(drawable);
@@ -209,7 +224,8 @@ public class Application implements Runnable {
 	/**
 	 * Enleve une explosion de la liste d'explosions
 	 *
-	 * @param explosion : explosion a enlever
+	 * @param explosion
+	 *            : explosion a enlever
 	 */
 	public void removeExplosion(IExplosion explosion) {
 		explosions.remove(explosion);
@@ -218,7 +234,8 @@ public class Application implements Runnable {
 	/**
 	 * Supprime un Manageable de l'application
 	 *
-	 * @param manageable : Manageable a supprimer
+	 * @param manageable
+	 *            : Manageable a supprimer
 	 */
 	public void removeManageable(Manageable manageable) {
 		manageables.remove(manageable);
@@ -255,6 +272,7 @@ public class Application implements Runnable {
 	public void start() {
 		myThread.start();
 	}
+
 	public void stop() {
 		myThread.interrupt();
 	}
