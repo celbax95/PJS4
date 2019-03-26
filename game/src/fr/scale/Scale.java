@@ -95,7 +95,6 @@ public class Scale implements Runnable {
 
 			while (!Thread.currentThread().isInterrupted()) {
 				while ((difference = Math.abs(tmpScale - aimedScale)) > 0.02) {
-					System.out.println(difference);
 
 					if (scale < aimedScale)
 						tmpScale += step * difference * animationSpeedFactor;
