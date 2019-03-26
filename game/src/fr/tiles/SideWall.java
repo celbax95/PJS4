@@ -31,9 +31,10 @@ public class SideWall extends MapTileSuper {
 	 */
 	@Override
 	public void draw(Graphics2D g) {
+		Scale scale = Scale.getInstance();
 		AffineTransform oldTransform = g.getTransform();
 		AffineTransform af = new AffineTransform();
-		af.scale(Scale.getScale(), Scale.getScale());
+		af.scale(scale.getScale(), scale.getScale());
 		af.translate(pos.getIX(), pos.getIY());
 		g.setTransform(af);
 		g.setColor(c);

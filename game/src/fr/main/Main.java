@@ -15,7 +15,7 @@ public class Main {
 	private static final String NAME = "TEST PJS4";
 
 	static {
-		Scale.setScale(2);
+		Scale.getInstance().setScale(1);
 	}
 
 	private static final String VERSION = "0.1.1"; // beta=0.version.sousVersion

@@ -1,6 +1,5 @@
 package fr.explosion;
 
-import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;
 /**

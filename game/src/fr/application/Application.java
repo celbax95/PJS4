@@ -11,7 +11,6 @@ import fr.itemsApp.Manageable;
 import fr.itemsApp.character.CharacterFactory;
 import fr.itemsApp.character.ICharacter;
 import fr.map.GameMap;
-import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.time.Timer;
 

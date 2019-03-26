@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import fr.scale.Scale;
 import fr.tiles.FactoryTile;
 import fr.util.point.Point;
 

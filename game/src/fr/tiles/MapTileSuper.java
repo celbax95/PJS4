@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import fr.itemsApp.Drawable;
 import fr.map.MapTile;
-import fr.scale.Scale;
 import fr.util.point.Point;
 /**
  * Classe abstraite d'element constituant le terrain

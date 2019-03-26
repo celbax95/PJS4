@@ -36,8 +36,9 @@ public class StandardExplosion extends Explosion {
 	 */
 	@Override
 	public void draw(Graphics2D g) {
+		Scale scale = Scale.getInstance();
 		AffineTransform af = new AffineTransform();
-		af.scale(Scale.getScale(), Scale.getScale());
+		af.scale(scale.getScale(), scale.getScale());
 		af.translate(pos.getIX(), pos.getIY());
 		g.drawImage(img[type], af, null);
 	}
