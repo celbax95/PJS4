@@ -1,6 +1,5 @@
 package fr.server;
 
-import java.awt.Color;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -8,9 +7,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
-import java.util.Random;
 
 import fr.application.Application;
+import fr.hud.HUDManager;
 /**
  * Le Service du jeu qui communique avec le client via le serveur
  */
@@ -25,6 +24,7 @@ public class Service implements Runnable {
 	private Application application;
 
 	private int myPlayer;
+	
 	/**
 	 * constructeur Service vide
 	 */
@@ -50,6 +50,7 @@ public class Service implements Runnable {
 		this.socket = serverSocket;
 		this.application = application;
 		myPlayer = application.addPlayer();
+		HUDManager.getInstance().createHUD(application, myPlayer);
 		myThread = new Thread(this);
 	}
 
@@ -89,6 +90,7 @@ public class Service implements Runnable {
 			}
 			myThread.interrupt();
 			application.deletePlayer(myPlayer);
+			HUDManager.getInstance().deleteHUD(application, myPlayer);
 			System.err.println("Service termine");
 		}
 	}
