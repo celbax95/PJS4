@@ -66,9 +66,10 @@ public class AppliClient implements AppliScreen, Runnable {
 		Scale scale = Scale.getInstance();
 
 		if (keyBoard.isPressed(KeyEvent.VK_ADD))
-			scale.increaseScale();
+			scale.increase();
 		else if (keyBoard.isPressed(KeyEvent.VK_SUBTRACT))
-			scale.decreaseScale();
+			scale.decrease();
+		scale.update();
 	}
 
 	/**
