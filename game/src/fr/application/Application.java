@@ -19,7 +19,7 @@ import fr.util.time.Timer;
  * Application (Le jeu)
  */
 public class Application implements Runnable {
-	private final static int spawnPlaces[][] = { { (int) (120 * Scale.getScale()), (int) (120 * Scale.getScale()) } };
+	private final static int spawnPlaces[][] = { { 120, 120 } };
 
 	private Map<Integer, ICharacter> players;
 
