@@ -93,7 +93,6 @@ public class CharacterRed implements ICharacter {
 			g.drawImage(
 					imgD[(walkStep < walkFrequence / 2) ? 0 : 1], af, null);
 		}
-		System.out.println(DEFAULT_SIZE);
 	}
 
 	/**
