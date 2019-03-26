@@ -5,7 +5,7 @@ package fr.scale;
  */
 public class Scale {
 
-	private static double scale = 1;
+	private static double scale = 1.5;
 	/**
 	 * constructeur Scale vide
 	 */
@@ -18,7 +18,7 @@ public class Scale {
 		return scale;
 	}
 	/**
-	 * 
+	 *
 	 * @param s : l'echelle
 	 */
 	public static void setScale(double s) {
