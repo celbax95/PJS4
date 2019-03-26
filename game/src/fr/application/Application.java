@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
+import fr.hud.HUD;
 import fr.itemsApp.Drawable;
 import fr.itemsApp.Manageable;
 import fr.itemsApp.character.CharacterFactory;
@@ -30,6 +31,7 @@ public class Application implements Runnable {
 	private Timer timerApploop;
 
 	private Thread myThread;
+	
 
 	/**
 	 * @param width  : Largeur de la fenetre
@@ -89,7 +91,12 @@ public class Application implements Runnable {
 
 		return id;
 	}
-
+	
+	
+	
+	public ICharacter getPlayerById(int idPlayer) {
+		return players.get(idPlayer);
+	}
 	/**
 	 * Supprime un joueur de l'application
 	 *
@@ -101,6 +108,7 @@ public class Application implements Runnable {
 		removeDrawable(character);
 		removeManageable(character);
 	}
+	
 
 	/**
 	 * @return Liste des elments Drawbles

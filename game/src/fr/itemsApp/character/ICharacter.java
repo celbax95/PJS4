@@ -43,4 +43,8 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	 * @param speed : nouvelle vitesse pour le ICharacter
 	 */
 	void setSpeed(int speed);
+	/**
+	 * @return les points de vie du joueur
+	 */
+	int getHealth();
 }

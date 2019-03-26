@@ -50,6 +50,8 @@ public class CharacterRed implements ICharacter {
 	private Point moves;
 
 	private BombFactory bombFactory;
+	
+	private int health;
 
 	/**
 	 * @param x            : Position x
@@ -66,6 +68,7 @@ public class CharacterRed implements ICharacter {
 		this.bombCoolDown = new Cooldown(bombCoolDown);
 		this.bombFactory = new BombFactory();
 		defaultBomb = "std";
+		health = 100;
 	}
 
 	/* (non-Javadoc)
@@ -282,5 +285,11 @@ public class CharacterRed implements ICharacter {
 	 */
 	public static boolean isBetween(int p, int p1, int p2) {
 		return (p1 < p && p < p2);
+	}
+	/**
+	 * @return health : les points de vie du joueur
+	 */
+	public int getHealth() {
+		return health;
 	}
 }

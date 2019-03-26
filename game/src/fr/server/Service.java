@@ -7,7 +7,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
+
 import fr.application.Application;
+import fr.hud.HUDManager;
 
 /**
  * Le Service du jeu qui communique avec le client via le serveur
@@ -23,31 +25,42 @@ public class Service implements Runnable {
 	private Application application;
 
 	private int myPlayer;
+
 	/**
 	 * constructeur Service vide
 	 */
 	private Service() {
 	}
+
 	/**
 	 * constructeur Service
-	 * @param s : le serveur
-	 * @param serverSocket : la socket du serveur
-	 * @param application : l'application
+	 * 
+	 * @param s
+	 *            : le serveur
+	 * @param serverSocket
+	 *            : la socket du serveur
+	 * @param application
+	 *            : l'application
 	 */
 	public Service(Server s, Socket serverSocket, Application application) {
 		this(serverSocket, application);
 		this.server = s;
 	}
+
 	/**
 	 * constructeur Service
-	 * @param serverSocket : la socket du serveur
-	 * @param application : l'application
+	 * 
+	 * @param serverSocket
+	 *            : la socket du serveur
+	 * @param application
+	 *            : l'application
 	 */
 	public Service(Socket serverSocket, Application application) {
 		server = null;
 		this.socket = serverSocket;
 		this.application = application;
 		myPlayer = application.addPlayer();
+		HUDManager.getInstance().createHUD(application, myPlayer);
 		myThread = new Thread(this);
 	}
 
@@ -87,9 +100,11 @@ public class Service implements Runnable {
 			}
 			myThread.interrupt();
 			application.deletePlayer(myPlayer);
+			HUDManager.getInstance().deleteHUD(application, myPlayer);
 			System.err.println("Service termine");
 		}
 	}
+
 	/**
 	 * lance le thread du service
 	 */
