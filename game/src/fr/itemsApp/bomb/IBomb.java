@@ -33,6 +33,10 @@ public interface IBomb extends Serializable, Manageable, fr.itemsApp.Drawable {
 	 */
 	int getExplosionSize();
 
+	Point getPos();
+
+	Point getSize();
+
 	/**
 	 * @return Emplacement de la bombe sur la map
 	 */
@@ -48,7 +52,7 @@ public interface IBomb extends Serializable, Manageable, fr.itemsApp.Drawable {
 
 	/**
 	 * Ajoute une bombe au Manageable et au Drawbales
-	 * 
+	 *
 	 * @param application : application
 	 * @param bomb        : bombe
 	 */

@@ -18,7 +18,9 @@ public abstract class Bomb implements IBomb {
 	protected Point pos, tile;
 
 	protected Cooldown cooldown;
+
 	protected int explosionSize;
+
 	protected int tileSize;
 
 	@Override
@@ -33,6 +35,16 @@ public abstract class Bomb implements IBomb {
 	@Override
 	public int getExplosionSize() {
 		return explosionSize;
+	}
+
+	@Override
+	public Point getPos() {
+		return pos;
+	}
+
+	@Override
+	public Point getSize() {
+		return new Point(DEFAULT_BOMB_SIZE, DEFAULT_BOMB_SIZE);
 	}
 
 	@Override
