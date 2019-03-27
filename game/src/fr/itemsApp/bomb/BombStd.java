@@ -9,7 +9,6 @@ import fr.explosion.IExplosion;
 import fr.explosion.StandardExplosion;
 import fr.scale.Scale;
 import fr.util.point.Point;
-import fr.util.time.Cooldown;
 
 /**
  * Bombe standard
@@ -24,14 +23,10 @@ public class BombStd extends Bomb {
 	private static final int EXPLOSION_TIME = 1200;
 	private static final int DAMAGE = 100;
 
-	public BombStd(Point tile, int tileSize, int explosionSize) {
-		this.tile = tile;
-
+	public BombStd(Point tile, int explosionSize) {
 		// Calcul de la position de la bombe
-		this.pos = new Point((tile.getIX() * tileSize) + (tileSize - DEFAULT_BOMB_SIZE) / 2,
-				(tile.getIY() * tileSize) + (tileSize - DEFAULT_BOMB_SIZE) / 2);
-		this.cooldown = new Cooldown(TIME);
-		this.explosionSize = explosionSize;
+		super(new Point((tile.getIX() * TILE_SIZE) + (TILE_SIZE - DEFAULT_BOMB_SIZE) / 2,
+				(tile.getIY() * TILE_SIZE) + (TILE_SIZE - DEFAULT_BOMB_SIZE) / 2), tile, TIME, explosionSize);
 	}
 
 	@Override
@@ -60,7 +55,6 @@ public class BombStd extends Bomb {
 
 	@Override
 	public void manage(Application a, double t) {
-		super.manage(a, t);
 		if (cooldown.isDone()) {
 			explode(a);
 		}

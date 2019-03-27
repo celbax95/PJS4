@@ -12,6 +12,8 @@ public abstract class Bomb implements IBomb {
 
 	private static final long serialVersionUID = 1L;
 
+	protected static final int TILE_SIZE = 120;
+
 	protected static final int DEFAULT_COOLDOWN = 4000;
 	protected static final int DEFAULT_BOMB_SIZE = 80;
 
@@ -21,7 +23,12 @@ public abstract class Bomb implements IBomb {
 
 	protected int explosionSize;
 
-	protected int tileSize;
+	public Bomb(Point pos, Point tile, int cooldown, int explosionSize) {
+		this.pos = pos;
+		this.cooldown = new Cooldown(cooldown);
+		this.tile = tile;
+		this.explosionSize = explosionSize;
+	}
 
 	@Override
 	public void explode(Application application) {
@@ -57,9 +64,7 @@ public abstract class Bomb implements IBomb {
 	}
 
 	@Override
-	public void manage(Application a, double timeSinceLastCall) {
-		tileSize = a.getMap().getTileSize();
-	}
+	public abstract void manage(Application a, double timeSinceLastCall);
 
 	@Override
 	public void start() {
