@@ -13,8 +13,10 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	/**
 	 * Execute les action suivant les touches du clavier
 	 *
-	 * @param application    : Application
-	 * @param clickedKeys : Touches appuyees du clavier
+	 * @param application
+	 *            : Application
+	 * @param clickedKeys
+	 *            : Touches appuyees du clavier
 	 */
 	void actions(Application application, List<Integer> clickedKeys);
 
@@ -25,26 +27,28 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 
 	/**
 	 * Change le cooldown de pose des bombes
-	 * 
-	 * @param bombCoolDown : nouveau cooldown
+	 *
+	 * @param bombCoolDown
+	 *            : nouveau cooldown
 	 */
 	void setBombCoolDown(int bombCoolDown);
 
 	/**
 	 * Change la position du ICharacter
-	 * 
+	 *
 	 * @param pos
 	 */
 	void setPos(Point pos);
 
 	/**
 	 * Change la vitesse du ICharacter
-	 * 
-	 * @param speed : nouvelle vitesse pour le ICharacter
+	 *
+	 * @param speed
+	 *            : nouvelle vitesse pour le ICharacter
 	 */
 	void setSpeed(int speed);
 	/**
 	 * @return les points de vie du joueur
 	 */
-	int getHealth();
+	// int getHealth();
 }

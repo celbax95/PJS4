@@ -82,7 +82,7 @@ public class CharacterRed implements ICharacter {
 
 	private BombFactory bombFactory;
 
-	private int health;
+	// private int health;
 
 	/**
 	 * @param x
@@ -103,12 +103,12 @@ public class CharacterRed implements ICharacter {
 		this.bombCoolDown = new Cooldown(bombCoolDown);
 		this.bombFactory = new BombFactory();
 		defaultBomb = "std";
-		health = 100;
+		// health = 100;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.itemsApp.character.ICharacter#actions(fr.application.Application,
 	 * java.util.List)
 	 */
@@ -163,7 +163,7 @@ public class CharacterRed implements ICharacter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.itemsApp.character.ICharacter#getCenter()
 	 */
 	@Override
@@ -174,14 +174,13 @@ public class CharacterRed implements ICharacter {
 	/**
 	 * @return health : les points de vie du joueur
 	 */
-	@Override
-	public int getHealth() {
-		return health;
-	}
+	/*
+	 * @Override public int getHealth() { return health; }
+	 */
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.itemsApp.character.ICharacter#manage(fr.application.Application,
 	 * double)
 	 */
