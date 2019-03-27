@@ -47,17 +47,17 @@ public class MenuDisplay implements Menu{
 		GameLauncher.setMenu(MenuDisplay.getInstance());
 	}
 	
-	private JFrame f;
-	private JPanel p;
+	private JFrame frame;
+	private JPanel panel;
 	private JLabel nbPlayersLabel;
-	private JTextField ipTF;
+	private JTextField ipTextField;
 	private JButton host, join, back, decNbPlayers, incNbPlayers, mapL, mapR, search, start, connect;
-	private ArrayList<JButton> bList;
-	private ArrayList<JComponent> cHList;
-	private ArrayList<JComponent> cSList;
-	private ArrayList<JComponent> cJList;
-	private ArrayList<JComponent> cCList;
-	private int hj;
+	private ArrayList<JButton> buttonList;
+	private ArrayList<JComponent> componentHostList;
+	private ArrayList<JComponent> componentStartList;
+	private ArrayList<JComponent> componentJoinList;
+	private ArrayList<JComponent> componentConnectList;
+	private int menuPostion;
 	private int nbPlayers;
 	private boolean sawIpAdress;
 	
@@ -82,14 +82,15 @@ public class MenuDisplay implements Menu{
 	 * Constructeur du menu (initialisation de tous ses composants)
 	 */
 	private MenuDisplay() {
-		this.f = new JFrame(MenuDisplay.TITLE);
-		this.f.setSize(new Dimension(windowSize, 250));
+		this.frame = new JFrame(MenuDisplay.TITLE);
+		this.frame.setSize(new Dimension(windowSize, 250));
+		this.frame.setLocationRelativeTo(null);
 		
-		this.f.setPreferredSize(new Dimension(windowSize, windowSize));
-		this.f.setBackground(BACKGROUND_COLOR);
-		this.p = new MenuPanel(windowSize);
+		this.frame.setPreferredSize(new Dimension(windowSize, windowSize));
+		this.frame.setBackground(BACKGROUND_COLOR);
+		this.panel = new MenuPanel(windowSize);
 		
-		this.hj = 0;
+		this.menuPostion = 0;
 		this.nbPlayers = NB_INIT_PLAYERS;
 		this.sawIpAdress = false;
 		
@@ -104,12 +105,12 @@ public class MenuDisplay implements Menu{
 		this.mapL = new JButton("<");
 		this.mapR = new JButton(">");
 		this.nbPlayersLabel = new JLabel(String.valueOf(nbPlayers),SwingConstants.CENTER);
-		this.ipTF = new JTextField("Ip Adress");
-		bList = new ArrayList<JButton>(Arrays.asList(host, join, back, decNbPlayers, incNbPlayers, mapL, mapR, search, start, connect));
-		cHList = new ArrayList<JComponent>(Arrays.asList(search, decNbPlayers, incNbPlayers, mapL, mapR, nbPlayersLabel));
-		cJList = new ArrayList<JComponent>(Arrays.asList(ipTF, connect));		
-		cSList = new ArrayList<JComponent>(Arrays.asList(start));
-		cCList = new ArrayList<JComponent>(Arrays.asList());
+		this.ipTextField = new JTextField("Ip Adress");
+		buttonList = new ArrayList<JButton>(Arrays.asList(host, join, back, decNbPlayers, incNbPlayers, mapL, mapR, search, start, connect));
+		componentHostList = new ArrayList<JComponent>(Arrays.asList(search, decNbPlayers, incNbPlayers, mapL, mapR, nbPlayersLabel));
+		componentJoinList = new ArrayList<JComponent>(Arrays.asList(ipTextField, connect));		
+		componentStartList = new ArrayList<JComponent>(Arrays.asList(start));
+		componentConnectList = new ArrayList<JComponent>(Arrays.asList());
 		
 		this.host.setBounds(145, 110, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 		this.join.setBounds(145, 260, SIZE_BUTTON_X, SIZE_BUTTON_Y);
@@ -122,12 +123,12 @@ public class MenuDisplay implements Menu{
 		this.mapL.setBounds(145-SIZE_BUTTON_X/3, 110+SIZE_BUTTON_Y*2, SIZE_BUTTON_X/3, SIZE_BUTTON_Y);
 		this.mapR.setBounds(145+SIZE_BUTTON_X, 110+SIZE_BUTTON_Y*2, SIZE_BUTTON_X/3, SIZE_BUTTON_Y);
 		this.nbPlayersLabel.setBounds(130+SIZE_BUTTON_X/3, 110, SIZE_BUTTON_X/2, SIZE_BUTTON_Y);
-		this.ipTF.setBounds(145, 140, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+		this.ipTextField.setBounds(145, 140, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 		
 		setFocusPaintedButtons();
 		
 		this.nbPlayersLabel.setOpaque(true);
-		this.ipTF.setHorizontalAlignment(JTextField.CENTER);
+		this.ipTextField.setHorizontalAlignment(JTextField.CENTER);
 		
 		this.host.setBackground(BUTTON_BACKGROUND_COLOR);
 		this.join.setBackground(BUTTON_BACKGROUND_COLOR);
@@ -140,29 +141,29 @@ public class MenuDisplay implements Menu{
 		this.mapL.setBackground(ARROWS_BACKGROUND_COLOR);
 		this.mapR.setBackground(ARROWS_BACKGROUND_COLOR);
 		this.nbPlayersLabel.setBackground(BUTTON_BACKGROUND_COLOR);
-		this.ipTF.setBackground(BUTTON_BACKGROUND_COLOR);
+		this.ipTextField.setBackground(BUTTON_BACKGROUND_COLOR);
 		
 		
 		setFontButtons();
 		this.nbPlayersLabel.setFont(BUTTON_FONT);
-		this.ipTF.setFont(BUTTON_FONT);
+		this.ipTextField.setFont(BUTTON_FONT);
 		
 		nbPlayersLabel.setBorder(BorderFactory.createLineBorder(BUTTON_BACKGROUND_COLOR));
 		
 		setForegroundButtons();
 		this.nbPlayersLabel.setForeground(Color.white);
-		this.ipTF.setForeground(Color.gray);
+		this.ipTextField.setForeground(Color.gray);
 	}
 	
 	/**
 	 * Déclaration de tous les listeners des objets du menu et affichage du menu.
 	 */
 	public void init() {
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.host.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				hj = 1;
+				menuPostion = 1;
 				showComponents();
 				host.setVisible(false);
 				join.setVisible(false);
@@ -172,7 +173,7 @@ public class MenuDisplay implements Menu{
 		this.join.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				hj = 2;
+				menuPostion = 2;
 				showComponents();
 				connect.requestFocusInWindow();
 				host.setVisible(false);
@@ -184,26 +185,26 @@ public class MenuDisplay implements Menu{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				hideComponents();
-				switch(hj) {
+				switch(menuPostion) {
 					case 1:
 						nbPlayers = NB_INIT_PLAYERS;
 						nbPlayersLabel.setText(String.valueOf(nbPlayers));
-						hj = 0;
+						menuPostion = 0;
 						break;
 					case 2:
-						hj = 0;
-						ipTF.setForeground(Color.gray);
-						ipTF.setText("Ip Adress");
+						menuPostion = 0;
+						ipTextField.setForeground(Color.gray);
+						ipTextField.setText("Ip Adress");
 						sawIpAdress = false;
 						break;
 					case 3:
 					GameLauncher.clientClose();
 					GameLauncher.serverClose();
-						hj = 1;
+						menuPostion = 1;
 						break;
 					case 4:
 						GameLauncher.clientClose();
-						hj = 2;
+						menuPostion = 2;
 						break;
 				}
 				showComponents();
@@ -213,7 +214,7 @@ public class MenuDisplay implements Menu{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				hideComponents();
-				hj = 3;
+				menuPostion = 3;
 				showComponents();
 				GameLauncher.createServer(TITLE,PORT, nbPlayers);
 				GameLauncher.serverStart();
@@ -229,7 +230,7 @@ public class MenuDisplay implements Menu{
 					return;
 				}
 				hideComponents();
-				hj = 4;
+				menuPostion = 4;
 				showComponents();
 				
 				
@@ -279,40 +280,40 @@ public class MenuDisplay implements Menu{
 				}
 			}
 		});
-		this.ipTF.addFocusListener(new FocusAdapter() {
+		this.ipTextField.addFocusListener(new FocusAdapter() {
 		    public void focusGained(FocusEvent e) {
 		    	if(!sawIpAdress) {
-		    		ipTF.setText("");
-		    		ipTF.setForeground(Color.white);
+		    		ipTextField.setText("");
+		    		ipTextField.setForeground(Color.white);
 		    		sawIpAdress = true;
 		    	}
 		    }
 		});;
 		
 		
-		this.f.add(host);
-		this.f.add(join);
-		this.f.add(back);
-		for(JComponent jc : cHList) {
-			this.f.getContentPane().add(jc);
+		this.frame.add(host);
+		this.frame.add(join);
+		this.frame.add(back);
+		for(JComponent jc : componentHostList) {
+			this.frame.getContentPane().add(jc);
 		}
-		for(JComponent jc : cJList) {
-			this.f.getContentPane().add(jc);
+		for(JComponent jc : componentJoinList) {
+			this.frame.getContentPane().add(jc);
 		}
-		for(JComponent jc : cSList) {
-			this.f.getContentPane().add(jc);
+		for(JComponent jc : componentStartList) {
+			this.frame.getContentPane().add(jc);
 		}
-		this.f.add(p);
-		this.f.pack();
-		this.f.setVisible(true);
-		this.f.setResizable(false);
+		this.frame.add(panel);
+		this.frame.pack();
+		this.frame.setVisible(true);
+		this.frame.setResizable(false);
 		
 		back.setVisible(false);
 		hideComponents();
 	}
 	
 	public void refresh() {
-		this.f.repaint();
+		this.frame.repaint();
 	}
 
 	public void display() {
@@ -320,41 +321,41 @@ public class MenuDisplay implements Menu{
 	}
 	
 	public void hideWindow() {
-		f.setVisible(false);
+		frame.setVisible(false);
 	}
 	
 	/**
 	 * Cache les composants du menu en fonction de la position dans l'arborescence du menu
 	 */
 	private void hideComponents() {
-		if(hj == 0) {
-			for(JComponent jc : cHList) {
+		if(menuPostion == 0) {
+			for(JComponent jc : componentHostList) {
 				jc.setVisible(false);
 			}
-			for(JComponent jc : cJList) {
+			for(JComponent jc : componentJoinList) {
 				jc.setVisible(false);
 			}
-			for(JComponent jc : cSList) {
-				jc.setVisible(false);
-			}
-		}
-		else if(hj == 1) {
-			for(JComponent jc : cHList) {
+			for(JComponent jc : componentStartList) {
 				jc.setVisible(false);
 			}
 		}
-		else if(hj == 2) {
-			for(JComponent jc : cJList) {
+		else if(menuPostion == 1) {
+			for(JComponent jc : componentHostList) {
 				jc.setVisible(false);
 			}
 		}
-		else if(hj == 3) {
-			for(JComponent jc : cSList) {
+		else if(menuPostion == 2) {
+			for(JComponent jc : componentJoinList) {
 				jc.setVisible(false);
 			}
 		}
-		else if(hj == 4) {
-			for(JComponent jc : cCList) {
+		else if(menuPostion == 3) {
+			for(JComponent jc : componentStartList) {
+				jc.setVisible(false);
+			}
+		}
+		else if(menuPostion == 4) {
+			for(JComponent jc : componentConnectList) {
 				jc.setVisible(false);
 			}
 		}
@@ -365,45 +366,45 @@ public class MenuDisplay implements Menu{
 	 * Montre les composants du menu en fonction de la position dans l'arborescence du menu
 	 */
 	private void showComponents() {
-		if(hj ==0) {
+		if(menuPostion ==0) {
 			host.setVisible(true);
 			join.setVisible(true);
 			back.setVisible(false);
 		}
-		else if(hj == 1) {
-			for(JComponent jc : cHList) {
+		else if(menuPostion == 1) {
+			for(JComponent jc : componentHostList) {
 				jc.setVisible(true);
 			}
 		}
-		else if(hj == 2) {
-			for(JComponent jc : cJList) {
+		else if(menuPostion == 2) {
+			for(JComponent jc : componentJoinList) {
 				jc.setVisible(true);
 			}
 		}
-		else if(hj == 3) {
-			for(JComponent jc : cSList) {
+		else if(menuPostion == 3) {
+			for(JComponent jc : componentStartList) {
 				jc.setVisible(true);
 			}
 		}
-		else if(hj == 4) {
-			for(JComponent jc : cCList) {
+		else if(menuPostion == 4) {
+			for(JComponent jc : componentConnectList) {
 				jc.setVisible(true);
 			}
 		}
 		else { /* éventuellement à rajouter */ }
 	}
 	private void setFocusPaintedButtons() {
-		for(JButton jb : bList) {
+		for(JButton jb : buttonList) {
 			jb.setFocusPainted(false);
 		}
 	}
 	private void setFontButtons() {
-		for(JButton jb : bList) {
+		for(JButton jb : buttonList) {
 			jb.setFont(BUTTON_FONT);
 		}
 	}
 	private void setForegroundButtons() {
-		for(JButton jb : bList) {
+		for(JButton jb : buttonList) {
 			jb.setForeground(Color.white);
 		}
 	}
