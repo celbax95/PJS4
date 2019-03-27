@@ -21,11 +21,13 @@ public class ExplosionCreator implements Serializable {
 	/**
 	 * Creer une liste d'explosions (dans 4 directions différentes) pour 1 bombe et
 	 * les ajoutes à la liste des drawables et des manageables
-	 * 
+	 *
 	 * @param application
 	 * @param bombe
 	 */
 	public void create(Application application, IBomb bombe) {
+
+		System.out.println("Je passe");
 
 		explosions = new ArrayList<>();
 
@@ -66,7 +68,7 @@ public class ExplosionCreator implements Serializable {
 	 * Vérifie si une explosion peut etre placée à une position (x, y) donnée
 	 * determine également la taille de la serie d'explosions et si l'explosion peut
 	 * détruire un mur ou non
-	 * 
+	 *
 	 * @param mapTile : ensemble des éléments présents sur le terrain
 	 * @param bombe   : la bombe qui est déposée sur le terrain
 	 * @param type    : type de l'explosion (1 direction droite ou gauche) (2

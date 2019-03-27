@@ -53,7 +53,7 @@ public class Application implements Runnable {
 		myThread = new Thread(this);
 
 		// Chargement de la map depuis le fichier "/maps/1.bmap"
-		map = new GameMap("/maps/1.bmap");
+		map = new GameMap("/maps/2.bmap");
 		spawnPlaces = map.getSpawnPoints();
 		currentSpawnPoint = 0;
 	}
