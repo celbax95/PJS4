@@ -28,8 +28,7 @@ public abstract class Bomb implements IBomb {
 		ExplosionCreator ec = new ExplosionCreator();
 
 		ec.create(application, this);
-		application.removeDrawable(this);
-		application.removeManageable(this);
+		IBomb.removeFromLists(application, this);
 	}
 
 	@Override
