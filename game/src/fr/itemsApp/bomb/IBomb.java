@@ -24,6 +24,11 @@ public interface IBomb extends Serializable, Manageable, fr.itemsApp.Drawable {
 	void explode(Application application);
 
 	/**
+	 * @return Centre de l'IBomb
+	 */
+	Point getCenter();
+
+	/**
 	 * @return Type de l'explosion a creer
 	 */
 	IExplosion getExplosion();

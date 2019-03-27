@@ -32,6 +32,11 @@ public abstract class Bomb implements IBomb {
 	}
 
 	@Override
+	public Point getCenter() {
+		return new Point(pos.x + DEFAULT_BOMB_SIZE / 2, pos.y + DEFAULT_BOMB_SIZE / 2);
+	}
+
+	@Override
 	public int getExplosionSize() {
 		return explosionSize;
 	}

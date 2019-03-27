@@ -16,6 +16,7 @@ import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.scale.Scale;
 import fr.util.point.Point;
+import fr.util.point.PointCalc;
 import fr.util.time.Cooldown;
 
 /**
@@ -169,8 +170,33 @@ public class CharacterRed implements ICharacter {
 
 		GameMap map = application.getMap();
 
-		double x = pos.x + (moves.x * speed * t);
-		double y = pos.y + (moves.y * speed * t);
+		double x = pos.x;
+		double y = pos.y;
+
+		List<IBomb> bombs = application.getBombs();
+
+		for (IBomb b : bombs) {
+			if (isAligned(pos.getIX() + collideMargin, DEFAULT_SIZE - collideMargin * 2, b.getPos().getIX(),
+					b.getSize().getIX())
+					&& isAligned(pos.getIY() + collideMargin, DEFAULT_SIZE - collideMargin * 2, b.getPos().getIY(),
+							b.getSize().getIY())) {
+
+				Point center = getCenter();
+				Point bcenter = b.getCenter();
+
+				Point pushDir = PointCalc.sub(center, bcenter);
+				pushDir.normalize();
+
+				x += (pushDir.x * speed / 1.5 * t);
+				y += (pushDir.y * speed / 1.5 * t);
+			}
+		}
+
+		x += (moves.x * speed * t);
+		y += (moves.y * speed * t);
+
+		Point tMove = new Point(x - pos.x, y - pos.y);
+		tMove.normalize();
 
 		Point tile = map.getTileFor(x + DEFAULT_SIZE / 2, y + DEFAULT_SIZE / 2);
 
@@ -196,14 +222,14 @@ public class CharacterRed implements ICharacter {
 							mapTile.getPos().getIY(), mapTile.getSize())) {
 
 						// Droite
-						if (moves.x > 0 && isBetween((int) x + DEFAULT_SIZE, mapTile.getPos().getIX(),
+						if (tMove.x > 0 && isBetween((int) x + DEFAULT_SIZE, mapTile.getPos().getIX(),
 								mapTile.getPos().getIX() + mapTile.getSize())) {
 							x = mapTile.getPos().x - DEFAULT_SIZE;
 							// On ne peut pas aller a droite
 						}
 
 						// Gauche
-						else if (moves.x < 0 && isBetween((int) x, mapTile.getPos().getIX(),
+						else if (tMove.x < 0 && isBetween((int) x, mapTile.getPos().getIX(),
 								mapTile.getPos().getIX() + mapTile.getSize())) {
 							x = mapTile.getPos().x + mapTile.getSize();
 							// On ne peut pas aller a gauche
@@ -215,14 +241,14 @@ public class CharacterRed implements ICharacter {
 							mapTile.getPos().getIX(), mapTile.getSize())) {
 
 						// Haut
-						if (moves.y > 0 && isBetween((int) y + DEFAULT_SIZE, mapTile.getPos().getIY(),
+						if (tMove.y > 0 && isBetween((int) y + DEFAULT_SIZE, mapTile.getPos().getIY(),
 								mapTile.getPos().getIY() + mapTile.getSize())) {
 							y = mapTile.getPos().y - DEFAULT_SIZE;
 							// On ne peut pas aller en haut
 						}
 
 						// Bas
-						else if (moves.y < 0 && isBetween((int) y, mapTile.getPos().getIY(),
+						else if (tMove.y < 0 && isBetween((int) y, mapTile.getPos().getIY(),
 								mapTile.getPos().getIY() + mapTile.getSize())) {
 							y = mapTile.getPos().y + mapTile.getSize();
 							// On ne peut pas aller en bas

@@ -36,7 +36,7 @@ public class BombFactory implements Serializable {
 		// Creation de la bombe
 		switch (type.trim().toLowerCase()) {
 		case "std":
-			return new BombStd(tile, map.getTileSize(), 1000, 1);
+			return new BombStd(tile, map.getTileSize(), 2500, 1);
 		}
 		return null;
 	}
