@@ -20,16 +20,17 @@ public class BombStd extends Bomb {
 
 	private static Color c = Color.black;
 
-	private static final int TIME = 1400;
+	private static final int TIME = 2200;
+	private static final int EXPLOSION_TIME = 1200;
 	private static final int DAMAGE = 100;
 
-	public BombStd(Point tile, int tileSize, int cooldown, int explosionSize) {
+	public BombStd(Point tile, int tileSize, int explosionSize) {
 		this.tile = tile;
 
 		// Calcul de la position de la bombe
 		this.pos = new Point((tile.getIX() * tileSize) + (tileSize - DEFAULT_BOMB_SIZE) / 2,
 				(tile.getIY() * tileSize) + (tileSize - DEFAULT_BOMB_SIZE) / 2);
-		this.cooldown = new Cooldown(cooldown);
+		this.cooldown = new Cooldown(TIME);
 		this.explosionSize = explosionSize;
 	}
 
@@ -53,7 +54,7 @@ public class BombStd extends Bomb {
 	public IExplosion getExplosion() {
 		IExplosion ex = new StandardExplosion();
 		ex.setDamage(DAMAGE);
-		ex.setCooldown(TIME);
+		ex.setCooldown(EXPLOSION_TIME);
 		return ex;
 	}
 
