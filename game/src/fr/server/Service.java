@@ -34,7 +34,7 @@ public class Service implements Runnable {
 
 	/**
 	 * constructeur Service
-	 * 
+	 *
 	 * @param s
 	 *            : le serveur
 	 * @param serverSocket
@@ -49,7 +49,7 @@ public class Service implements Runnable {
 
 	/**
 	 * constructeur Service
-	 * 
+	 *
 	 * @param serverSocket
 	 *            : la socket du serveur
 	 * @param application
