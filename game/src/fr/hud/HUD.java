@@ -20,22 +20,22 @@ import fr.itemsApp.character.ICharacter;
  */
 public class HUD implements Drawable, Serializable, Manageable{
 	private static final long serialVersionUID = 1L;
+	private static final double rescaleHUD = 0.7; 
+	private static final double WIDTH = 510 * rescaleHUD, HEIGHT = 230 * rescaleHUD;
 	
-	private static final int WIDTH = 510, HEIGHT = 230;
+	private static final double RECTANGLE_HEIGHT = 26 * rescaleHUD, RECTANGLE_MAX_WIDTH = 200 * rescaleHUD;
 	
-	private static final int RECTANGLE_HEIGHT = 26, RECTANGLE_MAX_WIDTH = 200;
-	
-	private static final int LIFE_MAX_AMOUNT = 100;
+	private static final double LIFE_MAX_AMOUNT = 100;
 	
 	private int currentLifeAmount, currentCoolDownAmount;
 	
-	private float lifeRectangleWidth = RECTANGLE_MAX_WIDTH, coolDownRegtangleWidth = RECTANGLE_MAX_WIDTH;
+	private double lifeRectangleWidth = RECTANGLE_MAX_WIDTH, coolDownRegtangleWidth = RECTANGLE_MAX_WIDTH;
 	
 	private static Image hudGif = (new ImageIcon(HUD.class.getResource("/images/HUD/hud.gif")))
-	.getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
+	.getImage().getScaledInstance((int)WIDTH, (int)HEIGHT, Image.SCALE_DEFAULT);
 	
 	private static Image hudPng = (new ImageIcon(HUD.class.getResource("/images/HUD/hud.png")))
-			.getImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_DEFAULT);
+			.getImage().getScaledInstance((int)WIDTH, (int)HEIGHT, Image.SCALE_DEFAULT);
 	
 	
 	private Font font = new Font("Arial", Font.PLAIN, 24);
@@ -58,11 +58,12 @@ public class HUD implements Drawable, Serializable, Manageable{
 		// test
 		currentLifeAmount = 30;
 		if(currentLifeAmount < LIFE_MAX_AMOUNT)
-			lifeRectangleWidth = ((float)((LIFE_MAX_AMOUNT - currentLifeAmount) / 100.0) * RECTANGLE_MAX_WIDTH);
+			lifeRectangleWidth = ((float)(((LIFE_MAX_AMOUNT - currentLifeAmount) / LIFE_MAX_AMOUNT)) * RECTANGLE_MAX_WIDTH);
 		coolDownRegtangleWidth = 1;
-        g.fillRect(222 + (RECTANGLE_MAX_WIDTH - ((LIFE_MAX_AMOUNT - currentLifeAmount)*2)),
-        		22,(int)lifeRectangleWidth, RECTANGLE_HEIGHT);
-        g.fillRect(222, 76,(int)coolDownRegtangleWidth, RECTANGLE_HEIGHT);
+		System.out.println(lifeRectangleWidth);
+        g.fillRect((int)(222 * rescaleHUD) + (int)(RECTANGLE_MAX_WIDTH - (((int)(LIFE_MAX_AMOUNT * rescaleHUD) - currentLifeAmount)*2)),(int)(22 * rescaleHUD),
+        		(int)lifeRectangleWidth, (int)(RECTANGLE_HEIGHT));
+        g.fillRect((int)(222 * rescaleHUD), (int)(76 * rescaleHUD),(int)coolDownRegtangleWidth, (int)RECTANGLE_HEIGHT);
 	}
 	/**
 	 * Gestion de l'element
@@ -72,7 +73,6 @@ public class HUD implements Drawable, Serializable, Manageable{
 	 */
 	@Override
 	public void manage(Application app, double timeSinceLastCall) {
-		
 		
 	}
 }
