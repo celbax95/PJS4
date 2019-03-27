@@ -57,13 +57,26 @@ public interface IBomb extends Serializable, Manageable, fr.itemsApp.Drawable {
 	void start();
 
 	/**
-	 * Ajoute une bombe au Manageable et au Drawbales
+	 * Ajoute une bombe au Manageables, Drawbales, bombes
 	 *
 	 * @param application : application
-	 * @param bomb        : bombe
+	 * @param bomb        : bombe a ajouter
 	 */
 	public static void addToLists(Application application, IBomb bomb) {
 		application.addDrawable(bomb);
 		application.addManageable(bomb);
+		application.addBomb(bomb);
+	}
+
+	/**
+	 * Supprime une bombe au Manageables, Drawbales, bombes
+	 *
+	 * @param application : application
+	 * @param bomb        : bombe a supprimer
+	 */
+	public static void removeFromLists(Application application, IBomb bomb) {
+		application.removeDrawable(bomb);
+		application.removeManageable(bomb);
+		application.removeBomb(bomb);
 	}
 }
