@@ -21,7 +21,7 @@ public class BombStd extends Bomb {
 	private static Color c = Color.black;
 
 	private static final int TIME = 1400;
-	private static final int DAMAGE = 333;
+	private static final int DAMAGE = 100;
 
 	public BombStd(Point tile, int tileSize, int cooldown, int explosionSize) {
 		this.tile = tile;

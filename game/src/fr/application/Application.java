@@ -59,6 +59,11 @@ public class Application implements Runnable {
 		drawables.add(drawable);
 	}
 
+	/**
+	 * Ajoute une Explosion
+	 *
+	 * @param explosion : Explosion a ajouter
+	 */
 	public void addExplosion(IExplosion explosion) {
 		explosions.add(explosion);
 	}
@@ -88,6 +93,7 @@ public class Application implements Runnable {
 
 		ICharacter character = CharacterFactory.getInstance().create("red");
 		character.setPos(new Point(spawnPlace[0], spawnPlace[1]));
+		character.setId(id);
 
 		players.put(id, character);
 
@@ -105,9 +111,11 @@ public class Application implements Runnable {
 	 */
 	public void deletePlayer(int id) {
 		ICharacter character = players.get(id);
-		players.remove(id);
-		removeDrawable(character);
-		removeManageable(character);
+		if (character != null) {
+			players.remove(id);
+			removeDrawable(character);
+			removeManageable(character);
+		}
 	}
 
 	/**
@@ -144,8 +152,13 @@ public class Application implements Runnable {
 	 * @param id          : Id du joueur
 	 * @param clickedKeys : Touches active du clavier du joueur
 	 */
-	public void managePlayer(int id, List<Integer> clickedKeys) {
-		players.get(id).actions(this, clickedKeys);
+	public boolean managePlayer(int id, List<Integer> clickedKeys) {
+		ICharacter character = players.get(id);
+		if (character != null) {
+			character.actions(this, clickedKeys);
+			return true;
+		} else
+			return false;
 	}
 
 	/**
@@ -157,6 +170,11 @@ public class Application implements Runnable {
 		drawables.remove(drawable);
 	}
 
+	/**
+	 * Enleve une explosion de la liste d'explosions
+	 * 
+	 * @param explosion : explosion a enlever
+	 */
 	public void removeExplosion(IExplosion explosion) {
 		explosions.remove(explosion);
 	}

@@ -19,7 +19,7 @@ public abstract class Explosion implements IExplosion {
 
 	protected Point tile, pos;
 
-	protected double damage;
+	protected int damage;
 
 	protected int tileSize;
 
@@ -37,19 +37,33 @@ public abstract class Explosion implements IExplosion {
 		this.explosionTime = new Cooldown(0);
 	}
 
+	/**
+	 * Supprime une explosion de l'application
+	 *
+	 * @param application : application
+	 */
 	protected void delete(Application application) {
 		application.removeExplosion(this);
 		application.removeDrawable(this);
 		application.removeManageable(this);
 	}
 
+	@Override
+	public int getDamage() {
+		return damage;
+	}
+
 	/**
-	 *
 	 * @param tile : élément du jeu possedant une largeur et une hauteur
 	 * @return la position de la tile
 	 */
 	private Point getPosfromTile(Point tile) {
 		return new Point(tile.x * tileSize, tile.y * tileSize);
+	}
+
+	@Override
+	public Point getTile() {
+		return tile;
 	}
 
 	/**
@@ -66,7 +80,7 @@ public abstract class Explosion implements IExplosion {
 	 * @param damage : dommage provoqués par une explosion
 	 */
 	@Override
-	public void setDamage(double damage) {
+	public void setDamage(int damage) {
 		this.damage = damage;
 	}
 

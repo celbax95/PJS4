@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 
 import fr.application.Application;
+import fr.explosion.IExplosion;
 import fr.itemsApp.bomb.BombFactory;
 import fr.itemsApp.bomb.IBomb;
 import fr.map.GameMap;
@@ -34,11 +35,15 @@ public class CharacterRed implements ICharacter {
 
 	private static final int walkFrequence = 60;
 
+	private static final int timeBetweenDamages = 500;
+
 	private int speed;
 
 	private double angleOfView;
 
 	private int walkStep;
+
+	private Cooldown lastDamage;
 
 	private String defaultBomb;
 
@@ -47,6 +52,8 @@ public class CharacterRed implements ICharacter {
 	private Point pos;
 
 	private Point moves;
+
+	private int id;
 
 	private BombFactory bombFactory;
 
@@ -62,6 +69,7 @@ public class CharacterRed implements ICharacter {
 		pos = new Point(x, y);
 		this.speed = speed;
 		this.health = health;
+		lastDamage = new Cooldown(timeBetweenDamages);
 		moves = new Point(0, 0);
 		angleOfView = 0;
 		walkStep = 0;
@@ -70,16 +78,27 @@ public class CharacterRed implements ICharacter {
 		defaultBomb = "std";
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.itemsApp.character.ICharacter#actions(fr.application.Application,
-	 * java.util.List)
-	 */
 	@Override
 	public void actions(Application application, List<Integer> clickedKeys) {
 		setMoves(clickedKeys);
 		dropBomb(application, clickedKeys);
+	}
+
+	@Override
+	public void damage(int health) {
+		this.health -= health;
+		lastDamage.reset();
+	}
+
+	/**
+	 * Gere si le joueur est mort
+	 *
+	 * @param application : application
+	 */
+	private void death(Application application) {
+		if (health <= 0) {
+			application.deletePlayer(id);
+		}
 	}
 
 	@Override
@@ -123,11 +142,6 @@ public class CharacterRed implements ICharacter {
 		return bombCoolDown;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.itemsApp.character.ICharacter#getCenter()
-	 */
 	@Override
 	public Point getCenter() {
 		return new Point(pos.x + DEFAULT_SIZE / 2, pos.y + DEFAULT_SIZE / 2);
@@ -138,15 +152,11 @@ public class CharacterRed implements ICharacter {
 		return health;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see fr.itemsApp.character.ICharacter#manage(fr.application.Application,
-	 * double)
-	 */
 	@Override
 	public void manage(Application application, double timeSinceLastCall) {
 		move(application.getMap(), timeSinceLastCall);
+		setDamage(application);
+		death(application);
 	}
 
 	/**
@@ -234,9 +244,36 @@ public class CharacterRed implements ICharacter {
 		this.bombCoolDown = new Cooldown(bombCoolDown);
 	}
 
+	/**
+	 * Applique les degats au joueur s'il doit en recevoir
+	 *
+	 * @param application
+	 */
+	private void setDamage(Application application) {
+
+		if (!lastDamage.isDone())
+			return;
+
+		// Explosion Damage
+		List<IExplosion> explosions = application.getExplosions();
+
+		Point tile = application.getMap().getTileFor(pos.x, pos.y);
+
+		for (IExplosion e : explosions) {
+			Point eTile = e.getTile();
+			if (tile.x == eTile.x && tile.y == eTile.y)
+				damage(e.getDamage());
+		}
+	}
+
 	@Override
 	public void setHealth(int health) {
 		this.health = health;
+	}
+
+	@Override
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	/**

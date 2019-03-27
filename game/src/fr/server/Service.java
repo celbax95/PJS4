@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
+
 import fr.application.Application;
 
 /**
@@ -23,25 +24,30 @@ public class Service implements Runnable {
 	private Application application;
 
 	private int myPlayer;
+
 	/**
 	 * constructeur Service vide
 	 */
 	private Service() {
 	}
+
 	/**
 	 * constructeur Service
-	 * @param s : le serveur
+	 *
+	 * @param s            : le serveur
 	 * @param serverSocket : la socket du serveur
-	 * @param application : l'application
+	 * @param application  : l'application
 	 */
 	public Service(Server s, Socket serverSocket, Application application) {
 		this(serverSocket, application);
 		this.server = s;
 	}
+
 	/**
 	 * constructeur Service
+	 *
 	 * @param serverSocket : la socket du serveur
-	 * @param application : l'application
+	 * @param application  : l'application
 	 */
 	public Service(Socket serverSocket, Application application) {
 		server = null;
@@ -77,9 +83,11 @@ public class Service implements Runnable {
 				sOut.flush();
 				sOut.reset();
 				List<Integer> cliKeys = (List<Integer>) sIn.readUnshared();
-				application.managePlayer(myPlayer, cliKeys);
+				if (!application.managePlayer(myPlayer, cliKeys)) {
+					// Quand le joueur est mort
+				}
 			}
-		} catch (IOException | ClassNotFoundException e) {
+		} catch (Exception e) {
 			// e.printStackTrace();
 			try {
 				socket.close();
@@ -90,6 +98,7 @@ public class Service implements Runnable {
 			System.err.println("Service termine");
 		}
 	}
+
 	/**
 	 * lance le thread du service
 	 */
