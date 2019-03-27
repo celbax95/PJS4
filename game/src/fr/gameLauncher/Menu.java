@@ -5,5 +5,5 @@ public interface Menu {
 
 	public void hideWindow();
 
-	public void resetInstance();
+	public void reset();
 }

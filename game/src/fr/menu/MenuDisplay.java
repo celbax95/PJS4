@@ -73,10 +73,10 @@ public class MenuDisplay implements Menu{
 	}
 	
 	/**
-	 * Génère une nouvelle instance du menu qui remplace l'ancienne
+	 * Retour au menu après une partie
 	 */
-	public void resetInstance() {
-		MenuDisplay.menu = new MenuDisplay();
+	public void reset() {
+		MenuDisplay.menu.frame.setVisible(true);
 	}
 	/**
 	 * Constructeur du menu (initialisation de tous ses composants)

@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import fr.gameLauncher.GameLauncher;
 import fr.screen.keyboard.KeyBoardHolder;
 
 /**
@@ -39,6 +40,7 @@ public class Screen extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				super.windowClosing(e);
 				appScreen.close();
+				GameLauncher.resetMenu();
 			}
 		});
 

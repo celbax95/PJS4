@@ -94,7 +94,6 @@ public class GameLauncher {
 	 * Reset du menu
 	 */
 	public static void resetMenu() {
-		menu.resetInstance();
-		menu.display();
+		menu.reset();
 	}
 }

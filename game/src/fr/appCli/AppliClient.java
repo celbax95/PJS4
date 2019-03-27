@@ -77,6 +77,7 @@ public class AppliClient implements AppliScreen, Runnable {
 	public void close() {
 		myThread.interrupt();
 		endApp = true;
+		GameLauncher.resetMenu();
 		try {
 			socket.close();
 		} catch (IOException e) {

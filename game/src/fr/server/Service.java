@@ -111,15 +111,12 @@ public class Service implements Runnable {
 			server.playerLeft();
 			try {
 				socket.close();
-				GameLauncher.resetMenu();
 			} catch (IOException e1) {GameLauncher.resetMenu();}
 			myThread.interrupt();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			GameLauncher.resetMenu();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-			GameLauncher.resetMenu();
 		}
 	}
 
