@@ -34,38 +34,6 @@ public class CharacterRed implements ICharacter {
 
 	private static final int walkFrequence = 60;
 
-	/**
-	 * Verification de l'alignement entre deux intervalles
-	 *
-	 * @param p1
-	 *            : Position de la premiere borne de l'intervalle 1
-	 * @param s1
-	 *            : Distance jusqu'a la deuxieme borne de l'intervale 1
-	 * @param p2
-	 *            : Position de la premiere borne de l'intervalle 2
-	 * @param s2
-	 *            : Distance jusqu'a la deuxieme borne de l'intervale 2
-	 * @return Intervalles alignees
-	 */
-	private static boolean isAligned(int p1, int s1, int p2, int s2) {
-		return (isBetween(p2, p1, p1 + s1) || isBetween(p1, p2, p2 + s2) || isBetween(p2 + s2 / 2, p1, p1 + s1));
-	}
-
-	/**
-	 * Verification qu'un point est entre deux autres points sur une droite
-	 *
-	 * @param p
-	 *            : point test
-	 * @param p1
-	 *            : point 1
-	 * @param p2
-	 *            : point 2
-	 * @return Le point est entre les deux autres
-	 */
-	public static boolean isBetween(int p, int p1, int p2) {
-		return (p1 < p && p < p2);
-	}
-
 	private int speed;
 
 	private double angleOfView;
@@ -85,14 +53,10 @@ public class CharacterRed implements ICharacter {
 	private int health;
 
 	/**
-	 * @param x
-	 *            : Position x
-	 * @param y
-	 *            : Position y
-	 * @param bombCoolDown
-	 *            : Temps entre chaque pose de bombe
-	 * @param speed
-	 *            : Vitesse du personnage
+	 * @param x            : Position x
+	 * @param y            : Position y
+	 * @param bombCoolDown : Temps entre chaque pose de bombe
+	 * @param speed        : Vitesse du personnage
 	 */
 	public CharacterRed(double x, double y, int bombCoolDown, int speed) {
 		pos = new Point(x, y);
@@ -107,7 +71,7 @@ public class CharacterRed implements ICharacter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.itemsApp.character.ICharacter#actions(fr.application.Application,
 	 * java.util.List)
 	 */
@@ -138,10 +102,8 @@ public class CharacterRed implements ICharacter {
 	/**
 	 * Pose une bombe sur la tile sur laquelle est le character
 	 *
-	 * @param application
-	 *            : Application
-	 * @param clickedKeys
-	 *            : Touches appuyees du clavier
+	 * @param application : Application
+	 * @param clickedKeys : Touches appuyees du clavier
 	 */
 	public void dropBomb(Application application, List<Integer> clickedKeys) {
 		if (clickedKeys.contains(KeyEvent.VK_R)) {
@@ -162,7 +124,7 @@ public class CharacterRed implements ICharacter {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.itemsApp.character.ICharacter#getCenter()
 	 */
 	@Override
@@ -170,13 +132,14 @@ public class CharacterRed implements ICharacter {
 		return new Point(pos.x + DEFAULT_SIZE / 2, pos.y + DEFAULT_SIZE / 2);
 	}
 
+	@Override
 	public int getHealth() {
 		return health;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see fr.itemsApp.character.ICharacter#manage(fr.application.Application,
 	 * double)
 	 */
@@ -188,10 +151,8 @@ public class CharacterRed implements ICharacter {
 	/**
 	 * Bouge le joueur, et gere les collisions
 	 *
-	 * @param map
-	 *            : Carte de la partie
-	 * @param t
-	 *            : Temps entre chaque appel
+	 * @param map : Carte de la partie
+	 * @param t   : Temps entre chaque appel
 	 */
 	public void move(GameMap map, double t) {
 
@@ -272,6 +233,7 @@ public class CharacterRed implements ICharacter {
 		this.bombCoolDown = new Cooldown(bombCoolDown);
 	}
 
+	@Override
 	public void setHealth(int health) {
 		this.health = health;
 	}
@@ -279,8 +241,7 @@ public class CharacterRed implements ICharacter {
 	/**
 	 * Demande au character de bouger dans une direction
 	 *
-	 * @param clickedKeys
-	 *            : Touches appuyees du clavier
+	 * @param clickedKeys : Touches appuyees du clavier
 	 */
 	public void setMoves(List<Integer> clickedKeys) {
 		moves.setLocation(0, 0);
@@ -309,5 +270,30 @@ public class CharacterRed implements ICharacter {
 	@Override
 	public void setSpeed(int speed) {
 		this.speed = speed;
+	}
+
+	/**
+	 * Verification de l'alignement entre deux intervalles
+	 *
+	 * @param p1 : Position de la premiere borne de l'intervalle 1
+	 * @param s1 : Distance jusqu'a la deuxieme borne de l'intervale 1
+	 * @param p2 : Position de la premiere borne de l'intervalle 2
+	 * @param s2 : Distance jusqu'a la deuxieme borne de l'intervale 2
+	 * @return Intervalles alignees
+	 */
+	private static boolean isAligned(int p1, int s1, int p2, int s2) {
+		return (isBetween(p2, p1, p1 + s1) || isBetween(p1, p2, p2 + s2) || isBetween(p2 + s2 / 2, p1, p1 + s1));
+	}
+
+	/**
+	 * Verification qu'un point est entre deux autres points sur une droite
+	 *
+	 * @param p  : point test
+	 * @param p1 : point 1
+	 * @param p2 : point 2
+	 * @return Le point est entre les deux autres
+	 */
+	public static boolean isBetween(int p, int p1, int p2) {
+		return (p1 < p && p < p2);
 	}
 }
