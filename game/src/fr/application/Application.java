@@ -9,6 +9,7 @@ import java.util.Vector;
 import fr.explosion.IExplosion;
 import fr.itemsApp.Drawable;
 import fr.itemsApp.Manageable;
+import fr.itemsApp.bomb.IBomb;
 import fr.itemsApp.character.CharacterFactory;
 import fr.itemsApp.character.ICharacter;
 import fr.map.GameMap;
@@ -29,6 +30,7 @@ public class Application implements Runnable {
 	private GameMap map;
 
 	private List<IExplosion> explosions;
+	private List<IBomb> bombs;
 
 	private Timer timerApploop;
 
@@ -43,11 +45,21 @@ public class Application implements Runnable {
 		drawables = new Vector<>();
 		manageables = new Vector<>();
 		explosions = new Vector<>();
+		bombs = new Vector<>();
 		timerApploop = new Timer();
 		myThread = new Thread(this);
 
 		// Chargement de la map depuis le fichier "/maps/1.bmap"
 		map = new GameMap("/maps/1.bmap");
+	}
+
+	/**
+	 * Ajoute une bombe a la liste des bombes
+	 *
+	 * @param bomb : bombe a ajouter
+	 */
+	public void addBomb(IBomb bomb) {
+		bombs.add(bomb);
 	}
 
 	/**
@@ -119,6 +131,13 @@ public class Application implements Runnable {
 	}
 
 	/**
+	 * @return La liste de toutes les bombes
+	 */
+	public List<IBomb> getBombs() {
+		return bombs;
+	}
+
+	/**
 	 * @return Liste des elments Drawbles
 	 */
 	public List<Drawable> getDrawables() {
@@ -162,6 +181,15 @@ public class Application implements Runnable {
 	}
 
 	/**
+	 * Supprime une bombe de la liste des bombes
+	 *
+	 * @param bomb : la bombe a supprimer
+	 */
+	public void removeBomb(IBomb bomb) {
+		bombs.remove(bomb);
+	}
+
+	/**
 	 * Supprime un Drawable de l'application
 	 *
 	 * @param drawable : Drawable a supprimer
@@ -172,7 +200,7 @@ public class Application implements Runnable {
 
 	/**
 	 * Enleve une explosion de la liste d'explosions
-	 * 
+	 *
 	 * @param explosion : explosion a enlever
 	 */
 	public void removeExplosion(IExplosion explosion) {
