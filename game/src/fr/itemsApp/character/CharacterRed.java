@@ -30,10 +30,41 @@ public class CharacterRed implements ICharacter {
 			.getImage();
 	private static Image[] imgD = {
 			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_1.png"))).getImage(),
-			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_2.png"))).getImage()
-	};
+			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_2.png"))).getImage() };
 
 	private static final int walkFrequence = 60;
+
+	/**
+	 * Verification de l'alignement entre deux intervalles
+	 *
+	 * @param p1
+	 *            : Position de la premiere borne de l'intervalle 1
+	 * @param s1
+	 *            : Distance jusqu'a la deuxieme borne de l'intervale 1
+	 * @param p2
+	 *            : Position de la premiere borne de l'intervalle 2
+	 * @param s2
+	 *            : Distance jusqu'a la deuxieme borne de l'intervale 2
+	 * @return Intervalles alignees
+	 */
+	private static boolean isAligned(int p1, int s1, int p2, int s2) {
+		return (isBetween(p2, p1, p1 + s1) || isBetween(p1, p2, p2 + s2) || isBetween(p2 + s2 / 2, p1, p1 + s1));
+	}
+
+	/**
+	 * Verification qu'un point est entre deux autres points sur une droite
+	 *
+	 * @param p
+	 *            : point test
+	 * @param p1
+	 *            : point 1
+	 * @param p2
+	 *            : point 2
+	 * @return Le point est entre les deux autres
+	 */
+	public static boolean isBetween(int p, int p1, int p2) {
+		return (p1 < p && p < p2);
+	}
 
 	private int speed;
 
@@ -51,11 +82,17 @@ public class CharacterRed implements ICharacter {
 
 	private BombFactory bombFactory;
 
+	private int health;
+
 	/**
-	 * @param x            : Position x
-	 * @param y            : Position y
-	 * @param bombCoolDown : Temps entre chaque pose de bombe
-	 * @param speed        : Vitesse du personnage
+	 * @param x
+	 *            : Position x
+	 * @param y
+	 *            : Position y
+	 * @param bombCoolDown
+	 *            : Temps entre chaque pose de bombe
+	 * @param speed
+	 *            : Vitesse du personnage
 	 */
 	public CharacterRed(double x, double y, int bombCoolDown, int speed) {
 		pos = new Point(x, y);
@@ -68,13 +105,16 @@ public class CharacterRed implements ICharacter {
 		defaultBomb = "std";
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.itemsApp.character.ICharacter#actions(fr.application.Application, java.util.List)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see fr.itemsApp.character.ICharacter#actions(fr.application.Application,
+	 * java.util.List)
 	 */
 	@Override
 	public void actions(Application application, List<Integer> clickedKeys) {
 		setMoves(clickedKeys);
-		dropBomb(application,clickedKeys);
+		dropBomb(application, clickedKeys);
 	}
 
 	@Override
@@ -90,18 +130,18 @@ public class CharacterRed implements ICharacter {
 		// Affichage du skin statique ou en mouvement
 		if (moves.x == 0 && moves.y == 0) {
 			g.drawImage(imgS, af, null);
-		}
-		else {
-			g.drawImage(
-					imgD[(walkStep < walkFrequence / 2) ? 0 : 1], af, null);
+		} else {
+			g.drawImage(imgD[(walkStep < walkFrequence / 2) ? 0 : 1], af, null);
 		}
 	}
 
 	/**
 	 * Pose une bombe sur la tile sur laquelle est le character
 	 *
-	 * @param application    : Application
-	 * @param clickedKeys : Touches appuyees du clavier
+	 * @param application
+	 *            : Application
+	 * @param clickedKeys
+	 *            : Touches appuyees du clavier
 	 */
 	public void dropBomb(Application application, List<Integer> clickedKeys) {
 		if (clickedKeys.contains(KeyEvent.VK_R)) {
@@ -120,7 +160,9 @@ public class CharacterRed implements ICharacter {
 		return bombCoolDown;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see fr.itemsApp.character.ICharacter#getCenter()
 	 */
 	@Override
@@ -128,8 +170,15 @@ public class CharacterRed implements ICharacter {
 		return new Point(pos.x + DEFAULT_SIZE / 2, pos.y + DEFAULT_SIZE / 2);
 	}
 
-	/* (non-Javadoc)
-	 * @see fr.itemsApp.character.ICharacter#manage(fr.application.Application, double)
+	public int getHealth() {
+		return health;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see fr.itemsApp.character.ICharacter#manage(fr.application.Application,
+	 * double)
 	 */
 	@Override
 	public void manage(Application application, double timeSinceLastCall) {
@@ -139,8 +188,10 @@ public class CharacterRed implements ICharacter {
 	/**
 	 * Bouge le joueur, et gere les collisions
 	 *
-	 * @param map : Carte de la partie
-	 * @param t   : Temps entre chaque appel
+	 * @param map
+	 *            : Carte de la partie
+	 * @param t
+	 *            : Temps entre chaque appel
 	 */
 	public void move(GameMap map, double t) {
 
@@ -168,20 +219,18 @@ public class CharacterRed implements ICharacter {
 				if (!mapTile.isWalkable()) {
 					// X
 					if (isAligned(pos.getIY() + collideMargin, DEFAULT_SIZE - collideMargin * 2,
-							mapTile.getPos().getIY(),
-							mapTile.getSize())) {
+							mapTile.getPos().getIY(), mapTile.getSize())) {
 
 						// Droite
-						if (moves.x > 0
-								&& isBetween((int) x + DEFAULT_SIZE, mapTile.getPos().getIX(),
-										mapTile.getPos().getIX() + mapTile.getSize())) {
+						if (moves.x > 0 && isBetween((int) x + DEFAULT_SIZE, mapTile.getPos().getIX(),
+								mapTile.getPos().getIX() + mapTile.getSize())) {
 							x = mapTile.getPos().x - DEFAULT_SIZE;
 							// On ne peut pas aller a droite
 						}
 
 						// Gauche
-						else if (moves.x < 0
-								&& isBetween((int) x, mapTile.getPos().getIX(), mapTile.getPos().getIX() + mapTile.getSize())) {
+						else if (moves.x < 0 && isBetween((int) x, mapTile.getPos().getIX(),
+								mapTile.getPos().getIX() + mapTile.getSize())) {
 							x = mapTile.getPos().x + mapTile.getSize();
 							// On ne peut pas aller a gauche
 						}
@@ -189,20 +238,18 @@ public class CharacterRed implements ICharacter {
 
 					// Y
 					if (isAligned(pos.getIX() + collideMargin, DEFAULT_SIZE - collideMargin * 2,
-							mapTile.getPos().getIX(),
-							mapTile.getSize())) {
+							mapTile.getPos().getIX(), mapTile.getSize())) {
 
 						// Haut
-						if (moves.y > 0
-								&& isBetween((int) y + DEFAULT_SIZE, mapTile.getPos().getIY(),
-										mapTile.getPos().getIY() + mapTile.getSize())) {
+						if (moves.y > 0 && isBetween((int) y + DEFAULT_SIZE, mapTile.getPos().getIY(),
+								mapTile.getPos().getIY() + mapTile.getSize())) {
 							y = mapTile.getPos().y - DEFAULT_SIZE;
 							// On ne peut pas aller en haut
 						}
 
 						// Bas
-						else if (moves.y < 0
-								&& isBetween((int) y, mapTile.getPos().getIY(), mapTile.getPos().getIY() + mapTile.getSize())) {
+						else if (moves.y < 0 && isBetween((int) y, mapTile.getPos().getIY(),
+								mapTile.getPos().getIY() + mapTile.getSize())) {
 							y = mapTile.getPos().y + mapTile.getSize();
 							// On ne peut pas aller en bas
 						}
@@ -225,10 +272,15 @@ public class CharacterRed implements ICharacter {
 		this.bombCoolDown = new Cooldown(bombCoolDown);
 	}
 
+	public void setHealth(int health) {
+		this.health = health;
+	}
+
 	/**
 	 * Demande au character de bouger dans une direction
 	 *
-	 * @param clickedKeys : Touches appuyees du clavier
+	 * @param clickedKeys
+	 *            : Touches appuyees du clavier
 	 */
 	public void setMoves(List<Integer> clickedKeys) {
 		moves.setLocation(0, 0);
@@ -257,30 +309,5 @@ public class CharacterRed implements ICharacter {
 	@Override
 	public void setSpeed(int speed) {
 		this.speed = speed;
-	}
-
-	/**
-	 * Verification de l'alignement entre deux intervalles
-	 *
-	 * @param p1 : Position de la premiere borne de l'intervalle 1
-	 * @param s1 : Distance jusqu'a la deuxieme borne de l'intervale 1
-	 * @param p2 : Position de la premiere borne de l'intervalle 2
-	 * @param s2 : Distance jusqu'a la deuxieme borne de l'intervale 2
-	 * @return Intervalles alignees
-	 */
-	private static boolean isAligned(int p1, int s1, int p2, int s2) {
-		return (isBetween(p2, p1, p1 + s1) || isBetween(p1, p2, p2 + s2) || isBetween(p2 + s2 / 2, p1, p1 + s1));
-	}
-
-	/**
-	 * Verification qu'un point est entre deux autres points sur une droite
-	 *
-	 * @param p  : point test
-	 * @param p1 : point 1
-	 * @param p2 : point 2
-	 * @return Le point est entre les deux autres
-	 */
-	public static boolean isBetween(int p, int p1, int p2) {
-		return (p1 < p && p < p2);
 	}
 }
