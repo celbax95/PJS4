@@ -154,7 +154,7 @@ public class CharacterRed implements ICharacter {
 
 	@Override
 	public void manage(Application application, double timeSinceLastCall) {
-		move(application.getMap(), timeSinceLastCall);
+		move(application, timeSinceLastCall);
 		setDamage(application);
 		death(application);
 	}
@@ -165,7 +165,9 @@ public class CharacterRed implements ICharacter {
 	 * @param map : Carte de la partie
 	 * @param t   : Temps entre chaque appel
 	 */
-	public void move(GameMap map, double t) {
+	public void move(Application application, double t) {
+
+		GameMap map = application.getMap();
 
 		double x = pos.x + (moves.x * speed * t);
 		double y = pos.y + (moves.y * speed * t);
@@ -226,7 +228,6 @@ public class CharacterRed implements ICharacter {
 							// On ne peut pas aller en bas
 						}
 					}
-
 				}
 			}
 		}
