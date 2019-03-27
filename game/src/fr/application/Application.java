@@ -20,7 +20,9 @@ import fr.util.time.Timer;
  * Application (Le jeu)
  */
 public class Application implements Runnable {
-	private final static int spawnPlaces[][] = { { 120, 120 } };
+
+	private List<Point> spawnPlaces;
+	private int currentSpawnPoint;
 
 	private Map<Integer, ICharacter> players;
 
@@ -51,6 +53,8 @@ public class Application implements Runnable {
 
 		// Chargement de la map depuis le fichier "/maps/1.bmap"
 		map = new GameMap("/maps/1.bmap");
+		spawnPlaces = map.getSpawnPoints();
+		currentSpawnPoint = 0;
 	}
 
 	/**
@@ -101,10 +105,11 @@ public class Application implements Runnable {
 			id++;
 
 		// Choix aleatoire parmi les emplacements de spawn existants
-		int spawnPlace[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
+		Point spawnPlace = spawnPlaces.get(currentSpawnPoint);
+		currentSpawnPoint = (currentSpawnPoint + 1) % spawnPlaces.size();
 
 		ICharacter character = CharacterFactory.getInstance().create("red");
-		character.setPos(new Point(spawnPlace[0], spawnPlace[1]));
+		character.setPos(new Point(spawnPlace.x, spawnPlace.y));
 		character.setId(id);
 
 		players.put(id, character);

@@ -35,6 +35,10 @@ public class GameMap implements Serializable {
 		return map;
 	}
 
+	public ArrayList<Point> getSpawnPoints() {
+		return spawnPoints;
+	}
+
 	public Point getTileFor(double x, double y) {
 		return new Point(((int) x) / DEFAULT_TILE_SIZE, ((int) y) / DEFAULT_TILE_SIZE);
 	}
@@ -63,7 +67,7 @@ public class GameMap implements Serializable {
 		int tmp = sc.nextInt();
 		sc.nextLine();
 		for (int i = 0; i < tmp; i++) {
-			spawnPoints.add(new Point(sc.nextInt(), sc.nextInt()));
+			spawnPoints.add(new Point(sc.nextInt() * DEFAULT_TILE_SIZE, sc.nextInt() * DEFAULT_TILE_SIZE));
 			sc.nextLine();
 		}
 
