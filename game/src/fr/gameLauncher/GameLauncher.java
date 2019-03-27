@@ -97,8 +97,8 @@ public class GameLauncher {
 		if(server!=null) {
 			serverClose();
 		}
-		Screen.setNewInstance();
 		MainJPanel.setNewInstance();
+		Screen.setNewInstance();
 		menu.reset();
 		
 	}
