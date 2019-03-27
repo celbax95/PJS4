@@ -12,7 +12,7 @@ public abstract class Item implements CollectableItem, PlaceableItem {
 
 	@Override
 	public CollectableItem collect(Application application, Character character) {
-		holder = character;
+		this.holder = character;
 		return this;
 	}
 
@@ -21,7 +21,7 @@ public abstract class Item implements CollectableItem, PlaceableItem {
 
 	@Override
 	public Point getPos() {
-		return pos;
+		return this.pos;
 	}
 
 	@Override

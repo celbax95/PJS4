@@ -11,10 +11,8 @@ public interface PlaceableItem extends Drawable {
 	/**
 	 * Recuperation d'un item
 	 *
-	 * @param application
-	 *            : application
-	 * @param character
-	 *            : character recuperant l'item
+	 * @param application : application
+	 * @param character   : character recuperant l'item
 	 * @return l'item sous forme de CollectableItem
 	 */
 	CollectableItem collect(Application application, Character character);
@@ -30,8 +28,7 @@ public interface PlaceableItem extends Drawable {
 	/**
 	 * Change la position de l'item
 	 *
-	 * @param pos
-	 *            : nouvelle position
+	 * @param pos : nouvelle position
 	 */
 	void setPos(Point pos);
 }
