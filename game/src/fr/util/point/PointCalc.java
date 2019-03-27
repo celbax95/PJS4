@@ -39,6 +39,7 @@ public class PointCalc {
 
 	/**
 	 * Distance entre deux points
+	 *
 	 * @param p1 : point 1
 	 * @param p2 : point 2
 	 * @return la distance entre les deux points
@@ -50,6 +51,7 @@ public class PointCalc {
 
 	/**
 	 * Division d'un point par un nombre
+	 *
 	 * @param p1 : le point
 	 * @param p2 : le nombre
 	 * @return le resultat de la division du point par le nombre
@@ -76,8 +78,11 @@ public class PointCalc {
 	 * @return l'angle entre le segment p et (0,0)
 	 */
 	public static double getAngle(Point p) {
-		double a = Math.acos(p.x);
-		if (p.y < 0)
+		Point o = p.clone();
+		o.normalize();
+
+		double a = Math.acos(o.x);
+		if (o.y < 0)
 			a *= -1;
 		return (a + Math.PI * 2) % (Math.PI * 2);
 	}
