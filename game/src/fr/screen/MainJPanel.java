@@ -14,11 +14,15 @@ public class MainJPanel extends JPanel {
 
 	private static MainJPanel single = null;
 
+	private static boolean newGame;
+
 	private int WIDTH, HEIGHT;
 
 	private Screen screen;
 
 	private AppliScreen appScreen;
+	
+	private Thread repainter;
 
 	/**
 	 * @param screen    : la fenetre
@@ -29,6 +33,7 @@ public class MainJPanel extends JPanel {
 	 */
 	private MainJPanel(Screen screen, AppliScreen appScreen, int width, int height, int margin) {
 		super();
+		this.newGame = false;
 		this.screen = screen;
 
 		// taille du panel
@@ -40,7 +45,7 @@ public class MainJPanel extends JPanel {
 
 		(this.appScreen = appScreen).start();
 
-		Thread repainter = new Thread(new Repainter(this));
+		repainter = new Thread(new Repainter(this));
 		repainter.start();
 	}
 
@@ -63,8 +68,11 @@ public class MainJPanel extends JPanel {
 		try {
 			appScreen.draw((Graphics2D) g2);
 		} catch (EndApp e) {
-			System.err.println(e.getMessage());
-			closeScr();
+			synchronized(this.screen) {
+				System.err.println(e.getMessage());
+				repainter.interrupt();
+				closeScr();
+			}
 		}
 	}
 
@@ -86,10 +94,14 @@ public class MainJPanel extends JPanel {
 	 * @return une nouvelle instance ou l'instance existante
 	 */
 	public static MainJPanel getInstance(Screen screen, AppliScreen appScreen, int width, int height, int margin) {
-		if (single == null) {
+		if (single == null || MainJPanel.newGame == true) {
 			single = new MainJPanel(screen, appScreen, width, height, margin);
 			return single;
 		} else
 			return single;
+	}
+
+	public static void setNewInstance() {
+		MainJPanel.newGame = true;
 	}
 }

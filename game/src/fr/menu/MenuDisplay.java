@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.io.IOException;
 //import java.io.FileWriter;
 //import java.io.IOException;
 //import java.io.PrintWriter;
@@ -57,7 +58,7 @@ public class MenuDisplay implements Menu{
 	private ArrayList<JComponent> componentStartList;
 	private ArrayList<JComponent> componentJoinList;
 	private ArrayList<JComponent> componentConnectList;
-	private int menuPostion;
+	private int menuPosition;
 	private int nbPlayers;
 	private boolean sawIpAdress;
 	
@@ -76,6 +77,18 @@ public class MenuDisplay implements Menu{
 	 * Retour au menu après une partie
 	 */
 	public void reset() {
+		hideComponents();
+		
+		if(menuPosition==3) {
+			nbPlayers = NB_INIT_PLAYERS;
+			nbPlayersLabel.setText(String.valueOf(nbPlayers));
+			menuPosition = 1;
+		}
+		else if(menuPosition==4) {
+			menuPosition = 2;
+			connect.requestFocusInWindow();
+		}
+		showComponents();
 		MenuDisplay.menu.frame.setVisible(true);
 	}
 	/**
@@ -90,7 +103,7 @@ public class MenuDisplay implements Menu{
 		this.frame.setBackground(BACKGROUND_COLOR);
 		this.panel = new MenuPanel(windowSize);
 		
-		this.menuPostion = 0;
+		this.menuPosition = 0;
 		this.nbPlayers = NB_INIT_PLAYERS;
 		this.sawIpAdress = false;
 		
@@ -163,7 +176,7 @@ public class MenuDisplay implements Menu{
 		this.host.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menuPostion = 1;
+				menuPosition = 1;
 				showComponents();
 				host.setVisible(false);
 				join.setVisible(false);
@@ -173,7 +186,7 @@ public class MenuDisplay implements Menu{
 		this.join.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menuPostion = 2;
+				menuPosition = 2;
 				showComponents();
 				connect.requestFocusInWindow();
 				host.setVisible(false);
@@ -185,26 +198,28 @@ public class MenuDisplay implements Menu{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				hideComponents();
-				switch(menuPostion) {
+				switch(menuPosition) {
 					case 1:
 						nbPlayers = NB_INIT_PLAYERS;
 						nbPlayersLabel.setText(String.valueOf(nbPlayers));
-						menuPostion = 0;
+						menuPosition = 0;
 						break;
 					case 2:
-						menuPostion = 0;
+						menuPosition = 0;
 						ipTextField.setForeground(Color.gray);
 						ipTextField.setText("Ip Adress");
 						sawIpAdress = false;
 						break;
 					case 3:
-					GameLauncher.clientClose();
-					GameLauncher.serverClose();
-						menuPostion = 1;
+						GameLauncher.clientClose();
+						GameLauncher.serverClose();
+						nbPlayers = NB_INIT_PLAYERS;
+						nbPlayersLabel.setText(String.valueOf(nbPlayers));
+						menuPosition = 1;
 						break;
 					case 4:
 						GameLauncher.clientClose();
-						menuPostion = 2;
+						menuPosition = 2;
 						break;
 				}
 				showComponents();
@@ -214,24 +229,29 @@ public class MenuDisplay implements Menu{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				hideComponents();
-				menuPostion = 3;
+				menuPosition = 3;
 				showComponents();
 				GameLauncher.createServer(TITLE,PORT, nbPlayers);
 				GameLauncher.serverStart();
-				GameLauncher.createClient(IP,PORT, MenuDisplay.menu);
+				try {
+					GameLauncher.createClient(IP,PORT, MenuDisplay.menu);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 				
 			}
 		});
 		this.connect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				GameLauncher.createClient(IP,PORT, MenuDisplay.menu);
-				if (GameLauncher.isSocketClientNull()) {
-					return;
+				try {
+					GameLauncher.createClient(IP,PORT, MenuDisplay.menu);
+					hideComponents();
+					menuPosition = 4;
+					showComponents();
+				} catch (IOException e1) {
+					System.err.println("Impossible de se connecter au serveur");
 				}
-				hideComponents();
-				menuPostion = 4;
-				showComponents();
 				
 				
 			}
@@ -328,7 +348,7 @@ public class MenuDisplay implements Menu{
 	 * Cache les composants du menu en fonction de la position dans l'arborescence du menu
 	 */
 	private void hideComponents() {
-		if(menuPostion == 0) {
+		if(menuPosition == 0) {
 			for(JComponent jc : componentHostList) {
 				jc.setVisible(false);
 			}
@@ -339,22 +359,22 @@ public class MenuDisplay implements Menu{
 				jc.setVisible(false);
 			}
 		}
-		else if(menuPostion == 1) {
+		else if(menuPosition == 1) {
 			for(JComponent jc : componentHostList) {
 				jc.setVisible(false);
 			}
 		}
-		else if(menuPostion == 2) {
+		else if(menuPosition == 2) {
 			for(JComponent jc : componentJoinList) {
 				jc.setVisible(false);
 			}
 		}
-		else if(menuPostion == 3) {
+		else if(menuPosition == 3) {
 			for(JComponent jc : componentStartList) {
 				jc.setVisible(false);
 			}
 		}
-		else if(menuPostion == 4) {
+		else if(menuPosition == 4) {
 			for(JComponent jc : componentConnectList) {
 				jc.setVisible(false);
 			}
@@ -366,27 +386,27 @@ public class MenuDisplay implements Menu{
 	 * Montre les composants du menu en fonction de la position dans l'arborescence du menu
 	 */
 	private void showComponents() {
-		if(menuPostion ==0) {
+		if(menuPosition ==0) {
 			host.setVisible(true);
 			join.setVisible(true);
 			back.setVisible(false);
 		}
-		else if(menuPostion == 1) {
+		else if(menuPosition == 1) {
 			for(JComponent jc : componentHostList) {
 				jc.setVisible(true);
 			}
 		}
-		else if(menuPostion == 2) {
+		else if(menuPosition == 2) {
 			for(JComponent jc : componentJoinList) {
 				jc.setVisible(true);
 			}
 		}
-		else if(menuPostion == 3) {
+		else if(menuPosition == 3) {
 			for(JComponent jc : componentStartList) {
 				jc.setVisible(true);
 			}
 		}
-		else if(menuPostion == 4) {
+		else if(menuPosition == 4) {
 			for(JComponent jc : componentConnectList) {
 				jc.setVisible(true);
 			}

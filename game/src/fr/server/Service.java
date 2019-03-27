@@ -10,7 +10,6 @@ import java.net.Socket;
 import java.util.List;
 
 import fr.application.Application;
-import fr.gameLauncher.GameLauncher;
 
 /**
  * Le Service du jeu qui communique avec le client via le serveur
@@ -111,7 +110,9 @@ public class Service implements Runnable {
 			server.playerLeft();
 			try {
 				socket.close();
-			} catch (IOException e1) {GameLauncher.resetMenu();}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			myThread.interrupt();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

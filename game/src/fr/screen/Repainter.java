@@ -26,7 +26,7 @@ public class Repainter implements Runnable {
 	 */
 	@Override
 	public void run() {
-		while (true) {
+		while (!Thread.currentThread().isInterrupted()) {
 			japanel.repaint();
 			try {
 				Thread.sleep(FPS30);

@@ -17,7 +17,7 @@ import fr.screen.keyboard.KeyBoardHolder;
 public class Screen extends JFrame {
 
 	private static Screen single = null;
-
+	private static boolean newGame;
 	@SuppressWarnings("unused")
 	private MainJPanel mainJpanel;
 
@@ -30,15 +30,15 @@ public class Screen extends JFrame {
 	 * @param margin    : marge totale dans la fenetre
 	 */
 	private Screen(AppliScreen appScreen, int width, int height, int marginX, int marginY, int margin) {
-		// Nom d ela fenetre
+		this.newGame = false;
+		// Nom de la fenetre
 		this.setTitle(appScreen.getName());
 
 		// Quand on ferme la fenetre
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
 				appScreen.close();
 				GameLauncher.resetMenu();
 			}
@@ -83,10 +83,14 @@ public class Screen extends JFrame {
 	 */
 	public static Screen getInstance(AppliScreen appScreen, int width, int height, int marginX, int marginY,
 			int margin) {
-		if (single == null) {
+		if (single == null || Screen.newGame == true) {
 			single = new Screen(appScreen, width, height, marginX, marginY, margin);
 			return single;
 		} else
 			return single;
+	}
+	
+	public static void setNewInstance() {
+		Screen.newGame = true;
 	}
 }

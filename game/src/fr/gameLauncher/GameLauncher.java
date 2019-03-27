@@ -3,6 +3,8 @@ package fr.gameLauncher;
 import java.io.IOException;
 
 import fr.client.Client;
+import fr.screen.MainJPanel;
+import fr.screen.Screen;
 import fr.server.Server;
 
 /**
@@ -37,8 +39,9 @@ public class GameLauncher {
 	 * @param ip Adresse IP du serveur auquel veut se connecter le client
 	 * @param port Numéro du port du serveur auquel veut se connecter le client
 	 * @param menu Menu actuellement utilisé
+	 * @throws IOException 
 	 */
-	public static void createClient(String ip, int port, Menu menu) {
+	public static void createClient(String ip, int port, Menu menu) throws IOException {
 		cli = new Client(ip, port, menu);
 	}
 	/**
@@ -62,10 +65,6 @@ public class GameLauncher {
 	 */
 	public static void clientClose() {
 		cli.close();
-	}
-	
-	public static boolean isSocketClientNull() {
-		return cli.getSocket()==null;
 	}
 	
 	public static int getServerNbPlayers() {
@@ -94,6 +93,13 @@ public class GameLauncher {
 	 * Reset du menu
 	 */
 	public static void resetMenu() {
+		clientClose();
+		if(server!=null) {
+			serverClose();
+		}
+		Screen.setNewInstance();
+		MainJPanel.setNewInstance();
 		menu.reset();
+		
 	}
 }

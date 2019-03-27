@@ -7,7 +7,6 @@ import java.net.Socket;
 
 import fr.appCli.AppliClient;
 import fr.gameLauncher.Menu;
-import fr.menu.MenuDisplay;
 import fr.screen.AppliScreen;
 import fr.screen.Screen;
 
@@ -26,9 +25,11 @@ public class Client implements Runnable{
 	public static final int WIDTH = 1728;
 	public static final int HEIGHT = 972;
 	
-	public Client(String ip, int port, Menu menu) {
+	public Client(String ip, int port, Menu menu) throws IOException {
 
+		
 		socket = connexion(ip, port);
+		
 		this.menu = menu;
 		myThread = new Thread(this);
 		this.start();
@@ -57,7 +58,7 @@ public class Client implements Runnable{
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Client ferme");
 		}
 		
 	}
@@ -85,14 +86,12 @@ public class Client implements Runnable{
 		}
 	}
 	
-	private Socket connexion(String ip, int port) {
+	private Socket connexion(String ip, int port) throws IOException {
 		try {
 			return new Socket(ip, port);
 		} catch (IOException e) {
-			System.err.println("Impossible de se connecter au serveur");
-			//e.printStackTrace();
+			throw e;
 		}
-		return null;
 	}
 	public Socket getSocket() {
 		return this.socket;
