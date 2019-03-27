@@ -8,13 +8,19 @@ import fr.map.GameMap;
 import fr.util.point.Point;
 
 /**
- * Factory pour les bombes
+ * Singleton Factory pour les bombes
  */
 public class BombFactory implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	public BombFactory() {
+	private static BombFactory instance;
+
+	static {
+		instance = new BombFactory();
+	}
+
+	private BombFactory() {
 	}
 
 	/**
@@ -39,6 +45,10 @@ public class BombFactory implements Serializable {
 			return new BombStd(tile, map.getTileSize(), 2500, 1);
 		}
 		return null;
+	}
+
+	public static BombFactory getInstance() {
+		return instance;
 	}
 
 }

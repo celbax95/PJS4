@@ -56,8 +56,6 @@ public class CharacterRed implements ICharacter {
 
 	private int id;
 
-	private BombFactory bombFactory;
-
 	private int health;
 
 	/**
@@ -75,7 +73,6 @@ public class CharacterRed implements ICharacter {
 		angleOfView = 0;
 		walkStep = 0;
 		this.bombCoolDown = new Cooldown(bombCoolDown);
-		this.bombFactory = new BombFactory();
 		defaultBomb = "std";
 	}
 
@@ -129,7 +126,7 @@ public class CharacterRed implements ICharacter {
 	public void dropBomb(Application application, List<Integer> clickedKeys) {
 		if (clickedKeys.contains(KeyEvent.VK_R)) {
 			if (bombCoolDown.resetOnDone()) {
-				IBomb bomb = bombFactory.create(defaultBomb, application, this);
+				IBomb bomb = BombFactory.getInstance().create(defaultBomb, application, this);
 				IBomb.addToLists(application, bomb);
 				bomb.start();
 			}
