@@ -267,6 +267,11 @@ public class CharacterRed implements ICharacter {
 	}
 
 	@Override
+	public void setAngle(double angle) {
+		this.angleOfView = angle;
+	}
+
+	@Override
 	public void setBombCoolDown(int bombCoolDown) {
 		this.bombCoolDown = new Cooldown(bombCoolDown);
 	}

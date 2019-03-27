@@ -36,6 +36,13 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	int getHealth();
 
 	/**
+	 * Fait regarder le ICharacter dans une direction
+	 * 
+	 * @param angle : angle dans lequel le ICharacter doit regarder
+	 */
+	void setAngle(double angle);
+
+	/**
 	 * Change le cooldown de pose des bombes
 	 *
 	 * @param bombCoolDown : nouveau cooldown

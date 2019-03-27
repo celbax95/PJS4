@@ -14,6 +14,7 @@ import fr.itemsApp.character.CharacterFactory;
 import fr.itemsApp.character.ICharacter;
 import fr.map.GameMap;
 import fr.util.point.Point;
+import fr.util.point.PointCalc;
 import fr.util.time.Timer;
 
 /**
@@ -111,6 +112,8 @@ public class Application implements Runnable {
 		ICharacter character = CharacterFactory.getInstance().create("red");
 		character.setPos(new Point(spawnPlace.x, spawnPlace.y));
 		character.setId(id);
+
+		character.setAngle(PointCalc.getAngle(PointCalc.sub(map.getCenter(), character.getCenter())));
 
 		players.put(id, character);
 

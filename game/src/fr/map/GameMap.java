@@ -27,6 +27,10 @@ public class GameMap implements Serializable {
 		map = loadMap(s);
 	}
 
+	public Point getCenter() {
+		return new Point((width * DEFAULT_TILE_SIZE) / 2, (height * DEFAULT_TILE_SIZE) / 2);
+	}
+
 	public int getHeight() {
 		return height;
 	}
