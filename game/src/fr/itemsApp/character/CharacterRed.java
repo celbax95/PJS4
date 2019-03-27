@@ -58,9 +58,10 @@ public class CharacterRed implements ICharacter {
 	 * @param bombCoolDown : Temps entre chaque pose de bombe
 	 * @param speed        : Vitesse du personnage
 	 */
-	public CharacterRed(double x, double y, int bombCoolDown, int speed) {
+	public CharacterRed(double x, double y, int health, int bombCoolDown, int speed) {
 		pos = new Point(x, y);
 		this.speed = speed;
+		this.health = health;
 		moves = new Point(0, 0);
 		angleOfView = 0;
 		walkStep = 0;

@@ -16,14 +16,14 @@ public class CharacterFactory {
 
 	/**
 	 * Cree un character
-	 * 
+	 *
 	 * @param type : type du character
 	 * @return le character cree
 	 */
 	public ICharacter create(String type) {
 		switch (type.toLowerCase()) {
 		case "red":
-			return new CharacterRed(0, 0, 900, 500);
+			return new CharacterRed(0, 0, 100, 900, 500);
 		}
 		return null;
 	}
