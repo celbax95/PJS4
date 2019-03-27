@@ -114,6 +114,12 @@ public class CharacterRed implements ICharacter {
 		health = 100;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see fr.itemsApp.character.ICharacter#actions(fr.application.Application,
+	 * java.util.List)
+	 */
 	@Override
 	public void actions(Application application, List<Integer> clickedKeys) {
 		setMoves(clickedKeys);
@@ -189,13 +195,19 @@ public class CharacterRed implements ICharacter {
 		return bombCoolDown;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see fr.itemsApp.character.ICharacter#getCenter()
+	 */
+
 	@Override
 	public Point getCenter() {
 		return new Point(pos.x + DEFAULT_SIZE / 2, pos.y + DEFAULT_SIZE / 2);
 	}
 
 	/**
-	 * @return health : les points de vie du joueur
+	 * @return health : les points de vie du joueur <<<<<<< HEAD =======
 	 */
 	@Override
 	public int getHealth() {
@@ -204,7 +216,6 @@ public class CharacterRed implements ICharacter {
 
 	@Override
 	public double getMaxHealth() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -279,14 +290,14 @@ public class CharacterRed implements ICharacter {
 							mapTile.getPos().getIY(), mapTile.getSize())) {
 
 						// Droite
-						if (tMove.x > 0 && isBetween((int) x + DEFAULT_SIZE, mapTile.getPos().getIX(),
+						if (moves.x > 0 && isBetween((int) x + DEFAULT_SIZE, mapTile.getPos().getIX(),
 								mapTile.getPos().getIX() + mapTile.getSize())) {
 							x = mapTile.getPos().x - DEFAULT_SIZE;
 							// On ne peut pas aller a droite
 						}
 
 						// Gauche
-						else if (tMove.x < 0 && isBetween((int) x, mapTile.getPos().getIX(),
+						else if (moves.x < 0 && isBetween((int) x, mapTile.getPos().getIX(),
 								mapTile.getPos().getIX() + mapTile.getSize())) {
 							x = mapTile.getPos().x + mapTile.getSize();
 							// On ne peut pas aller a gauche
@@ -298,14 +309,14 @@ public class CharacterRed implements ICharacter {
 							mapTile.getPos().getIX(), mapTile.getSize())) {
 
 						// Haut
-						if (tMove.y > 0 && isBetween((int) y + DEFAULT_SIZE, mapTile.getPos().getIY(),
+						if (moves.y > 0 && isBetween((int) y + DEFAULT_SIZE, mapTile.getPos().getIY(),
 								mapTile.getPos().getIY() + mapTile.getSize())) {
 							y = mapTile.getPos().y - DEFAULT_SIZE;
 							// On ne peut pas aller en haut
 						}
 
 						// Bas
-						else if (tMove.y < 0 && isBetween((int) y, mapTile.getPos().getIY(),
+						else if (moves.y < 0 && isBetween((int) y, mapTile.getPos().getIY(),
 								mapTile.getPos().getIY() + mapTile.getSize())) {
 							y = mapTile.getPos().y + mapTile.getSize();
 							// On ne peut pas aller en bas
