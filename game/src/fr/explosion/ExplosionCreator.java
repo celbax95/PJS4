@@ -9,6 +9,7 @@ import fr.itemsApp.bomb.IBomb;
 import fr.map.MapTile;
 import fr.tiles.Floor;
 import fr.util.point.Point;
+
 /**
  * Créer une explosion
  */
@@ -16,9 +17,11 @@ public class ExplosionCreator implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private List<IExplosion> explosions;
+
 	/**
-	 * Creer une liste d'explosions (dans 4 directions différentes) pour 1 bombe
-	 * et les ajoutes à la liste des drawables et des manageables
+	 * Creer une liste d'explosions (dans 4 directions différentes) pour 1 bombe et
+	 * les ajoutes à la liste des drawables et des manageables
+	 * 
 	 * @param application
 	 * @param bombe
 	 */
@@ -55,17 +58,21 @@ public class ExplosionCreator implements Serializable {
 		for (IExplosion e : explosions) {
 			application.addDrawable(e);
 			application.addManageable(e);
+			application.addExplosion(e);
 		}
 	}
+
 	/**
 	 * Vérifie si une explosion peut etre placée à une position (x, y) donnée
-	 * determine également la taille de la serie d'explosions 
-	 * et si l'explosion peut détruire un mur ou non 
+	 * determine également la taille de la serie d'explosions et si l'explosion peut
+	 * détruire un mur ou non
+	 * 
 	 * @param mapTile : ensemble des éléments présents sur le terrain
-	 * @param bombe : la bombe qui est déposée sur le terrain
-	 * @param type : type de l'explosion (1 direction droite ou gauche) (2 direction haut ou bas)
-	 * @param x : abscisse du point ou doit etre placee l'explosion
-	 * @param y : ordonnée du point ou doit etre placee l'explosion
+	 * @param bombe   : la bombe qui est déposée sur le terrain
+	 * @param type    : type de l'explosion (1 direction droite ou gauche) (2
+	 *                direction haut ou bas)
+	 * @param x       : abscisse du point ou doit etre placee l'explosion
+	 * @param y       : ordonnée du point ou doit etre placee l'explosion
 	 */
 	private boolean setExplosion(MapTile[][] mapTile, IBomb bombe, int type, int x, int y) {
 		if (x < 0 || x > mapTile.length || y < 0 || y > mapTile[0].length)

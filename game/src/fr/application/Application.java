@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
+import fr.explosion.IExplosion;
 import fr.itemsApp.Drawable;
 import fr.itemsApp.Manageable;
 import fr.itemsApp.character.CharacterFactory;
@@ -27,6 +28,8 @@ public class Application implements Runnable {
 
 	private GameMap map;
 
+	private List<IExplosion> explosions;
+
 	private Timer timerApploop;
 
 	private Thread myThread;
@@ -39,6 +42,7 @@ public class Application implements Runnable {
 		players = new HashMap<>();
 		drawables = new Vector<>();
 		manageables = new Vector<>();
+		explosions = new Vector<>();
 		timerApploop = new Timer();
 		myThread = new Thread(this);
 
@@ -53,6 +57,10 @@ public class Application implements Runnable {
 	 */
 	public void addDrawable(Drawable drawable) {
 		drawables.add(drawable);
+	}
+
+	public void addExplosion(IExplosion explosion) {
+		explosions.add(explosion);
 	}
 
 	/**
@@ -79,7 +87,7 @@ public class Application implements Runnable {
 		int spawnPlace[] = spawnPlaces[(new Random().nextInt(spawnPlaces.length))];
 
 		ICharacter character = CharacterFactory.getInstance().create("red");
-		character.setPos(new Point(spawnPlace[0],spawnPlace[1]));
+		character.setPos(new Point(spawnPlace[0], spawnPlace[1]));
 
 		players.put(id, character);
 
@@ -110,6 +118,13 @@ public class Application implements Runnable {
 	}
 
 	/**
+	 * @return liste des explosions en cours
+	 */
+	public List<IExplosion> getExplosions() {
+		return explosions;
+	}
+
+	/**
 	 * @return Liste des elments Manageable
 	 */
 	public List<Manageable> getManageables() {
@@ -126,7 +141,7 @@ public class Application implements Runnable {
 	/**
 	 * Gere les actions du Joueur
 	 *
-	 * @param id      : Id du joueur
+	 * @param id          : Id du joueur
 	 * @param clickedKeys : Touches active du clavier du joueur
 	 */
 	public void managePlayer(int id, List<Integer> clickedKeys) {
@@ -140,6 +155,10 @@ public class Application implements Runnable {
 	 */
 	public void removeDrawable(Drawable drawable) {
 		drawables.remove(drawable);
+	}
+
+	public void removeExplosion(IExplosion explosion) {
+		explosions.remove(explosion);
 	}
 
 	/**

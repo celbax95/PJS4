@@ -1,7 +1,9 @@
 package fr.explosion;
 
+import fr.application.Application;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;
+
 /**
  *
  * Classe abstraite Explosion
@@ -34,6 +36,13 @@ public abstract class Explosion implements IExplosion {
 		this.damage = 0;
 		this.explosionTime = new Cooldown(0);
 	}
+
+	protected void delete(Application application) {
+		application.removeExplosion(this);
+		application.removeDrawable(this);
+		application.removeManageable(this);
+	}
+
 	/**
 	 *
 	 * @param tile : élément du jeu possedant une largeur et une hauteur
@@ -44,7 +53,8 @@ public abstract class Explosion implements IExplosion {
 	}
 
 	/**
-	 * @param explosionTime : temps mis par l'explosion avant de disparaitre du terrain
+	 * @param explosionTime : temps mis par l'explosion avant de disparaitre du
+	 *                      terrain
 	 */
 	@Override
 	public void setCooldown(int explosionTime) {
@@ -72,7 +82,8 @@ public abstract class Explosion implements IExplosion {
 
 	/**
 	 *
-	 * @param type : type de l'explosion (1 direction droite ou gauche) (2 direction haut ou bas)
+	 * @param type : type de l'explosion (1 direction droite ou gauche) (2 direction
+	 *             haut ou bas)
 	 */
 	@Override
 	public void setType(int type) {

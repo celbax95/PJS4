@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 
 import fr.application.Application;
 import fr.scale.Scale;
+
 /**
  * Explosion standard
  */
@@ -21,8 +22,8 @@ public class StandardExplosion extends Explosion {
 			((new ImageIcon(Character.class.getResource("/images/explosions/standard/1.png"))).getImage()
 					.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_DEFAULT)),
 			((new ImageIcon(Character.class.getResource("/images/explosions/standard/2.png"))).getImage()
-					.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_DEFAULT)),
-	};
+					.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_DEFAULT)), };
+
 	/**
 	 * constructeur StandardExplosion
 	 */
@@ -32,6 +33,7 @@ public class StandardExplosion extends Explosion {
 
 	/**
 	 * Dessine l'explosion sur le terrain
+	 *
 	 * @param g : permet l'affichage d'éléments (images, text, ...)
 	 */
 	@Override
@@ -42,6 +44,7 @@ public class StandardExplosion extends Explosion {
 		af.translate(pos.getIX(), pos.getIY());
 		g.drawImage(img[type], af, null);
 	}
+
 	/**
 	 * Gestion de l'element
 	 *
@@ -50,11 +53,9 @@ public class StandardExplosion extends Explosion {
 	 *                          synchro @see Application.run
 	 */
 	@Override
-	public void manage(Application a, double timeSinceLastCall) {
-		tileSize = a.getMap().getTileSize();
+	public void manage(Application application, double timeSinceLastCall) {
 		if (explosionTime.isDone()) {
-			a.removeDrawable(this);
-			a.removeManageable(this);
+			delete(application);
 		}
 	}
 }
