@@ -88,8 +88,9 @@ public class CharacterRed implements ICharacter {
 
 	private int id;
 	private BombFactory bombFactory;
-
 	private int health;
+
+	// private int health;
 
 	/**
 	 * @param x
@@ -111,7 +112,7 @@ public class CharacterRed implements ICharacter {
 		walkStep = 0;
 		this.bombCoolDown = new Cooldown(bombCoolDown);
 		defaultBomb = "std";
-		health = 100;
+		// health = 100;
 	}
 
 	/*
@@ -206,19 +207,30 @@ public class CharacterRed implements ICharacter {
 		return new Point(pos.x + DEFAULT_SIZE / 2, pos.y + DEFAULT_SIZE / 2);
 	}
 
+	@Override
+	public int getHealth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	/**
 	 * @return health : les points de vie du joueur <<<<<<< HEAD =======
 	 */
-	@Override
-	public int getHealth() {
-		return health;
-	}
+	/*
+	 * @Override public int getHealth() { return health; }
+	 */
 
 	@Override
 	public double getMaxHealth() {
 		return 0;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see fr.itemsApp.character.ICharacter#manage(fr.application.Application,
+	 * double)
+	 */
 	@Override
 	public void manage(Application application, double timeSinceLastCall) {
 		move(application, timeSinceLastCall);
