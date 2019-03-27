@@ -1,5 +1,7 @@
 package fr.itemsApp.items;
 
+import java.awt.Graphics2D;
+
 import fr.application.Application;
 import fr.util.point.Point;
 
@@ -9,10 +11,13 @@ public abstract class Item implements CollectableItem, PlaceableItem {
 	protected Character holder;
 
 	@Override
-	public CollectableItem collect(Character character) {
+	public CollectableItem collect(Application application, Character character) {
 		holder = character;
 		return this;
 	}
+
+	@Override
+	public abstract void draw(Graphics2D g);
 
 	@Override
 	public Point getPos() {
