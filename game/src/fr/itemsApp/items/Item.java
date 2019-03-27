@@ -3,13 +3,13 @@ package fr.itemsApp.items;
 import fr.application.Application;
 import fr.util.point.Point;
 
-public abstract class Item implements HoldableItem, PlaceableItem {
+public abstract class Item implements CollectableItem, PlaceableItem {
 
 	protected Point pos;
 	protected Character holder;
 
 	@Override
-	public HoldableItem collect(Character character) {
+	public CollectableItem collect(Character character) {
 		holder = character;
 		return this;
 	}

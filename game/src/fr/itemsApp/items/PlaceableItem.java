@@ -5,7 +5,7 @@ import fr.util.point.Point;
 
 public interface PlaceableItem extends Drawable {
 
-	HoldableItem collect(Character character);
+	CollectableItem collect(Character character);
 
 	Point getPos();
 
