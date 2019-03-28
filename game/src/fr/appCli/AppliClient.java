@@ -2,7 +2,6 @@ package fr.appCli;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -10,10 +9,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.glass.events.KeyEvent;
+
+import fr.gameLauncher.GameLauncher;
 import fr.itemsApp.Drawable;
-import fr.main.Main;
 import fr.map.GameMap;
 import fr.map.MapTile;
+import fr.scale.Scale;
 import fr.screen.AppliScreen;
 import fr.screen.EndApp;
 import fr.screen.keyboard.KeyBoard;
@@ -37,23 +39,37 @@ public class AppliClient implements AppliScreen, Runnable {
 	/**
 	 * @param name
 	 *            : Nom de la fenetre de jeu
-	 * @param ip
-	 *            : Ip du serveur
-	 * @param port
-	 *            : Port du serveur
+	 * @param socket
+	 *            : Socket liee au serveur
 	 */
-	public AppliClient(String name, String ip, int port) {
+	public AppliClient(String name, Socket socket) {
 		this.transfer = new Object();
 
 		this.name = name;
 		this.endApp = false;
 
-		socket = connexion(ip, port);
-		testVersion(socket);
+		this.socket = socket;
+		// testVersion(socket);
 
 		myThread = new Thread(this);
 
 		listD = new ArrayList<>();
+	}
+
+	/**
+	 * Change le scale suivant les touches du clavier pressees
+	 */
+	private void changeScale() {
+
+		KeyBoard keyBoard = KeyBoard.getInstance();
+
+		Scale scale = Scale.getInstance();
+
+		if (keyBoard.isPressed(KeyEvent.VK_ADD))
+			scale.increase();
+		else if (keyBoard.isPressed(KeyEvent.VK_SUBTRACT))
+			scale.decrease();
+		scale.update();
 	}
 
 	/**
@@ -84,25 +100,6 @@ public class AppliClient implements AppliScreen, Runnable {
 	}
 
 	/**
-	 * Cree une socket de communication client / serveur
-	 *
-	 * @param ip
-	 *            : Ip du serveur
-	 * @param port
-	 *            : port du serveur
-	 * @return Socket initialisee
-	 */
-	private Socket connexion(String ip, int port) {
-		try {
-			return new Socket(ip, port);
-		} catch (IOException e) {
-			System.err.println("Impossible de se connecter au serveur");
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	/**
 	 * Affiche les donnees recues par le serveur (Map et Elements)
 	 *
 	 * @see run
@@ -111,6 +108,9 @@ public class AppliClient implements AppliScreen, Runnable {
 	public void draw(Graphics2D g) throws EndApp {
 		if (endApp)
 			throw new EndApp();
+
+		// Application d'un eventuel changement d'echelle
+		changeScale();
 
 		// creation d'un cache
 		List<Drawable> ld;
@@ -158,9 +158,9 @@ public class AppliClient implements AppliScreen, Runnable {
 	public void run() {
 		try {
 			// Creation du cache
-			KeyBoard keyBoard = KeyBoard.getInstance();
-
 			List<Drawable> listDrawables;
+
+			KeyBoard keyBoard = KeyBoard.getInstance();
 
 			// Input et Output de la socket
 			ObjectOutputStream sOut = new ObjectOutputStream((socket.getOutputStream()));
@@ -185,13 +185,13 @@ public class AppliClient implements AppliScreen, Runnable {
 				sOut.reset();
 			}
 		} catch (IOException e) {
-			// e.printStackTrace();
 			System.err.println("Communication avec le serveur terminee");
 			close();
+			GameLauncher.resetMenu();
 		} catch (ClassNotFoundException e1) {
-			// e1.printStackTrace();
 			System.err.println("Erreur de Reception depuis le serveur");
 			close();
+			GameLauncher.resetMenu();
 		}
 	}
 
@@ -200,20 +200,14 @@ public class AppliClient implements AppliScreen, Runnable {
 		myThread.start();
 	}
 
-	/**
+	/*
 	 * Verifie que le client est a jour par rapport au serveur
 	 *
-	 * @param socket
-	 *            : socket de communication client / serveur
+	 * @param socket : socket de communication client / serveur
+	 *
+	 * public void testVersion(Socket socket) { try { ObjectOutputStream sOut = new
+	 * ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+	 * sOut.writeObject(Main.getVersion()); sOut.flush(); sOut.reset(); } catch
+	 * (IOException e) { e.printStackTrace(); } }
 	 */
-	public void testVersion(Socket socket) {
-		try {
-			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-			sOut.writeObject(Main.getVersion());
-			sOut.flush();
-			sOut.reset();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }

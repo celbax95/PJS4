@@ -38,6 +38,8 @@ public class CharacterRed implements ICharacter {
 
 	private static final int timeBetweenDamages = 500;
 
+	private static final double MAX_HEALTH = 100;
+
 	/**
 	 * Verification de l'alignement entre deux intervalles
 	 *
@@ -85,10 +87,10 @@ public class CharacterRed implements ICharacter {
 	private Point pos;
 
 	private Point moves;
-
 	private int id;
 	private BombFactory bombFactory;
-	private int health;
+
+	private double health;
 
 	// private int health;
 
@@ -102,7 +104,7 @@ public class CharacterRed implements ICharacter {
 	 * @param speed
 	 *            : Vitesse du personnage
 	 */
-	public CharacterRed(double x, double y, int health, int bombCoolDown, int speed) {
+	public CharacterRed(double x, double y, int bombCoolDown, int speed) {
 		pos = new Point(x, y);
 		this.speed = speed;
 		this.health = health;
@@ -112,7 +114,7 @@ public class CharacterRed implements ICharacter {
 		walkStep = 0;
 		this.bombCoolDown = new Cooldown(bombCoolDown);
 		defaultBomb = "std";
-		// health = 100;
+		this.health = MAX_HEALTH;
 	}
 
 	/*
@@ -129,7 +131,10 @@ public class CharacterRed implements ICharacter {
 
 	@Override
 	public void damage(int health) {
-		this.health -= health;
+		if (this.health - health >= 0)
+			this.health -= health;
+		else
+			this.health = 0;
 		lastDamage.reset();
 	}
 
@@ -208,9 +213,8 @@ public class CharacterRed implements ICharacter {
 	}
 
 	@Override
-	public int getHealth() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double getHealth() {
+		return health;
 	}
 
 	/**
@@ -222,7 +226,7 @@ public class CharacterRed implements ICharacter {
 
 	@Override
 	public double getMaxHealth() {
-		return 0;
+		return MAX_HEALTH;
 	}
 
 	/*

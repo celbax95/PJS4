@@ -36,7 +36,7 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	/**
 	 * @return vie du IChraracter
 	 */
-	int getHealth();
+	double getHealth();
 
 	double getMaxHealth();
 

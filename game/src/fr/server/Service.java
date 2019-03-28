@@ -41,11 +41,11 @@ public class Service implements Runnable {
 	 * constructeur Service <<<<<<< HEAD <<<<<<< HEAD
 	 *
 	 * =======
-	 * 
+	 *
 	 * >>>>>>> HUD life point feature =======
 	 *
 	 * >>>>>>> restructuration propre HUD
-	 * 
+	 *
 	 * @param s
 	 *            : le serveur
 	 * @param serverSocket
@@ -79,10 +79,7 @@ public class Service implements Runnable {
 	 */
 	public Service(Socket serverSocket) {
 		this.server = null;
-
-		this.application = application;
-		myPlayer = application.addPlayer();
-		HUDManager.getInstance().createHUD(application, myPlayer);
+		this.socket = serverSocket;
 		myThread = new Thread(this);
 	}
 
@@ -121,6 +118,9 @@ public class Service implements Runnable {
 				}
 				application = server.getApplication();
 				myPlayer = application.addPlayer();
+				HUDManager.getInstance().createHUD(application, myPlayer);
+				application.getPlayerById(myPlayer).damage(10);
+				;
 			}
 
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
@@ -136,7 +136,6 @@ public class Service implements Runnable {
 				if (!application.managePlayer(myPlayer, cliKeys)) {
 					// Quand le joueur est mort
 				}
-				application.managePlayer(myPlayer, cliKeys);
 			}
 		} catch (IOException e) {
 			System.err.println("Joueur déconnecté");
@@ -151,9 +150,6 @@ public class Service implements Runnable {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-			application.deletePlayer(myPlayer);
-			HUDManager.getInstance().deleteHUD(application, myPlayer);
-			System.err.println("Service termine");
 		}
 	}
 

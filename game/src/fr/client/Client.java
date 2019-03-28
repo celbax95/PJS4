@@ -10,63 +10,31 @@ import fr.gameLauncher.Menu;
 import fr.screen.AppliScreen;
 import fr.screen.Screen;
 
-public class Client implements Runnable{
+public class Client implements Runnable {
 
-	private Socket socket;
-	private Thread myThread;
-	private Menu menu; 
-	
 	private static final String NAME = "TEST PJS4";
-	
 	private static final int MARGE_H = 35;
 	private static final int MARGE_T = 2;
+
 	private static final int MARGE_W = 6;
 
 	public static final int WIDTH = 1728;
 	public static final int HEIGHT = 972;
-	
+	private Socket socket;
+
+	private Thread myThread;
+	private Menu menu;
+
 	public Client(String ip, int port, Menu menu) throws IOException {
 
-		
 		socket = connexion(ip, port);
-		
+
 		this.menu = menu;
 		myThread = new Thread(this);
 		this.start();
-		
-		
+
 	}
-	
-	@Override
-	public void run() {
-		try {
-			BufferedReader in = new BufferedReader (new InputStreamReader(socket.getInputStream ( )));
-			String response;
-			while(true) {
-				response = in.readLine();
-				System.out.println(response);
-				if(response.equals("Game start")) {
-					break;
-				}
-				if(Thread.currentThread().isInterrupted()) {
-					return;
-				}
-			}
-			menu.hideWindow();
-			
-			AppliScreen appScr = new AppliClient(NAME, socket);
-			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
-			
-		} catch (IOException e) {
-			System.err.println("Client ferme");
-		}
-		
-	}
-	
-	public void start() {
-		myThread.start();
-	}
-	
+
 	public void close() {
 		myThread.interrupt();
 		try {
@@ -75,7 +43,7 @@ public class Client implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void closeSocket() {
 		try {
 			System.out.println("FIN");
@@ -85,7 +53,7 @@ public class Client implements Runnable{
 			e.printStackTrace();
 		}
 	}
-	
+
 	private Socket connexion(String ip, int port) throws IOException {
 		try {
 			return new Socket(ip, port);
@@ -93,8 +61,39 @@ public class Client implements Runnable{
 			throw e;
 		}
 	}
+
 	public Socket getSocket() {
 		return this.socket;
 	}
-	
+
+	@Override
+	public void run() {
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			String response;
+			while (true) {
+				response = in.readLine();
+				System.out.println(response);
+				if (response.equals("Game start")) {
+					break;
+				}
+				if (Thread.currentThread().isInterrupted()) {
+					return;
+				}
+			}
+			menu.hideWindow();
+
+			AppliScreen appScr = new AppliClient(NAME, socket);
+			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
+
+		} catch (IOException e) {
+			System.err.println("Client ferme");
+		}
+
+	}
+
+	public void start() {
+		myThread.start();
+	}
+
 }

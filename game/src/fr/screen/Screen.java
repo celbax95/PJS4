@@ -7,6 +7,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import fr.gameLauncher.GameLauncher;
 import fr.screen.keyboard.KeyBoardHolder;
 
 /**
@@ -16,6 +17,7 @@ import fr.screen.keyboard.KeyBoardHolder;
 public class Screen extends JFrame {
 
 	private static Screen single = null;
+	private static boolean newGame;
 
 	/**
 	 * @return l'unique instance de Screen
@@ -43,11 +45,15 @@ public class Screen extends JFrame {
 	 */
 	public static Screen getInstance(AppliScreen appScreen, int width, int height, int marginX, int marginY,
 			int margin) {
-		if (single == null) {
+		if (single == null || Screen.newGame == true) {
 			single = new Screen(appScreen, width, height, marginX, marginY, margin);
 			return single;
 		} else
 			return single;
+	}
+
+	public static void setNewInstance() {
+		Screen.newGame = true;
 	}
 
 	@SuppressWarnings("unused")
@@ -68,16 +74,17 @@ public class Screen extends JFrame {
 	 *            : marge totale dans la fenetre
 	 */
 	private Screen(AppliScreen appScreen, int width, int height, int marginX, int marginY, int margin) {
-		// Nom d ela fenetre
+		Screen.newGame = false;
+		// Nom de la fenetre
 		this.setTitle(appScreen.getName());
 
 		// Quand on ferme la fenetre
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				super.windowClosing(e);
-				appScreen.close();
+				GameLauncher.resetMenu();
+				single.dispose();
 			}
 		});
 
