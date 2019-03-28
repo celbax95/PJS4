@@ -48,7 +48,7 @@ public class Service implements Runnable {
 	 * @param serverSocket : la socket du serveur
 	 */
 	public Service(Socket serverSocket) {
-		server = null;
+		this.server = null;
 		this.socket = serverSocket;
 		myThread = new Thread(this);
 	}
@@ -58,7 +58,7 @@ public class Service implements Runnable {
 	 */
 	@Override
 	public void finalize() throws IOException {
-		server.close(this);
+		server.close();
 	}
 
 	public Socket getSocket() {

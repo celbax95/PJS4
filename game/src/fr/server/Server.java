@@ -20,18 +20,18 @@ public class Server implements Runnable {
 	private boolean gameOn;
 	private ServerSocket serveur;
 	private Thread threadServ;
-	
-	private Service first;
+
 	private Socket socketHost;
-	
+
 	private Application application;
+
 	public static final int WIDTH = 1728;
 	public static final int HEIGHT = 972;
-	
+
 	private static final int MARGE_H = 35;
 	private static final int MARGE_T = 2;
 	private static final int MARGE_W = 6;
-	
+
 	/**
 	 * constructeur Server
 	 * @param title : Nom de fenetre de l'application
@@ -51,7 +51,7 @@ public class Server implements Runnable {
 		this.nbPlayers = 0;
 		this.gameOn = false;
 	}
-	
+
 	/**
 	 * Accepte les clients et lance le jeu
 	 */
@@ -73,12 +73,7 @@ public class Server implements Runnable {
 					break;
 				}
 				if (socket != null) {
-					if (socket != null) {
-						if (first == null)
-							(first = new Service(this, socket)).start();
-						else
-							(new Service(socket)).start();
-					}
+					(new Service(this,socket)).start();
 				}
 			}
 		}
@@ -89,14 +84,12 @@ public class Server implements Runnable {
 	 *
 	 * @param service : un service
 	 */
-	public void close(Service service) {
+	public void close() {
 		try {
-			if(service != first)
-				return;
 			socketHost.close();
 			threadServ.interrupt();
 			application.stop();
-		
+
 			serveur.close();
 		} catch (IOException e) {
 		}
@@ -107,7 +100,7 @@ public class Server implements Runnable {
 	 */
 	@Override
 	public void finalize() throws IOException {
-		serveur.close();
+		this.close();
 		if(this.application !=null) {
 			this.application.stop();
 		}
@@ -139,15 +132,15 @@ public class Server implements Runnable {
 			e.printStackTrace();
 		}
 	}*/
-	
+
 	protected void playerLeft() {
 		this.nbPlayers--;
 	}
-	
+
 	protected Application getApplication() {
 		return application;
 	}
-	
+
 	public int getNbPlayers() {
 		return this.nbPlayers;
 	}
@@ -156,6 +149,7 @@ public class Server implements Runnable {
 	}
 	public void setGameOn() {
 		synchronized(this) {
+			this.threadServ.interrupt();
 			this.gameOn = true;
 			(this.application = new Application(WIDTH, HEIGHT)).start();
 			AppliScreen appScr = new AppliClient(title, socketHost);
