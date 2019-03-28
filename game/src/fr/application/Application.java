@@ -100,10 +100,8 @@ public class Application implements Runnable {
 	 * @param c : Couleur aleatoire du joueur
 	 * @return : Id du joueur cree
 	 */
-	public int addPlayer() {
-		int id = Math.abs((new Random()).nextInt());
-		while (players.containsKey(id))
-			id++;
+	public void addPlayer(int no) {
+		int id = no;
 
 		// Choix aleatoire parmi les emplacements de spawn existants
 		Point spawnPlace = spawnPlaces.get(currentSpawnPoint);
@@ -120,8 +118,6 @@ public class Application implements Runnable {
 		// Ajout du joueur au listes de gestion
 		addDrawable(character);
 		addManageable(character);
-
-		return id;
 	}
 
 	/**

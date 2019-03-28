@@ -52,6 +52,7 @@ public class MenuDisplay implements Menu {
 	private JPanel panel;
 	private JLabel nbPlayersLabel;
 	private JTextField ipTextField;
+	private JTextField aliasTextField;
 	private JButton host, join, back, decNbPlayers, incNbPlayers, mapL, mapR, search, start, connect;
 	private ArrayList<JButton> buttonList;
 	private ArrayList<JComponent> componentHostList;
@@ -61,6 +62,7 @@ public class MenuDisplay implements Menu {
 	private int menuPosition;
 	private int nbPlayers;
 	private boolean sawIpAdress;
+	private boolean sawAlias;
 
 	/**
 	 * Constructeur du menu (initialisation de tous ses composants)
@@ -77,6 +79,7 @@ public class MenuDisplay implements Menu {
 		this.menuPosition = 0;
 		this.nbPlayers = NB_INIT_PLAYERS;
 		this.sawIpAdress = false;
+		this.sawAlias = false;
 
 		this.host = new JButton("Host");
 		this.join = new JButton("Join");
@@ -90,11 +93,12 @@ public class MenuDisplay implements Menu {
 		this.mapR = new JButton(">");
 		this.nbPlayersLabel = new JLabel(String.valueOf(nbPlayers), SwingConstants.CENTER);
 		this.ipTextField = new JTextField("Ip Adress");
+		this.aliasTextField = new JTextField("Alias");
 		buttonList = new ArrayList<JButton>(
 				Arrays.asList(host, join, back, decNbPlayers, incNbPlayers, mapL, mapR, search, start, connect));
 		componentHostList = new ArrayList<JComponent>(
 				Arrays.asList(search, decNbPlayers, incNbPlayers, mapL, mapR, nbPlayersLabel));
-		componentJoinList = new ArrayList<JComponent>(Arrays.asList(ipTextField, connect));
+		componentJoinList = new ArrayList<JComponent>(Arrays.asList(ipTextField, aliasTextField, connect));
 		componentStartList = new ArrayList<JComponent>(Arrays.asList(start));
 		componentConnectList = new ArrayList<JComponent>(Arrays.asList());
 
@@ -109,12 +113,14 @@ public class MenuDisplay implements Menu {
 		this.mapL.setBounds(145 - SIZE_BUTTON_X / 3, 110 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X / 3, SIZE_BUTTON_Y);
 		this.mapR.setBounds(145 + SIZE_BUTTON_X, 110 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X / 3, SIZE_BUTTON_Y);
 		this.nbPlayersLabel.setBounds(130 + SIZE_BUTTON_X / 3, 110, SIZE_BUTTON_X / 2, SIZE_BUTTON_Y);
-		this.ipTextField.setBounds(145, 140, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+		this.ipTextField.setBounds(145, 110, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+		this.aliasTextField.setBounds(145, 140+SIZE_BUTTON_Y*2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 
 		setFocusPaintedButtons();
 
 		this.nbPlayersLabel.setOpaque(true);
 		this.ipTextField.setHorizontalAlignment(JTextField.CENTER);
+		this.aliasTextField.setHorizontalAlignment(JTextField.CENTER);
 
 		this.host.setBackground(BUTTON_BACKGROUND_COLOR);
 		this.join.setBackground(BUTTON_BACKGROUND_COLOR);
@@ -128,16 +134,19 @@ public class MenuDisplay implements Menu {
 		this.mapR.setBackground(ARROWS_BACKGROUND_COLOR);
 		this.nbPlayersLabel.setBackground(BUTTON_BACKGROUND_COLOR);
 		this.ipTextField.setBackground(BUTTON_BACKGROUND_COLOR);
+		this.aliasTextField.setBackground(BUTTON_BACKGROUND_COLOR);
 
 		setFontButtons();
 		this.nbPlayersLabel.setFont(BUTTON_FONT);
 		this.ipTextField.setFont(BUTTON_FONT);
+		this.aliasTextField.setFont(BUTTON_FONT);
 
 		nbPlayersLabel.setBorder(BorderFactory.createLineBorder(BUTTON_BACKGROUND_COLOR));
 
 		setForegroundButtons();
 		this.nbPlayersLabel.setForeground(Color.white);
 		this.ipTextField.setForeground(Color.gray);
+		this.aliasTextField.setForeground(Color.gray);
 	}
 
 	@Override
@@ -226,7 +235,10 @@ public class MenuDisplay implements Menu {
 					menuPosition = 0;
 					ipTextField.setForeground(Color.gray);
 					ipTextField.setText("Ip Adress");
+					aliasTextField.setForeground(Color.gray);
+					aliasTextField.setText("Ip Adress");
 					sawIpAdress = false;
+					sawAlias = false;
 					break;
 				case 3:
 					GameLauncher.clientClose();
@@ -245,16 +257,17 @@ public class MenuDisplay implements Menu {
 		this.search.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				try {
+					GameLauncher.createServer(TITLE, PORT, nbPlayers);
+					GameLauncher.serverStart();
+					GameLauncher.createClient(IP, PORT, "Host", MenuDisplay.menu);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					return;
+				}
 				hideComponents();
 				menuPosition = 3;
 				showComponents();
-				GameLauncher.createServer(TITLE, PORT, nbPlayers);
-				GameLauncher.serverStart();
-				try {
-					GameLauncher.createClient(IP, PORT, MenuDisplay.menu);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
 
 			}
 		});
@@ -262,7 +275,7 @@ public class MenuDisplay implements Menu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GameLauncher.createClient(ipTextField.getText(), PORT, MenuDisplay.menu);
+					GameLauncher.createClient(ipTextField.getText(), PORT, aliasTextField.getText(), MenuDisplay.menu);
 					hideComponents();
 					menuPosition = 4;
 					showComponents();
@@ -320,6 +333,16 @@ public class MenuDisplay implements Menu {
 					ipTextField.setText("");
 					ipTextField.setForeground(Color.white);
 					sawIpAdress = true;
+				}
+			}
+		});
+		this.aliasTextField.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (!sawAlias) {
+					aliasTextField.setText("");
+					aliasTextField.setForeground(Color.white);
+					sawAlias = true;
 				}
 			}
 		});

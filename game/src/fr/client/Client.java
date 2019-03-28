@@ -1,14 +1,22 @@
 package fr.client;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import fr.appCli.AppliClient;
+import fr.gameLauncher.GameLauncher;
 import fr.gameLauncher.Menu;
 import fr.screen.AppliScreen;
 import fr.screen.Screen;
+import fr.server.Player;
 
 public class Client implements Runnable{
 
@@ -22,35 +30,47 @@ public class Client implements Runnable{
 	private static final int MARGE_T = 2;
 	private static final int MARGE_W = 6;
 
-	public static final int WIDTH = 1728;
-	public static final int HEIGHT = 972;
+	private static final int WIDTH = 1728;
+	private static final int HEIGHT = 972;
 	
-	public Client(String ip, int port, Menu menu) throws IOException {
+	private String alias;
+	
+	public Client(String ip, int port, String alias, Menu menu) throws IOException {
 
 		
 		socket = connexion(ip, port);
-		
+		if(socket.isClosed()) {
+			throw new IOException();
+		}
 		this.menu = menu;
 		myThread = new Thread(this);
+		
+		this.alias = alias;
+		
 		this.start();
-		
-		
 	}
 	
 	@Override
 	public void run() {
 		try {
-			BufferedReader in = new BufferedReader (new InputStreamReader(socket.getInputStream ( )));
+			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+			sOut.writeUnshared(this.alias);
+			sOut.flush();
+			sOut.reset();
+			
+			
+			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 			String response;
 			while(true) {
-				response = in.readLine();
-				System.out.println(response);
-				if(response.equals("Game start")) {
-					break;
-				}
 				if(Thread.currentThread().isInterrupted()) {
 					return;
 				}
+				response = String.valueOf(sIn.readUnshared());
+				//System.out.println();
+				if(response.equals("Game start")) {
+					break;
+				}
+				GameLauncher.updateMenu((ArrayList<Player>)sIn.readUnshared());
 			}
 			menu.hideWindow();
 			
@@ -58,7 +78,10 @@ public class Client implements Runnable{
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 			
 		} catch (IOException e) {
+			//e.printStackTrace();
 			System.err.println("Client ferme");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
 		}
 		
 	}
@@ -87,11 +110,7 @@ public class Client implements Runnable{
 	}
 	
 	private Socket connexion(String ip, int port) throws IOException {
-		try {
-			return new Socket(ip, port);
-		} catch (IOException e) {
-			throw e;
-		}
+		return new Socket(ip, port);
 	}
 	public Socket getSocket() {
 		return this.socket;

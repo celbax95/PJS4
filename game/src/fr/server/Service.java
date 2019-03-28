@@ -2,7 +2,9 @@ package fr.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
@@ -24,7 +26,7 @@ public class Service implements Runnable {
 
 	private Server server;
 
-	private int myPlayer;
+	private Player myPlayer;
 
 	/**
 	 * constructeur Service vide
@@ -75,25 +77,33 @@ public class Service implements Runnable {
 	@Override
 	public void run() {
 		try {
-
+			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+			this.myPlayer = new Player(this.server.getNoPlayerAvailable(),(String)sIn.readUnshared());
+			
+			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			while (!server.getGameOn()) {
 				if (Thread.currentThread().isInterrupted()) {
 					return;
 				}
+				sOut.writeUnshared("ok");
+				sOut.flush();
+				sOut.reset();
+				sOut.writeUnshared(server.getPlayers());
+				sOut.flush();
+				sOut.reset();
+				
 			}
-
-			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-			out.println("Game start");
+			sOut.writeUnshared("Game start");
+			sOut.flush();
+			sOut.reset();
 			synchronized (server) {
 				while (server.getApplication() == null) {
 					this.wait();
 				}
 				application = server.getApplication();
-				myPlayer = application.addPlayer();
+				application.addPlayer(this.myPlayer.getNo());
 			}
-
-			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+			
 			while (!Thread.currentThread().isInterrupted()) {
 				sOut.writeUnshared(application.getPlayer(myPlayer));
 				sOut.writeUnshared(application.getMap());
@@ -101,7 +111,7 @@ public class Service implements Runnable {
 				sOut.flush();
 				sOut.reset();
 				List<Integer> cliKeys = (List<Integer>) sIn.readUnshared();
-				if (!application.managePlayer(myPlayer, cliKeys)) {
+				if (!application.managePlayer(myPlayer.getNo(), cliKeys)) {
 					// Quand le joueur est mort
 				}
 			}

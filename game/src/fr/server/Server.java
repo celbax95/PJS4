@@ -22,8 +22,8 @@ public class Server implements Runnable {
 	private String title;
 
 	private final int NB_PLAYERS;
-
 	private int nbPlayers;
+	private ArrayList<Player> players;
 
 	private boolean gameOn;
 	private ServerSocket serveur;
@@ -46,16 +46,16 @@ public class Server implements Runnable {
 
 		try {
 			serveur = new ServerSocket(port);
+			this.threadServ = new Thread(this);
+			this.services = new ArrayList<Service>();
+			this.title = title;
+			this.nbPlayers = 0;
+			this.gameOn = false;
+			this.players = new ArrayList<Player>();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		this.threadServ = new Thread(this);
-		this.services = new ArrayList<Service>();
-		this.title = title;
 		this.NB_PLAYERS = nbPlayers;
-		this.nbPlayers = 0;
-		this.gameOn = false;
 	}
 
 	/**
@@ -159,6 +159,21 @@ public class Server implements Runnable {
 			notifyAll();
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 		}
+	}
+	
+	synchronized public void addPlayer(Player p) {
+		players.add(p);
+	}
+	synchronized public int getNoPlayerAvailable() {
+		if(players.isEmpty()) {
+			return 1;
+		}
+		else {
+			return players.get(players.size()-1).getNo()+1;
+		}
+	}
+	synchronized public ArrayList<Player> getPlayers(){
+		return players;
 	}
 
 	/**

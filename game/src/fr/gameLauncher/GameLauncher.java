@@ -1,10 +1,12 @@
 package fr.gameLauncher;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import fr.client.Client;
 import fr.screen.MainJPanel;
 import fr.screen.Screen;
+import fr.server.Player;
 import fr.server.Server;
 
 /**
@@ -41,8 +43,8 @@ public class GameLauncher {
 	 * @param menu Menu actuellement utilisé
 	 * @throws IOException 
 	 */
-	public static void createClient(String ip, int port, Menu menu) throws IOException {
-		cli = new Client(ip, port, menu);
+	public static void createClient(String ip, int port, String alias, Menu menu) throws IOException {
+		cli = new Client(ip, port, alias, menu);
 	}
 	/**
 	 * Mise en marche du serveur
@@ -100,6 +102,10 @@ public class GameLauncher {
 		MainJPanel.setNewInstance();
 		Screen.setNewInstance();
 		menu.reset();
+		
+	}
+
+	public static void updateMenu(ArrayList<Player> readUnshared) {
 		
 	}
 }
