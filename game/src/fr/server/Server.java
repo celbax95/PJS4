@@ -3,6 +3,7 @@ package fr.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import fr.appCli.AppliClient;
 import fr.application.Application;
@@ -26,7 +27,7 @@ public class Server implements Runnable {
 
 	private boolean gameOn;
 	private ServerSocket serveur;
-
+	private ArrayList<Service> services;
 	private Thread threadServ;
 	private Socket socketHost;
 	private Application application;
@@ -48,7 +49,9 @@ public class Server implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		threadServ = new Thread(this);
+
+		this.threadServ = new Thread(this);
+		this.services = new ArrayList<Service>();
 		this.title = title;
 		this.NB_PLAYERS = nbPlayers;
 		this.nbPlayers = 0;
@@ -60,6 +63,9 @@ public class Server implements Runnable {
 	 */
 	public void close() {
 		try {
+			for (Service s : this.services) {
+				s.finalize();
+			}
 			socketHost.close();
 			threadServ.interrupt();
 			if (this.application != null) {
@@ -132,7 +138,12 @@ public class Server implements Runnable {
 					break;
 				}
 				if (socket != null) {
-					(new Service(this, socket)).start();
+					Service s;
+					s = new Service(this, socket);
+					synchronized (services) {
+						services.add(s);
+					}
+					s.start();
 				}
 			}
 		}
