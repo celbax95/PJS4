@@ -38,21 +38,22 @@ public class Service implements Runnable {
 	}
 
 	/**
-	 * constructeur Service
-<<<<<<< HEAD
+	 * constructeur Service <<<<<<< HEAD <<<<<<< HEAD
 	 *
-=======
+	 * =======
 	 * 
->>>>>>> HUD life point feature
+	 * >>>>>>> HUD life point feature =======
+	 *
+	 * >>>>>>> restructuration propre HUD
+	 * 
 	 * @param s
 	 *            : le serveur
 	 * @param serverSocket
-	 *            : la socket du serveur
-<<<<<<< HEAD
-=======
+	 *            : la socket du serveur <<<<<<< HEAD <<<<<<< HEAD =======
 	 * @param application
-	 *            : l'application
->>>>>>> HUD life point feature
+	 *            : l'application >>>>>>> HUD life point feature =======
+	 * @param application
+	 *            : l'application >>>>>>> restructuration propre HUD
 	 */
 
 	public Service(Server s, Socket serverSocket) {
@@ -61,18 +62,20 @@ public class Service implements Runnable {
 	}
 
 	/**
-	 * constructeur Service
-<<<<<<< HEAD
+	 * constructeur Service <<<<<<< HEAD <<<<<<< HEAD
+	 *
+	 * @param serverSocket
+	 *            : la socket du serveur =======
 	 *
 	 * @param serverSocket
 	 *            : la socket du serveur
-=======
-	 * 
+	 * @param application
+	 *            : l'application >>>>>>> HUD life point feature =======
+	 *
 	 * @param serverSocket
 	 *            : la socket du serveur
 	 * @param application
-	 *            : l'application
->>>>>>> HUD life point feature
+	 *            : l'application >>>>>>> restructuration propre HUD
 	 */
 	public Service(Socket serverSocket) {
 		this.server = null;
@@ -133,6 +136,8 @@ public class Service implements Runnable {
 				if (!application.managePlayer(myPlayer, cliKeys)) {
 					// Quand le joueur est mort
 				}
+				application.managePlayer(myPlayer, cliKeys);
+				application.getPlayerById(myPlayer).setHealth(10);
 			}
 		} catch (IOException e) {
 			System.err.println("Joueur déconnecté");
