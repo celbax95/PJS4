@@ -245,7 +245,7 @@ public class MenuDisplay implements Menu{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GameLauncher.createClient(IP,PORT, MenuDisplay.menu);
+					GameLauncher.createClient(ipTextField.getText(),PORT, MenuDisplay.menu);
 					hideComponents();
 					menuPosition = 4;
 					showComponents();
