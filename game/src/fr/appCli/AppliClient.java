@@ -35,9 +35,12 @@ public class AppliClient implements AppliScreen, Runnable {
 	private GameMap map;
 
 	/**
-	 * @param name : Nom de la fenetre de jeu
-	 * @param ip   : Ip du serveur
-	 * @param port : Port du serveur
+	 * @param name
+	 *            : Nom de la fenetre de jeu
+	 * @param ip
+	 *            : Ip du serveur
+	 * @param port
+	 *            : Port du serveur
 	 */
 	public AppliClient(String name, String ip, int port) {
 		this.transfer = new Object();
@@ -83,8 +86,10 @@ public class AppliClient implements AppliScreen, Runnable {
 	/**
 	 * Cree une socket de communication client / serveur
 	 *
-	 * @param ip   : Ip du serveur
-	 * @param port : port du serveur
+	 * @param ip
+	 *            : Ip du serveur
+	 * @param port
+	 *            : port du serveur
 	 * @return Socket initialisee
 	 */
 	private Socket connexion(String ip, int port) {
@@ -153,6 +158,8 @@ public class AppliClient implements AppliScreen, Runnable {
 	public void run() {
 		try {
 			// Creation du cache
+			KeyBoard keyBoard = KeyBoard.getInstance();
+
 			List<Drawable> listDrawables;
 
 			// Input et Output de la socket
@@ -173,7 +180,7 @@ public class AppliClient implements AppliScreen, Runnable {
 					listD = new ArrayList<>(listDrawables);
 				}
 
-				sOut.writeUnshared(KeyBoard.getKeys());
+				sOut.writeUnshared(keyBoard.getKeys());
 				sOut.flush();
 				sOut.reset();
 			}
@@ -196,7 +203,8 @@ public class AppliClient implements AppliScreen, Runnable {
 	/**
 	 * Verifie que le client est a jour par rapport au serveur
 	 *
-	 * @param socket : socket de communication client / serveur
+	 * @param socket
+	 *            : socket de communication client / serveur
 	 */
 	public void testVersion(Socket socket) {
 		try {

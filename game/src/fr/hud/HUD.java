@@ -1,7 +1,6 @@
 package fr.hud;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.Serializable;
@@ -26,22 +25,11 @@ public class HUD implements Drawable, Serializable, Manageable {
 
 	private static final double WIDTH = 510 * rescaleRatio, HEIGHT = 230 * rescaleRatio;
 
-	private static final double RECTANGLE_HEIGHT = 26 * rescaleRatio, RECTANGLE_MAX_WIDTH = 200 * rescaleRatio,
-			RECTANGLE_X = 222 * rescaleRatio;
-
-	private static final double LIFE_MAX_AMOUNT = 100;
-
 	private static Image hudGif = (new ImageIcon(HUD.class.getResource("/images/HUD/hud.gif"))).getImage()
 			.getScaledInstance((int) WIDTH, (int) HEIGHT, Image.SCALE_DEFAULT);
 
 	private static Image hudPng = (new ImageIcon(HUD.class.getResource("/images/HUD/hud.png"))).getImage()
 			.getScaledInstance((int) WIDTH, (int) HEIGHT, Image.SCALE_DEFAULT);
-
-	private int currentLifeAmount, currentCoolDownAmount;
-
-	private double lifeRectangleWidth = RECTANGLE_MAX_WIDTH, coolDownRegtangleWidth = RECTANGLE_MAX_WIDTH;
-
-	private Font font = new Font("Arial", Font.PLAIN, 24);
 
 	private ICharacter player;
 
@@ -55,10 +43,6 @@ public class HUD implements Drawable, Serializable, Manageable {
 	 */
 	public HUD(ICharacter player) {
 		this.player = player;
-		// currentLifeAmount = player.getHealth();
-		lifeRectangleWidth = 1;
-		coolDownRegtangleWidth = 1;
-		player.setHealth(30);
 		LifeBar = new LifeBar(222, 22, 1, 26, player, rescaleRatio);
 		coolDownBar = new CoolDownBar(222, 76, 1, 26, player, rescaleRatio);
 
