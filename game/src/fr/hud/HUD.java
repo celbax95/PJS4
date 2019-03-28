@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.io.Serializable;
 
 import javax.swing.ImageIcon;
@@ -46,6 +45,8 @@ public class HUD implements Drawable, Serializable, Manageable {
 
 	private ICharacter player;
 
+	private ABar LifeBar, coolDownBar;
+
 	/**
 	 * constructeur HUD
 	 *
@@ -57,13 +58,10 @@ public class HUD implements Drawable, Serializable, Manageable {
 		// currentLifeAmount = player.getHealth();
 		lifeRectangleWidth = 1;
 		coolDownRegtangleWidth = 1;
-	}
+		player.setHealth(30);
+		LifeBar = new LifeBar(222, 22, 1, 26, player, rescaleRatio);
+		coolDownBar = new CoolDownBar(222, 76, 1, 26, player, rescaleRatio);
 
-	public void applyDamage(double damage) {
-		if (damage > LIFE_MAX_AMOUNT)
-			damage = LIFE_MAX_AMOUNT;
-		player.setHealth(LIFE_MAX_AMOUNT - damage);
-		lifeRectangleWidth = ((damage / 100.0) * RECTANGLE_MAX_WIDTH);
 	}
 
 	/**
@@ -77,13 +75,8 @@ public class HUD implements Drawable, Serializable, Manageable {
 		g.drawImage(hudPng, 0, 0, null);
 		g.drawImage(hudGif, 0, 0, null);
 		g.setColor(Color.BLACK);
-		applyDamage(70);
-		Rectangle lifeRect = new Rectangle(
-				(int) (RECTANGLE_X + ((RECTANGLE_MAX_WIDTH * player.getHealth()) / LIFE_MAX_AMOUNT)),
-				(int) (22 * rescaleRatio), (int) lifeRectangleWidth, (int) RECTANGLE_HEIGHT);
-		g.fill(lifeRect);
-
-		g.fillRect((int) RECTANGLE_X, (int) (76 * rescaleRatio), (int) coolDownRegtangleWidth, (int) RECTANGLE_HEIGHT);
+		LifeBar.draw(g);
+		coolDownBar.draw(g);
 	}
 
 	/**
