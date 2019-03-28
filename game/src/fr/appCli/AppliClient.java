@@ -38,9 +38,9 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	private GameMap map;
 
-	private Point center;
-
 	private Point camera;
+
+	private boolean receiving;
 
 	/**
 	 * @param name   : Nom de la fenetre de jeu
@@ -51,6 +51,7 @@ public class AppliClient implements AppliScreen, Runnable {
 
 		this.name = name;
 		this.endApp = false;
+		this.receiving = false;
 
 		this.socket = socket;
 		// testVersion(socket);
@@ -113,6 +114,9 @@ public class AppliClient implements AppliScreen, Runnable {
 		if (endApp)
 			throw new EndApp();
 
+		if (!receiving)
+			return;
+
 		// Application d'un eventuel changement d'echelle
 		changeScale();
 		setCamera(g);
@@ -126,22 +130,18 @@ public class AppliClient implements AppliScreen, Runnable {
 		}
 
 		// Affichage de la map
-		if (map != null) {
-			MapTile[][] mt = map.getMap();
-			if (mt != null) {
-				for (MapTile[] mapTiles : mt) {
-					for (MapTile mapTile : mapTiles) {
-						mapTile.draw(g);
-					}
+		MapTile[][] mt = map.getMap();
+		if (mt != null) {
+			for (MapTile[] mapTiles : mt) {
+				for (MapTile mapTile : mapTiles) {
+					mapTile.draw(g);
 				}
 			}
 		}
 
 		// Affichage des elements
-		if (listD != null) {
-			for (Drawable drawable : ld) {
-				drawable.draw(g);
-			}
+		for (Drawable drawable : ld) {
+			drawable.draw(g);
 		}
 	}
 
@@ -191,6 +191,9 @@ public class AppliClient implements AppliScreen, Runnable {
 				sOut.writeUnshared(keyBoard.getKeys());
 				sOut.flush();
 				sOut.reset();
+
+				if (!receiving)
+					receiving = true;
 			}
 		} catch (IOException e) {
 			System.err.println("Communication avec le serveur terminee");
