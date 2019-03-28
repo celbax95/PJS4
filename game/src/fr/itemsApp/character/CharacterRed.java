@@ -125,7 +125,15 @@ public class CharacterRed implements ICharacter {
 	 */
 	public void dropBomb(Application application, List<Integer> clickedKeys) {
 		if (clickedKeys.contains(KeyEvent.VK_R)) {
-			if (bombCoolDown.resetOnDone()) {
+			if (bombCoolDown.isDone()) {
+				Point tile = application.getMap().getTileFor(pos.getIX(), pos.getIY());
+				List<IBomb> bombs = application.getBombs();
+				for (IBomb b : bombs) {
+					Point btile = b.getTile();
+					if (btile.x == tile.x && btile.y == tile.y)
+						return;
+				}
+
 				IBomb bomb = BombFactory.getInstance().create(defaultBomb, application, this);
 				IBomb.addToLists(application, bomb);
 				bomb.start();

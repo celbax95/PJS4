@@ -27,8 +27,6 @@ public class ExplosionCreator implements Serializable {
 	 */
 	public void create(Application application, IBomb bombe) {
 
-		System.out.println("Je passe");
-
 		explosions = new ArrayList<>();
 
 		MapTile[][] m = application.getMap().getMap();
