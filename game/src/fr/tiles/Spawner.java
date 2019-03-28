@@ -6,6 +6,7 @@ import java.awt.geom.AffineTransform;
 
 import fr.application.Application;
 import fr.scale.Scale;
+
 /**
  * Zone d'apparition des objets
  */
@@ -17,37 +18,39 @@ public class Spawner extends MapTileSuper {
 	private static final boolean walkable = true;
 
 	private static final boolean destroyable = false;
+
 	/**
 	 * constructeur Spawner
+	 *
 	 * @param x : abscisse du point ou est placé l'element
 	 * @param y : ordonnée du point ou est placé l'element
 	 */
 	public Spawner(int x, int y) {
 		super(x, y);
 	}
+
 	/**
 	 * affiche la zone d'apparition
+	 *
 	 * @param g : permet l'affichage
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-
 		Scale scale = Scale.getInstance();
 
 		AffineTransform oldTransform = g.getTransform();
 
-		AffineTransform af = new AffineTransform();
+		g.scale(scale.getScale(), scale.getScale());
+		g.translate(pos.getIX(), pos.getIY());
 
-		af.scale(scale.getScale(), scale.getScale());
-		af.translate(pos.getIX(), pos.getIY());
-
-		g.setTransform(af);
 		g.setColor(c);
 		g.fillRect(0, 0, DEFAULT_SIZE, DEFAULT_SIZE);
 		g.setTransform(oldTransform);
 	}
+
 	/**
 	 * permet d'interagir avec la zone d'apparition
+	 *
 	 * @param m : l'application
 	 */
 	@Override
@@ -55,6 +58,7 @@ public class Spawner extends MapTileSuper {
 		// TODO Auto-generated method stub
 
 	}
+
 	/**
 	 * @return destroyable : true si l'element est destructible et false sinon
 	 */
@@ -62,6 +66,7 @@ public class Spawner extends MapTileSuper {
 	public boolean isDestroyable() {
 		return destroyable;
 	}
+
 	/**
 	 * @return walkable : true si on peut marcher sur l'element et false sinon
 	 */

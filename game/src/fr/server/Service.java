@@ -95,9 +95,10 @@ public class Service implements Runnable {
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 			while (!Thread.currentThread().isInterrupted()) {
-				sOut.writeUnshared(application.getMap());
+				sOut.writeUnshared(application.getPlayerPos(myPlayer));
 				sOut.flush();
 				sOut.reset();
+				sOut.writeUnshared(application.getMap());
 				sOut.writeUnshared(application.getDrawables());
 				sOut.flush();
 				sOut.reset();

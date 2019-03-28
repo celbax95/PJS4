@@ -173,6 +173,17 @@ public class Application implements Runnable {
 		return map;
 	}
 
+	public Point getPlayerPos(int i) {
+		Point pos = null;
+
+		try {
+			pos = players.get(i).getCenter();
+		} catch (Exception e) {
+		}
+
+		return pos;
+	}
+
 	/**
 	 * Gere les actions du Joueur
 	 *
@@ -255,6 +266,7 @@ public class Application implements Runnable {
 	public void start() {
 		myThread.start();
 	}
+
 	public void stop() {
 		myThread.interrupt();
 	}

@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.sun.glass.events.KeyEvent;
 
+import fr.client.Client;
 import fr.gameLauncher.GameLauncher;
 import fr.itemsApp.Drawable;
 import fr.map.GameMap;
@@ -19,6 +20,7 @@ import fr.scale.Scale;
 import fr.screen.AppliScreen;
 import fr.screen.EndApp;
 import fr.screen.keyboard.KeyBoard;
+import fr.util.point.Point;
 
 /**
  * Application client, recoit et affiche les donnees recues du serveur
@@ -36,8 +38,10 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	private GameMap map;
 
+	private Point camera;
+
 	/**
-	 * @param name : Nom de la fenetre de jeu
+	 * @param name   : Nom de la fenetre de jeu
 	 * @param socket : Socket liee au serveur
 	 */
 	public AppliClient(String name, Socket socket) {
@@ -47,7 +51,7 @@ public class AppliClient implements AppliScreen, Runnable {
 		this.endApp = false;
 
 		this.socket = socket;
-		//testVersion(socket);
+		// testVersion(socket);
 
 		myThread = new Thread(this);
 
@@ -97,7 +101,6 @@ public class AppliClient implements AppliScreen, Runnable {
 		}
 	}
 
-
 	/**
 	 * Affiche les donnees recues par le serveur (Map et Elements)
 	 *
@@ -110,6 +113,13 @@ public class AppliClient implements AppliScreen, Runnable {
 
 		// Application d'un eventuel changement d'echelle
 		changeScale();
+
+		try {
+			int sw = Client.WIDTH, sh = Client.HEIGHT;
+			int mw = map.getWidth() * map.getTileSize(), mh = map.getHeight() * map.getTileSize();
+			g.translate(-(mw - sw) / 2, -(mh - sh) / 2);
+		} catch (Exception e) {
+		}
 
 		// creation d'un cache
 		List<Drawable> ld;
@@ -168,6 +178,9 @@ public class AppliClient implements AppliScreen, Runnable {
 			// Tant que l'application n'est pas terminee
 			while (!Thread.currentThread().isInterrupted()) {
 
+				// Recuperation de la camera
+				camera = (Point) sIn.readUnshared();
+
 				// Recuperation de la map
 				map = (GameMap) sIn.readUnshared();
 
@@ -190,7 +203,7 @@ public class AppliClient implements AppliScreen, Runnable {
 		} catch (ClassNotFoundException e1) {
 			System.err.println("Erreur de Reception depuis le serveur");
 			close();
-			GameLauncher.resetMenu(); 
+			GameLauncher.resetMenu();
 		}
 	}
 
@@ -204,14 +217,9 @@ public class AppliClient implements AppliScreen, Runnable {
 	 *
 	 * @param socket : socket de communication client / serveur
 	 *
-	public void testVersion(Socket socket) {
-		try {
-			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-			sOut.writeObject(Main.getVersion());
-			sOut.flush();
-			sOut.reset();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
+	 * public void testVersion(Socket socket) { try { ObjectOutputStream sOut = new
+	 * ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+	 * sOut.writeObject(Main.getVersion()); sOut.flush(); sOut.reset(); } catch
+	 * (IOException e) { e.printStackTrace(); } }
+	 */
 }
