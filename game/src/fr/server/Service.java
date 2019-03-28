@@ -137,7 +137,6 @@ public class Service implements Runnable {
 					// Quand le joueur est mort
 				}
 				application.managePlayer(myPlayer, cliKeys);
-				application.getPlayerById(myPlayer).setHealth(10);
 			}
 		} catch (IOException e) {
 			System.err.println("Joueur déconnecté");
