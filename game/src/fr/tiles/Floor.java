@@ -2,12 +2,10 @@ package fr.tiles;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
 
 import fr.application.Application;
-import fr.scale.Scale;
 /**
  * Sol
  */
@@ -15,7 +13,7 @@ public class Floor extends MapTileSuper {
 
 	private static final long serialVersionUID = 1L;
 	private static Image img = (new ImageIcon(Floor.class.getResource("/images/map/floor/floor.png"))).getImage()
-			.getScaledInstance(DEFAULT_SIZE, DEFAULT_SIZE, Image.SCALE_DEFAULT);
+			.getScaledInstance(SIZE, SIZE, Image.SCALE_DEFAULT);
 
 	private static final boolean walkable = true;
 
@@ -34,11 +32,7 @@ public class Floor extends MapTileSuper {
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-		Scale scale = Scale.getInstance();
-		AffineTransform af = new AffineTransform();
-		af.scale(scale.getScale(), scale.getScale());
-		af.translate(pos.getIX(), pos.getIY());
-		g.drawImage(img, af, null);
+		g.drawImage(img, pos.getIX(), pos.getIY(), null);
 	}
 	/**
 	 * permet d'interagir avec un element

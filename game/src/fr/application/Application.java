@@ -12,6 +12,7 @@ import fr.itemsApp.Manageable;
 import fr.itemsApp.character.CharacterFactory;
 import fr.itemsApp.character.ICharacter;
 import fr.map.GameMap;
+import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.time.Timer;
 
@@ -19,7 +20,7 @@ import fr.util.time.Timer;
  * Application (Le jeu)
  */
 public class Application implements Runnable {
-	private final static int spawnPlaces[][] = { { 120, 120 } };
+	private final static int spawnPlaces[][] = { { (int) (120 * Scale.getScale()), (int) (120 * Scale.getScale()) } };
 
 	private Map<Integer, ICharacter> players;
 

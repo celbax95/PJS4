@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import fr.itemsApp.Drawable;
 import fr.map.MapTile;
+import fr.scale.Scale;
 import fr.util.point.Point;
 /**
  * Classe abstraite d'element constituant le terrain
@@ -11,7 +12,9 @@ import fr.util.point.Point;
 public abstract class MapTileSuper implements MapTile, Drawable, Serializable {
 	private static final long serialVersionUID = 1L;
 
-	protected static final int DEFAULT_SIZE = 120;
+	private static final int DEFAULT_SIZE = 120;
+
+	protected static int SIZE = (int) (DEFAULT_SIZE * Scale.getScale());
 
 	protected Point tile;
 	protected Point pos;
@@ -22,7 +25,7 @@ public abstract class MapTileSuper implements MapTile, Drawable, Serializable {
 	 */
 	public MapTileSuper(int x, int y) {
 		tile = new Point(x, y);
-		pos = new Point(x * DEFAULT_SIZE, y * DEFAULT_SIZE);
+		pos = new Point(x * SIZE, y * SIZE);
 	}
 	/**
 	 * @return pos : la position (x, y) de l'element
@@ -36,7 +39,7 @@ public abstract class MapTileSuper implements MapTile, Drawable, Serializable {
 	 */
 	@Override
 	public int getSize() {
-		return DEFAULT_SIZE;
+		return SIZE;
 	}
 	/**
 	 * @return tile : case du terrain

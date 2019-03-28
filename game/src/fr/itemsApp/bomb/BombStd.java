@@ -2,7 +2,6 @@ package fr.itemsApp.bomb;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 
 import fr.application.Application;
 import fr.explosion.IExplosion;
@@ -18,6 +17,8 @@ public class BombStd extends Bomb {
 
 	private static final long serialVersionUID = 1L;
 
+	private static int SIZE = (int) (DEFAULT_BOMB_SIZE * Scale.getScale());
+
 	private static Color c = Color.black;
 
 	private static final int TIME = 1400;
@@ -27,21 +28,16 @@ public class BombStd extends Bomb {
 		this.tile = tile;
 
 		// Calcul de la position de la bombe
-		this.pos = new Point((tile.getIX() * tileSize) + (tileSize - DEFAULT_BOMB_SIZE) / 2,
-				(tile.getIY() * tileSize) + (tileSize - DEFAULT_BOMB_SIZE) / 2);
+		this.pos = new Point((tile.getIX() * tileSize) + (tileSize - SIZE) / 2,
+				(tile.getIY() * tileSize) + (tileSize - SIZE) / 2);
 		this.cooldown = new Cooldown(cooldown);
 		this.explosionSize = explosionSize;
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		Scale scale = Scale.getInstance();
-		AffineTransform af = new AffineTransform();
-		af.scale(scale.getScale(), scale.getScale());
-		af.translate(pos.getIX(), pos.getIY());
-		g.setTransform(af);
 		g.setColor(c);
-		g.fillRect(0, 0, DEFAULT_BOMB_SIZE, DEFAULT_BOMB_SIZE);
+		g.fillRect(pos.getIX(), pos.getIY(), SIZE, SIZE);
 	}
 
 	@Override
@@ -69,6 +65,6 @@ public class BombStd extends Bomb {
 	 * @return Taille de la bombe
 	 */
 	public static int getSIZE() {
-		return DEFAULT_BOMB_SIZE;
+		return SIZE;
 	}
 }

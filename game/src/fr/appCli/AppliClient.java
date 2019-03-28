@@ -10,13 +10,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.glass.events.KeyEvent;
-
 import fr.itemsApp.Drawable;
 import fr.main.Main;
 import fr.map.GameMap;
 import fr.map.MapTile;
-import fr.scale.Scale;
 import fr.screen.AppliScreen;
 import fr.screen.EndApp;
 import fr.screen.keyboard.KeyBoard;
@@ -54,22 +51,6 @@ public class AppliClient implements AppliScreen, Runnable {
 		myThread = new Thread(this);
 
 		listD = new ArrayList<>();
-	}
-
-	/**
-	 * Change le scale suivant les touches du clavier pressees
-	 */
-	private void changeScale() {
-
-		KeyBoard keyBoard = KeyBoard.getInstance();
-
-		Scale scale = Scale.getInstance();
-
-		if (keyBoard.isPressed(KeyEvent.VK_ADD))
-			scale.increase();
-		else if (keyBoard.isPressed(KeyEvent.VK_SUBTRACT))
-			scale.decrease();
-		scale.update();
 	}
 
 	/**
@@ -126,9 +107,6 @@ public class AppliClient implements AppliScreen, Runnable {
 		if (endApp)
 			throw new EndApp();
 
-		// Application d'un eventuel changement d'echelle
-		changeScale();
-
 		// creation d'un cache
 		List<Drawable> ld;
 
@@ -177,8 +155,6 @@ public class AppliClient implements AppliScreen, Runnable {
 			// Creation du cache
 			List<Drawable> listDrawables;
 
-			KeyBoard keyBoard = KeyBoard.getInstance();
-
 			// Input et Output de la socket
 			ObjectOutputStream sOut = new ObjectOutputStream((socket.getOutputStream()));
 			ObjectInputStream sIn = new ObjectInputStream((socket.getInputStream()));
@@ -197,13 +173,17 @@ public class AppliClient implements AppliScreen, Runnable {
 					listD = new ArrayList<>(listDrawables);
 				}
 
-				sOut.writeUnshared(keyBoard.getKeys());
+				sOut.writeUnshared(KeyBoard.getKeys());
 				sOut.flush();
 				sOut.reset();
 			}
-		} catch (Exception e) {
+		} catch (IOException e) {
 			// e.printStackTrace();
 			System.err.println("Communication avec le serveur terminee");
+			close();
+		} catch (ClassNotFoundException e1) {
+			// e1.printStackTrace();
+			System.err.println("Erreur de Reception depuis le serveur");
 			close();
 		}
 	}

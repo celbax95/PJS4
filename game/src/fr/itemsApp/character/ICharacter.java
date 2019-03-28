@@ -26,12 +26,21 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	Point getCenter();
 
 	/**
+	 * @return les points de vie du joueur
+	 */
+	double getHealth();
+
+	double getMaxHealth();
+
+	/**
 	 * Change le cooldown de pose des bombes
 	 *
 	 * @param bombCoolDown
 	 *            : nouveau cooldown
 	 */
 	void setBombCoolDown(int bombCoolDown);
+
+	void setHealth(double health);
 
 	/**
 	 * Change la position du ICharacter
@@ -47,8 +56,4 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	 *            : nouvelle vitesse pour le ICharacter
 	 */
 	void setSpeed(int speed);
-	/**
-	 * @return les points de vie du joueur
-	 */
-	// int getHealth();
 }

@@ -2,10 +2,8 @@ package fr.tiles;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 
 import fr.application.Application;
-import fr.scale.Scale;
 /**
  * Mur cassable
  */
@@ -30,16 +28,8 @@ public class BreakableWall extends MapTileSuper {
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-		Scale scale = Scale.getInstance();
-		AffineTransform oldTransform = g.getTransform();
-		AffineTransform af = new AffineTransform();
-		af.scale(scale.getScale(), scale.getScale());
-		af.translate(pos.getIX(), pos.getIY());
-		g.setTransform(af);
 		g.setColor(c);
-		g.fillRect(0, 0, DEFAULT_SIZE, DEFAULT_SIZE);
-		g.setTransform(oldTransform);
-
+		g.fillRect(pos.getIX(), pos.getIY(), SIZE, SIZE);
 	}
 	/**
 	 * permet d'interagir avec le mur cassable

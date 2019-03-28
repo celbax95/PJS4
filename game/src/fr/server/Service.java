@@ -10,7 +10,6 @@ import java.util.List;
 
 import fr.application.Application;
 import fr.hud.HUDManager;
-
 /**
  * Le Service du jeu qui communique avec le client via le serveur
  */
@@ -25,35 +24,26 @@ public class Service implements Runnable {
 	private Application application;
 
 	private int myPlayer;
-
+	
 	/**
 	 * constructeur Service vide
 	 */
 	private Service() {
 	}
-
 	/**
 	 * constructeur Service
-	 *
-	 * @param s
-	 *            : le serveur
-	 * @param serverSocket
-	 *            : la socket du serveur
-	 * @param application
-	 *            : l'application
+	 * @param s : le serveur
+	 * @param serverSocket : la socket du serveur
+	 * @param application : l'application
 	 */
 	public Service(Server s, Socket serverSocket, Application application) {
 		this(serverSocket, application);
 		this.server = s;
 	}
-
 	/**
 	 * constructeur Service
-	 *
-	 * @param serverSocket
-	 *            : la socket du serveur
-	 * @param application
-	 *            : l'application
+	 * @param serverSocket : la socket du serveur
+	 * @param application : l'application
 	 */
 	public Service(Socket serverSocket, Application application) {
 		server = null;
@@ -93,7 +83,7 @@ public class Service implements Runnable {
 				application.managePlayer(myPlayer, cliKeys);
 			}
 		} catch (IOException | ClassNotFoundException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			try {
 				socket.close();
 			} catch (IOException e1) {
@@ -104,7 +94,6 @@ public class Service implements Runnable {
 			System.err.println("Service termine");
 		}
 	}
-
 	/**
 	 * lance le thread du service
 	 */
