@@ -243,7 +243,6 @@ public class MenuDisplay implements Menu {
 				case 3:
 					GameLauncher.clientClose();
 					GameLauncher.serverClose();
-					nbPlayers = NB_INIT_PLAYERS;
 					nbPlayersLabel.setText(String.valueOf(nbPlayers));
 					menuPosition = 1;
 					break;
@@ -371,7 +370,6 @@ public class MenuDisplay implements Menu {
 		hideComponents();
 
 		if (menuPosition == 3) {
-			nbPlayers = NB_INIT_PLAYERS;
 			nbPlayersLabel.setText(String.valueOf(nbPlayers));
 			menuPosition = 1;
 		} else if (menuPosition == 4) {
@@ -411,6 +409,12 @@ public class MenuDisplay implements Menu {
 			back.setVisible(false);
 		} else if (menuPosition == 1) {
 			for (JComponent jc : componentHostList) {
+				if (jc == this.decNbPlayers && this.nbPlayers == NB_MIN_PLAYERS) {
+					continue;
+				}
+				if (jc == this.incNbPlayers && this.nbPlayers == NB_MAX_PLAYERS) {
+					continue;
+				}
 				jc.setVisible(true);
 			}
 		} else if (menuPosition == 2) {
