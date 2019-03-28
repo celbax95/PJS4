@@ -2,8 +2,13 @@ package fr.Camera;
 
 import fr.scale.Scale;
 import fr.util.point.Point;
+import fr.util.point.PointCalc;
 
 public class Camera {
+
+	private static final double changingStep = 10;
+
+	private static final double step = 5;
 
 	private Point ms;
 
@@ -17,9 +22,10 @@ public class Camera {
 		this.ms = ms;
 		this.ss = ss;
 		this.a = a;
+		this.pos = a.clone();
 	}
 
-	public Point getPos() {
+	public Point getAimedPos() {
 		double scale = Scale.getInstance().getScale();
 
 		if (a == null)
@@ -42,7 +48,26 @@ public class Camera {
 		}
 	}
 
+	public Point getPos() {
+		return pos;
+	}
+
 	public void setA(Point a) {
 		this.a = a;
+	}
+
+	public void update() {
+		Point ap = getAimedPos();
+		Point d = PointCalc.compare(pos, ap);
+		if (d.x > changingStep) {
+			pos.x += step * Math.signum(ap.x - pos.x);
+		} else {
+			pos.x = ap.x;
+		}
+		if (d.y > changingStep) {
+			pos.y += step * Math.signum(ap.y - pos.y);
+		} else {
+			pos.y = ap.y;
+		}
 	}
 }

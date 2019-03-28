@@ -220,6 +220,7 @@ public class AppliClient implements AppliScreen, Runnable {
 		synchronized (transferAim) {
 			camera.setA(aim);
 		}
+		camera.update();
 		Point camPos = camera.getPos();
 		g.translate(camPos.x, camPos.y);
 	}
