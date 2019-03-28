@@ -136,6 +136,7 @@ public class CharacterRed implements ICharacter {
 
 				IBomb bomb = BombFactory.getInstance().create(defaultBomb, application, this);
 				IBomb.addToLists(application, bomb);
+				bombCoolDown.reset();
 				bomb.start();
 			}
 		}
@@ -178,6 +179,8 @@ public class CharacterRed implements ICharacter {
 		double x = pos.x;
 		double y = pos.y;
 
+		double newSpeed = speed;
+
 		List<IBomb> bombs = application.getBombs();
 
 		for (IBomb b : bombs) {
@@ -185,20 +188,27 @@ public class CharacterRed implements ICharacter {
 					b.getSize().getIX())
 					&& isAligned(pos.getIY() + collideMargin, DEFAULT_SIZE - collideMargin * 2, b.getPos().getIY(),
 							b.getSize().getIY())) {
+				// Si le Character est sur une bombe
 
-				Point center = getCenter();
-				Point bcenter = b.getCenter();
+				if (moves.x == 0 && moves.y == 0) {
+					// Si le Character est immobile
 
-				Point pushDir = PointCalc.sub(center, bcenter);
-				pushDir.normalize();
+					Point center = getCenter();
+					Point bcenter = b.getCenter();
 
-				x += (pushDir.x * speed / 1.5 * t);
-				y += (pushDir.y * speed / 1.5 * t);
+					Point pushDir = PointCalc.sub(center, bcenter);
+					pushDir.normalize();
+
+					x += (pushDir.x * speed / 1.5 * t);
+					y += (pushDir.y * speed / 1.5 * t);
+				} else {
+					newSpeed *= 0.5;
+				}
 			}
 		}
 
-		x += (moves.x * speed * t);
-		y += (moves.y * speed * t);
+		x += (moves.x * newSpeed * t);
+		y += (moves.y * newSpeed * t);
 
 		Point tMove = new Point(x - pos.x, y - pos.y);
 		tMove.normalize();
