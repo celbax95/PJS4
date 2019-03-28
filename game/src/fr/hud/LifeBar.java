@@ -17,9 +17,6 @@ public class LifeBar extends ABar {
 
 	@Override
 	public void draw(Graphics2D g) {
-		// g.fill(bar);
-		// bar = null;
-		// player.setHealth(10);
 		bar = new Rectangle((int) (this.barX + ((rescaledMaxBarWidth * player.getHealth()) / player.getMaxHealth())),
 				(int) this.barY,
 				(int) (((player.getMaxHealth() - player.getHealth()) * rescaledMaxBarWidth) / player.getMaxHealth()),

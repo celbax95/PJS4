@@ -91,7 +91,6 @@ public class Service implements Runnable {
 				sOut.reset();
 				List<Integer> cliKeys = (List<Integer>) sIn.readUnshared();
 				application.managePlayer(myPlayer, cliKeys);
-				application.getPlayerById(myPlayer).setHealth(10);
 			}
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
