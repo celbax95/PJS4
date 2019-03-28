@@ -53,7 +53,8 @@ public class MainJPanel extends JPanel {
 	 * Fermeture de la fenetre
 	 */
 	public void closeScr() {
-		screen.dispatchEvent(new WindowEvent(screen, WindowEvent.WINDOW_CLOSING));
+		repainter.interrupt();
+		this.appScreen.close();
 	}
 
 	/**
@@ -68,9 +69,8 @@ public class MainJPanel extends JPanel {
 		try {
 			appScreen.draw((Graphics2D) g2);
 		} catch (EndApp e) {
-			synchronized(this.screen) {
+			synchronized(this) {
 				System.err.println(e.getMessage());
-				repainter.interrupt();
 				closeScr();
 			}
 		}

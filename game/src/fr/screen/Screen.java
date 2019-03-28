@@ -30,17 +30,17 @@ public class Screen extends JFrame {
 	 * @param margin    : marge totale dans la fenetre
 	 */
 	private Screen(AppliScreen appScreen, int width, int height, int marginX, int marginY, int margin) {
-		this.newGame = false;
+		Screen.newGame = false;
 		// Nom de la fenetre
 		this.setTitle(appScreen.getName());
 
 		// Quand on ferme la fenetre
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				appScreen.close();
 				GameLauncher.resetMenu();
+				single.dispose();
 			}
 		});
 

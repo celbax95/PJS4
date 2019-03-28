@@ -3,6 +3,7 @@ package fr.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import fr.appCli.AppliClient;
 import fr.application.Application;
@@ -20,8 +21,8 @@ public class Server implements Runnable {
 	private ServerSocket serveur;
 	private Thread threadServ;
 	
-	private Socket socketHost;
 	private Service first;
+	private Socket socketHost;
 	
 	private Application application;
 	public static final int WIDTH = 1728;
@@ -33,7 +34,7 @@ public class Server implements Runnable {
 	
 	/**
 	 * constructeur Server
-	 * @param title : Nom de fenêtre de l'application
+	 * @param title : Nom de fenetre de l'application
 	 * @param port : port de connexion avec les clients
 	 * @param nbPlayers : nombre de joueurs acceptables par le serveur
 	 */
@@ -72,7 +73,12 @@ public class Server implements Runnable {
 					break;
 				}
 				if (socket != null) {
-					(new Service(this,socket)).start();
+					if (socket != null) {
+						if (first == null)
+							(first = new Service(this, socket)).start();
+						else
+							(new Service(socket)).start();
+					}
 				}
 			}
 		}
@@ -84,16 +90,14 @@ public class Server implements Runnable {
 	 * @param service : un service
 	 */
 	public void close(Service service) {
-		/*if (service != first)
-			return;*/
-
-		threadServ.interrupt();
 		try {
-			service.getSocket().close();
-			if (service != first) {
-				threadServ.interrupt();
-				serveur.close();
-			}
+			if(service != first)
+				return;
+			socketHost.close();
+			threadServ.interrupt();
+			application.stop();
+		
+			serveur.close();
 		} catch (IOException e) {
 		}
 	}
@@ -104,6 +108,9 @@ public class Server implements Runnable {
 	@Override
 	public void finalize() throws IOException {
 		serveur.close();
+		if(this.application !=null) {
+			this.application.stop();
+		}
 	}
 
 	/**

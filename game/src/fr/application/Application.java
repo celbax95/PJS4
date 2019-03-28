@@ -255,4 +255,7 @@ public class Application implements Runnable {
 	public void start() {
 		myThread.start();
 	}
+	public void stop() {
+		myThread.interrupt();
+	}
 }
