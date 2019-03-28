@@ -111,15 +111,10 @@ public class AppliClient implements AppliScreen, Runnable {
 		if (endApp)
 			throw new EndApp();
 
+		setCamera(g);
+
 		// Application d'un eventuel changement d'echelle
 		changeScale();
-
-		try {
-			int sw = Client.WIDTH, sh = Client.HEIGHT;
-			int mw = map.getWidth() * map.getTileSize(), mh = map.getHeight() * map.getTileSize();
-			g.translate(-(mw - sw) / 2, -(mh - sh) / 2);
-		} catch (Exception e) {
-		}
 
 		// creation d'un cache
 		List<Drawable> ld;
@@ -204,6 +199,19 @@ public class AppliClient implements AppliScreen, Runnable {
 			System.err.println("Erreur de Reception depuis le serveur");
 			close();
 			GameLauncher.resetMenu();
+		}
+	}
+
+	private void setCamera(Graphics2D g) {
+		double scale = Scale.getInstance().getScale();
+		System.out.println(scale);
+
+		try {
+			int sw = Client.WIDTH, sh = Client.HEIGHT;
+			int mw = map.getWidth() * map.getTileSize(), mh = map.getHeight() * map.getTileSize();
+//			g.translate(-(mw - sw) / 2, -(mh - sh) / 2);
+			g.translate(-(mw * scale - sw) / 2, -(mh * scale - sh) / 2);
+		} catch (Exception e) {
 		}
 	}
 
