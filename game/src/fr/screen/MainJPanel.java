@@ -2,7 +2,6 @@ package fr.screen;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JPanel;
 
@@ -21,7 +20,7 @@ public class MainJPanel extends JPanel {
 	private Screen screen;
 
 	private AppliScreen appScreen;
-	
+
 	private Thread repainter;
 
 	/**
@@ -33,7 +32,7 @@ public class MainJPanel extends JPanel {
 	 */
 	private MainJPanel(Screen screen, AppliScreen appScreen, int width, int height, int margin) {
 		super();
-		this.newGame = false;
+		MainJPanel.newGame = false;
 		this.screen = screen;
 
 		// taille du panel
@@ -69,7 +68,7 @@ public class MainJPanel extends JPanel {
 		try {
 			appScreen.draw((Graphics2D) g2);
 		} catch (EndApp e) {
-			synchronized(this) {
+			synchronized (this) {
 				System.err.println(e.getMessage());
 				closeScr();
 			}
