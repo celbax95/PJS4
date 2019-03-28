@@ -34,13 +34,18 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	Point getCenter();
 
 	/**
+<<<<<<< HEAD
 	 * @return vie du IChraracter
+=======
+	 * @return les points de vie du joueur
+>>>>>>> ae48494b12e33cd232a9d63dd67eafe8297c2895
 	 */
 	double getHealth();
 
 	double getMaxHealth();
 
 	/**
+<<<<<<< HEAD
 	 * Fait regarder le ICharacter dans une direction
 	 *
 	 * @param angle
@@ -49,12 +54,16 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	void setAngle(double angle);
 
 	/**
+=======
+>>>>>>> ae48494b12e33cd232a9d63dd67eafe8297c2895
 	 * Change le cooldown de pose des bombes
 	 *
 	 * @param bombCoolDown
 	 *            : nouveau cooldown
 	 */
 	void setBombCoolDown(int bombCoolDown);
+
+	void setHealth(double health);
 
 	/**
 	 * Change la vie du ICharacter

@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 
 import fr.application.Application;
 import fr.scale.Scale;
+
 /**
  * Sol
  */
@@ -20,17 +21,24 @@ public class Floor extends MapTileSuper {
 	private static final boolean walkable = true;
 
 	private static final boolean destroyable = false;
+
 	/**
 	 * constructeur Floor
-	 * @param x : abscisse du point ou est placé le sol
-	 * @param y : ordonnée du point ou est placé le sol
+	 * 
+	 * @param x
+	 *            : abscisse du point ou est placé le sol
+	 * @param y
+	 *            : ordonnée du point ou est placé le sol
 	 */
 	public Floor(int x, int y) {
 		super(x, y);
 	}
+
 	/**
 	 * affiche le sol
-	 * @param g : permet l'affichage
+	 * 
+	 * @param g
+	 *            : permet l'affichage
 	 */
 	@Override
 	public void draw(Graphics2D g) {
@@ -40,15 +48,19 @@ public class Floor extends MapTileSuper {
 		af.translate(pos.getIX(), pos.getIY());
 		g.drawImage(img, af, null);
 	}
+
 	/**
 	 * permet d'interagir avec un element
-	 * @param m : l'application
+	 * 
+	 * @param m
+	 *            : l'application
 	 */
 	@Override
 	public void interact(Application m) {
 		// TODO Auto-generated method stub
 
 	}
+
 	/**
 	 * @return destroyable : true si l'element est destructible et false sinon
 	 */
@@ -56,6 +68,7 @@ public class Floor extends MapTileSuper {
 	public boolean isDestroyable() {
 		return destroyable;
 	}
+
 	/**
 	 * @return walkable : true si on peut marcher sur l'element et false sinon
 	 */

@@ -23,6 +23,13 @@ public class BombStd extends Bomb {
 	private static final int EXPLOSION_TIME = 1200;
 	private static final int DAMAGE = 100;
 
+	/**
+	 * @return Taille de la bombe
+	 */
+	public static int getSIZE() {
+		return DEFAULT_BOMB_SIZE;
+	}
+
 	public BombStd(Point tile, int explosionSize) {
 		// Calcul de la position de la bombe
 		super(new Point((tile.getIX() * TILE_SIZE) + (TILE_SIZE - DEFAULT_BOMB_SIZE) / 2,
@@ -58,12 +65,5 @@ public class BombStd extends Bomb {
 		if (cooldown.isDone()) {
 			explode(a);
 		}
-	}
-
-	/**
-	 * @return Taille de la bombe
-	 */
-	public static int getSIZE() {
-		return DEFAULT_BOMB_SIZE;
 	}
 }

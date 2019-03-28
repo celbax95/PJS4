@@ -34,7 +34,8 @@ public class StandardExplosion extends Explosion {
 	/**
 	 * Dessine l'explosion sur le terrain
 	 *
-	 * @param g : permet l'affichage d'éléments (images, text, ...)
+	 * @param g
+	 *            : permet l'affichage d'éléments (images, text, ...)
 	 */
 	@Override
 	public void draw(Graphics2D g) {
@@ -48,9 +49,11 @@ public class StandardExplosion extends Explosion {
 	/**
 	 * Gestion de l'element
 	 *
-	 * @param app               : Application
-	 * @param timeSinceLastCall : temps depuis le dernier appel, pour la
-	 *                          synchro @see Application.run
+	 * @param app
+	 *            : Application
+	 * @param timeSinceLastCall
+	 *            : temps depuis le dernier appel, pour la synchro @see
+	 *            Application.run
 	 */
 	@Override
 	public void manage(Application application, double timeSinceLastCall) {

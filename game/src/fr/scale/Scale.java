@@ -22,6 +22,13 @@ public class Scale implements Runnable {
 
 	private static long holdDelay = 50;
 
+	/**
+	 * @return l'instance unique de scale
+	 */
+	public static Scale getInstance() {
+		return instance;
+	}
+
 	private double tmpScale;
 
 	private double scale;
@@ -113,7 +120,8 @@ public class Scale implements Runnable {
 	}
 
 	/**
-	 * @param s : l'echelle
+	 * @param s
+	 *            : l'echelle
 	 */
 	public void setScale(double s) {
 		scale = s;
@@ -134,12 +142,5 @@ public class Scale implements Runnable {
 	 */
 	public void update() {
 		scale = tmpScale;
-	}
-
-	/**
-	 * @return l'instance unique de scale
-	 */
-	public static Scale getInstance() {
-		return instance;
 	}
 }

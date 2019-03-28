@@ -383,6 +383,12 @@ public class CharacterRed implements ICharacter {
 	}
 
 	@Override
+	public void setHealth(double health) {
+		this.health = health;
+
+	}
+
+	@Override
 	public void setHealth(int health) {
 		this.health = health;
 	}
