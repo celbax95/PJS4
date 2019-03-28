@@ -16,11 +16,17 @@ import fr.application.Application;
  */
 public class Service implements Runnable {
 
-	private Socket socket;
-	private Thread myThread;
-	private Server server;
-
 	private static Application application;
+
+	public static void setApplication(Application app) {
+		Service.application = app;
+	}
+
+	private Socket socket;
+
+	private Thread myThread;
+
+	private Server server;
 
 	private int myPlayer;
 
@@ -33,8 +39,10 @@ public class Service implements Runnable {
 	/**
 	 * constructeur Service
 	 *
-	 * @param s            : le serveur
-	 * @param serverSocket : la socket du serveur
+	 * @param s
+	 *            : le serveur
+	 * @param serverSocket
+	 *            : la socket du serveur
 	 */
 
 	public Service(Server s, Socket serverSocket) {
@@ -45,7 +53,8 @@ public class Service implements Runnable {
 	/**
 	 * constructeur Service
 	 *
-	 * @param serverSocket : la socket du serveur
+	 * @param serverSocket
+	 *            : la socket du serveur
 	 */
 	public Service(Socket serverSocket) {
 		this.server = null;
@@ -58,7 +67,8 @@ public class Service implements Runnable {
 	 */
 	@Override
 	public void finalize() throws IOException {
-		server.close();
+		this.myThread.interrupt();
+		this.socket.close();
 	}
 
 	public Socket getSocket() {
@@ -72,28 +82,26 @@ public class Service implements Runnable {
 	@Override
 	public void run() {
 		try {
-			
 
 			while (!server.getGameOn()) {
-				if(Thread.currentThread().isInterrupted()) {
+				if (Thread.currentThread().isInterrupted()) {
 					return;
 				}
 			}
-			
-			
-			PrintWriter out = new PrintWriter (socket.getOutputStream ( ), true);
+
+			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 			out.println("Game start");
-			synchronized(server) {
-				while(server.getApplication() == null) {
+			synchronized (server) {
+				while (server.getApplication() == null) {
 					this.wait();
 				}
 				application = server.getApplication();
 				myPlayer = application.addPlayer();
 			}
-			
+
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-			while(!Thread.currentThread().isInterrupted()) {
+			while (!Thread.currentThread().isInterrupted()) {
 				sOut.writeUnshared(application.getMap());
 				sOut.flush();
 				sOut.reset();
@@ -126,9 +134,5 @@ public class Service implements Runnable {
 	 */
 	public void start() {
 		myThread.start();
-	}
-	
-	public static void setApplication(Application app) {
-		Service.application = app;
 	}
 }
