@@ -18,10 +18,6 @@ public class Service implements Runnable {
 
 	private static Application application;
 
-	public static void setApplication(Application app) {
-		Service.application = app;
-	}
-
 	private Socket socket;
 
 	private Thread myThread;
@@ -39,10 +35,8 @@ public class Service implements Runnable {
 	/**
 	 * constructeur Service
 	 *
-	 * @param s
-	 *            : le serveur
-	 * @param serverSocket
-	 *            : la socket du serveur
+	 * @param s            : le serveur
+	 * @param serverSocket : la socket du serveur
 	 */
 
 	public Service(Server s, Socket serverSocket) {
@@ -53,8 +47,7 @@ public class Service implements Runnable {
 	/**
 	 * constructeur Service
 	 *
-	 * @param serverSocket
-	 *            : la socket du serveur
+	 * @param serverSocket : la socket du serveur
 	 */
 	public Service(Socket serverSocket) {
 		this.server = null;
@@ -134,5 +127,9 @@ public class Service implements Runnable {
 	 */
 	public void start() {
 		myThread.start();
+	}
+
+	public static void setApplication(Application app) {
+		Service.application = app;
 	}
 }

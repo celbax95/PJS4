@@ -38,7 +38,7 @@ public class MenuDisplay implements Menu {
 	private static final Color ARROWS_BACKGROUND_COLOR = new Color(80, 100, 190);
 	private static final Font BUTTON_FONT = new Font("Tahoma", Font.BOLD, 20);
 	private static final int SIZE_BUTTON_X = 210, SIZE_BUTTON_Y = 45;
-	private static final int NB_MAX_PLAYERS = 4, NB_MIN_PLAYERS = 1, NB_INIT_PLAYERS = 3;
+	private static final int NB_MAX_PLAYERS = 4, NB_MIN_PLAYERS = 1, NB_INIT_PLAYERS = 1;
 
 	private static final String IP = "localhost";
 	private static final int PORT = 5000;
@@ -47,19 +47,8 @@ public class MenuDisplay implements Menu {
 		GameLauncher.setMenu(MenuDisplay.getInstance());
 	}
 
-	/**
-	 * Récupère l'instance unique du menu
-	 */
-	public static Menu getInstance() {
-		if (MenuDisplay.menu == null) {
-			MenuDisplay.menu = new MenuDisplay();
-			return MenuDisplay.menu;
-		} else {
-			return MenuDisplay.menu;
-		}
-	}
-
 	private JFrame frame;
+
 	private JPanel panel;
 	private JLabel nbPlayersLabel;
 	private JTextField ipTextField;
@@ -71,7 +60,6 @@ public class MenuDisplay implements Menu {
 	private ArrayList<JComponent> componentConnectList;
 	private int menuPosition;
 	private int nbPlayers;
-
 	private boolean sawIpAdress;
 
 	/**
@@ -431,5 +419,17 @@ public class MenuDisplay implements Menu {
 			}
 		} else {
 			/* éventuellement à rajouter */ }
+	}
+
+	/**
+	 * Récupère l'instance unique du menu
+	 */
+	public static Menu getInstance() {
+		if (MenuDisplay.menu == null) {
+			MenuDisplay.menu = new MenuDisplay();
+			return MenuDisplay.menu;
+		} else {
+			return MenuDisplay.menu;
+		}
 	}
 }
