@@ -8,6 +8,7 @@ import java.net.Socket;
 
 import fr.application.Application;
 import fr.main.Main;
+
 /**
  * Serveur
  */
@@ -19,14 +20,17 @@ public class Server implements Runnable {
 	private Service first;
 
 	private Application application;
+
 	/**
 	 * constructeur Server vide
 	 */
 	private Server() {
 	}
+
 	/**
 	 * constructeur Server
-	 * @param port : port de connexion avec les clients
+	 *
+	 * @param port   : port de connexion avec les clients
 	 * @param width  : Largeur de la fenetre
 	 * @param height : Hauteur de la fenetre
 	 */
@@ -42,28 +46,33 @@ public class Server implements Runnable {
 		}
 		threadServ = new Thread(this);
 	}
+
 	/**
-	 * ferme la socket du serveur 
+	 * ferme la socket du serveur
+	 *
 	 * @param service : un service
 	 */
 	public void close(Service service) {
-		if (service != first)
-			return;
-
-		threadServ.interrupt();
 		try {
-			serveur.close();
+			service.getSocket().close();
+			if (service != first) {
+				threadServ.interrupt();
+				serveur.close();
+			}
 		} catch (IOException e) {
 		}
 	}
+
 	/**
-	 * ferme la socket du serveur 
+	 * ferme la socket du serveur
+	 *
 	 * @param service : un service
 	 */
 	@Override
 	public void finalize() throws IOException {
 		serveur.close();
 	}
+
 	/**
 	 * Accepte les clients et lance le jeu
 	 */
@@ -80,26 +89,28 @@ public class Server implements Runnable {
 				System.err.println("Serveur ferme");
 				// e.printStackTrace();
 			}
-			if (testVersion(socket)) {
-				if (socket != null) {
+			if (socket != null) {
+				if (testVersion(socket)) {
 					if (first == null)
 						(first = new Service(this, socket, application)).start();
 					else
-						(new Service(socket, application)).start();
+						(new Service(this, socket, application)).start();
 				}
 			}
 		}
 	}
+
 	/**
-	 * lance le Thread du serveur
-	 * et appel la method run du serveur
+	 * lance le Thread du serveur et appel la method run du serveur
 	 */
 	public void start() {
 		threadServ.start();
 	}
+
 	/**
-	 * Permet de verifier si le serveur est de la meme version que le service
-	 * En cas de changements majeurs sur le serveur ou sur le service
+	 * Permet de verifier si le serveur est de la meme version que le service En cas
+	 * de changements majeurs sur le serveur ou sur le service
+	 *
 	 * @param socket : une socket
 	 * @return true si la version est valide et false sinon
 	 */

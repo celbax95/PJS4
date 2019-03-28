@@ -39,18 +39,7 @@ public class Service implements Runnable {
 	 * @param application  : l'application
 	 */
 	public Service(Server s, Socket serverSocket, Application application) {
-		this(serverSocket, application);
 		this.server = s;
-	}
-
-	/**
-	 * constructeur Service
-	 *
-	 * @param serverSocket : la socket du serveur
-	 * @param application  : l'application
-	 */
-	public Service(Socket serverSocket, Application application) {
-		server = null;
 		this.socket = serverSocket;
 		this.application = application;
 		myPlayer = application.addPlayer();
@@ -62,7 +51,11 @@ public class Service implements Runnable {
 	 */
 	@Override
 	public void finalize() throws IOException {
-		socket.close();
+		server.close(this);
+	}
+
+	public Socket getSocket() {
+		return socket;
 	}
 
 	/**
@@ -89,10 +82,7 @@ public class Service implements Runnable {
 			}
 		} catch (Exception e) {
 			// e.printStackTrace();
-			try {
-				socket.close();
-			} catch (IOException e1) {
-			}
+			server.close(this);
 			myThread.interrupt();
 			application.deletePlayer(myPlayer);
 			System.err.println("Service termine");
