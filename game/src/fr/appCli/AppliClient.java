@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.sun.glass.events.KeyEvent;
 
+import fr.Camera.Camera;
 import fr.client.Client;
 import fr.gameLauncher.GameLauncher;
 import fr.itemsApp.Drawable;
@@ -38,7 +39,9 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	private GameMap map;
 
-	private Point camera;
+	private Camera camera;
+	private Object transferAim;
+	private Point aim;
 
 	private boolean receiving;
 
@@ -48,6 +51,7 @@ public class AppliClient implements AppliScreen, Runnable {
 	 */
 	public AppliClient(String name, Socket socket) {
 		this.transfer = new Object();
+		this.transferAim = new Object();
 
 		this.name = name;
 		this.endApp = false;
@@ -119,6 +123,7 @@ public class AppliClient implements AppliScreen, Runnable {
 
 		// Application d'un eventuel changement d'echelle
 		changeScale();
+
 		setCamera(g);
 
 		// creation d'un cache
@@ -175,7 +180,9 @@ public class AppliClient implements AppliScreen, Runnable {
 			while (!Thread.currentThread().isInterrupted()) {
 
 				// Recuperation de la camera
-				camera = (Point) sIn.readUnshared();
+				synchronized (transferAim) {
+					aim = (Point) sIn.readUnshared();
+				}
 
 				// Recuperation de la map
 				map = (GameMap) sIn.readUnshared();
@@ -192,8 +199,11 @@ public class AppliClient implements AppliScreen, Runnable {
 				sOut.flush();
 				sOut.reset();
 
-				if (!receiving)
+				if (!receiving) {
+					camera = new Camera(new Point(Client.WIDTH, Client.HEIGHT),
+							new Point(map.getWidth() * map.getTileSize(), map.getHeight() * map.getTileSize()), aim);
 					receiving = true;
+				}
 			}
 		} catch (IOException e) {
 			System.err.println("Communication avec le serveur terminee");
@@ -207,33 +217,10 @@ public class AppliClient implements AppliScreen, Runnable {
 	}
 
 	private void setCamera(Graphics2D g) {
-		double scale = Scale.getInstance().getScale();
-
-		try {
-			int sw = Client.WIDTH, sh = Client.HEIGHT;
-			int mw = map.getWidth() * map.getTileSize(), mh = map.getHeight() * map.getTileSize();
-			if (camera == null)
-				g.translate(-(mw * scale - sw) / 2, -(mh * scale - sh) / 2);
-			else {
-				double mx = -(camera.x * scale - sw / 2), my = -(camera.y * scale - sh / 2);
-				if (mw * scale > sw) {
-					System.out.println();
-					if (mx >= 0)
-						mx = 0;
-					else if (mx < -(mw * scale - sw))
-						mx = sw - mw * scale;
-				}
-				if (mh * scale > sh) {
-					if (my >= 0)
-						my = 0;
-					else if (my < -(mh * scale - sh))
-						my = sh - mh * scale;
-				}
-
-				g.translate(mx, my);
-			}
-		} catch (Exception e) {
+		synchronized (transferAim) {
+			camera.setA(aim);
 		}
+		g.setTransform(camera.getTransform());
 	}
 
 	@Override
