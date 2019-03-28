@@ -3,7 +3,6 @@ package fr.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
 import fr.appCli.AppliClient;
 import fr.application.Application;
@@ -14,31 +13,35 @@ import fr.screen.Screen;
  * Serveur
  */
 public class Server implements Runnable {
-	private String title;
-	private final int NB_PLAYERS;
-	private int nbPlayers;
-	private boolean gameOn;
-	private ServerSocket serveur;
-	private Thread threadServ;
-
-	private Socket socketHost;
-
-	private Application application;
-
 	public static final int WIDTH = 1728;
 	public static final int HEIGHT = 972;
-
 	private static final int MARGE_H = 35;
 	private static final int MARGE_T = 2;
 	private static final int MARGE_W = 6;
+	private String title;
+
+	private final int NB_PLAYERS;
+
+	private int nbPlayers;
+
+	private boolean gameOn;
+	private ServerSocket serveur;
+
+	private Thread threadServ;
+	private Socket socketHost;
+	private Application application;
 
 	/**
 	 * constructeur Server
-	 * @param title : Nom de fenetre de l'application
-	 * @param port : port de connexion avec les clients
-	 * @param nbPlayers : nombre de joueurs acceptables par le serveur
+	 *
+	 * @param title
+	 *            : Nom de fenetre de l'application
+	 * @param port
+	 *            : port de connexion avec les clients
+	 * @param nbPlayers
+	 *            : nombre de joueurs acceptables par le serveur
 	 */
-	public Server(String title,int port, int nbPlayers) {
+	public Server(String title, int port, int nbPlayers) {
 
 		try {
 			serveur = new ServerSocket(port);
@@ -53,42 +56,15 @@ public class Server implements Runnable {
 	}
 
 	/**
-	 * Accepte les clients et lance le jeu
-	 */
-	@Override
-	public void run() {
-		while (!Thread.currentThread().isInterrupted()) {
-			if(nbPlayers < NB_PLAYERS) {
-				Socket socket = null;
-
-				try {
-					socket = serveur.accept();
-					if(this.socketHost == null) {
-						this.socketHost = socket;
-					}
-					this.nbPlayers++;
-					System.out.println("Connecte !");
-				} catch (IOException e) {
-					System.err.println("Serveur ferme");
-					break;
-				}
-				if (socket != null) {
-					(new Service(this,socket)).start();
-				}
-			}
-		}
-	}
-
-	/**
 	 * ferme la socket du serveur
-	 *
-	 * @param service : un service
 	 */
 	public void close() {
 		try {
 			socketHost.close();
 			threadServ.interrupt();
-			application.stop();
+			if (this.application != null) {
+				this.application.stop();
+			}
 
 			serveur.close();
 		} catch (IOException e) {
@@ -101,54 +77,69 @@ public class Server implements Runnable {
 	@Override
 	public void finalize() throws IOException {
 		this.close();
-		if(this.application !=null) {
-			this.application.stop();
-		}
-	}
-
-	/**
-	 * lance le Thread du serveur et appel la method run du serveur
-	 */
-	public void start() {
-		threadServ.start();
-	}
-
-	/*
-	 * Permet de verifier si le serveur est de la meme version que le service
-	 * En cas de changements majeurs sur le serveur ou sur le service
-	 * @param socket : une socket
-	 * @return true si la version est valide et false sinon
-	 *
-	public boolean testVersion(Socket socket) {
-		try {
-			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-			String version = (String) sIn.readObject();
-			if (!version.equals(Main.getVersion())) {
-				socket.close();
-				return false;
-			}
-
-		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}*/
-
-	protected void playerLeft() {
-		this.nbPlayers--;
 	}
 
 	protected Application getApplication() {
 		return application;
 	}
 
-	public int getNbPlayers() {
-		return this.nbPlayers;
-	}
 	public boolean getGameOn() {
 		return gameOn;
 	}
+
+	/*
+	 * Permet de verifier si le serveur est de la meme version que le service En cas
+	 * de changements majeurs sur le serveur ou sur le service
+	 *
+	 * @param socket : une socket
+	 *
+	 * @return true si la version est valide et false sinon
+	 *
+	 * public boolean testVersion(Socket socket) { try { ObjectInputStream sIn = new
+	 * ObjectInputStream(new BufferedInputStream(socket.getInputStream())); String
+	 * version = (String) sIn.readObject(); if (!version.equals(Main.getVersion()))
+	 * { socket.close(); return false; }
+	 *
+	 * } catch (IOException | ClassNotFoundException e) { e.printStackTrace(); } }
+	 */
+
+	public int getNbPlayers() {
+		return this.nbPlayers;
+	}
+
+	protected void playerLeft() {
+		this.nbPlayers--;
+	}
+
+	/**
+	 * Accepte les clients et lance le jeu
+	 */
+	@Override
+	public void run() {
+		while (!Thread.currentThread().isInterrupted()) {
+			if (nbPlayers < NB_PLAYERS) {
+				Socket socket = null;
+
+				try {
+					socket = serveur.accept();
+					if (this.socketHost == null) {
+						this.socketHost = socket;
+					}
+					this.nbPlayers++;
+					System.out.println("Connecte !");
+				} catch (IOException e) {
+					System.err.println("Serveur ferme");
+					break;
+				}
+				if (socket != null) {
+					(new Service(this, socket)).start();
+				}
+			}
+		}
+	}
+
 	public void setGameOn() {
-		synchronized(this) {
+		synchronized (this) {
 			this.threadServ.interrupt();
 			this.gameOn = true;
 			(this.application = new Application(WIDTH, HEIGHT)).start();
@@ -157,5 +148,12 @@ public class Server implements Runnable {
 			notifyAll();
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 		}
+	}
+
+	/**
+	 * lance le Thread du serveur et appel la method run du serveur
+	 */
+	public void start() {
+		threadServ.start();
 	}
 }
