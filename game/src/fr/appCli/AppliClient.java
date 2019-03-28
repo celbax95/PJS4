@@ -209,7 +209,10 @@ public class AppliClient implements AppliScreen, Runnable {
 		try {
 			int sw = Client.WIDTH, sh = Client.HEIGHT;
 			int mw = map.getWidth() * map.getTileSize(), mh = map.getHeight() * map.getTileSize();
-			g.translate(-(mw * scale - sw) / 2, -(mh * scale - sh) / 2);
+			if (camera == null)
+				g.translate(-(mw * scale) / 2, -(mh * scale - sh) / 2);
+			else
+				g.translate(-(camera.x * scale - sw / 2), -(camera.y * scale - sh / 2));
 		} catch (Exception e) {
 		}
 	}
