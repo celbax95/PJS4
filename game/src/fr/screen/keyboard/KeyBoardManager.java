@@ -15,13 +15,22 @@ public class KeyBoardManager implements KeyBoard {
 		instance = new KeyBoardManager();
 	}
 
+	/**
+	 * @return l'unique instance de KeyBoardManager
+	 */
+	protected static KeyBoardManager getInstance() {
+		return instance;
+	}
+
 	private List<Integer> keys = new Vector<Integer>();
+
 	private boolean released = true;
 
 	/**
 	 * Ajoute une touche a la liste des touches pressees
 	 *
-	 * @param key : la touche a ajouter
+	 * @param key
+	 *            : la touche a ajouter
 	 */
 	public void addKeyPressed(int key) {
 		if (!keys.contains(key))
@@ -62,7 +71,8 @@ public class KeyBoardManager implements KeyBoard {
 	/**
 	 * Enleve un touche de la liste de touche pressee
 	 *
-	 * @param key : la touche a enlever
+	 * @param key
+	 *            : la touche a enlever
 	 */
 	public void removeKeyPressed(int key) {
 		keys.remove((Object) key);
@@ -84,12 +94,5 @@ public class KeyBoardManager implements KeyBoard {
 		else if ((keys.isEmpty()) && !released)
 			released = true;
 		return false;
-	}
-
-	/**
-	 * @return l'unique instance de KeyBoardManager
-	 */
-	protected static KeyBoardManager getInstance() {
-		return instance;
 	}
 }

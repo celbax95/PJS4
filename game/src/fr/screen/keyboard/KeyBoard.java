@@ -4,8 +4,13 @@ import java.util.List;
 
 public interface KeyBoard {
 
+	public static KeyBoard getInstance() {
+		return KeyBoardManager.getInstance();
+	}
+
 	/**
-	 * @param i : l'indice de la touche recherche
+	 * @param i
+	 *            : l'indice de la touche recherche
 	 * @return la touche a l'indice i
 	 */
 	int getKey(int i);
@@ -21,7 +26,8 @@ public interface KeyBoard {
 	boolean isPressed();
 
 	/**
-	 * @param key : la cle (identifiant) d'une touche
+	 * @param key
+	 *            : la cle (identifiant) d'une touche
 	 * @return true si une touche donnée est pressee et false sinon
 	 */
 	boolean isPressed(int key);
@@ -30,8 +36,4 @@ public interface KeyBoard {
 	 * @return true si une touche est tappee et false sinon
 	 */
 	boolean tap();
-
-	public static KeyBoard getInstance() {
-		return KeyBoardManager.getInstance();
-	}
 }
