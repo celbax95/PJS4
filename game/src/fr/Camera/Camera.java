@@ -1,7 +1,5 @@
 package fr.Camera;
 
-import java.awt.geom.AffineTransform;
-
 import fr.scale.Scale;
 import fr.util.point.Point;
 
@@ -13,19 +11,19 @@ public class Camera {
 
 	private Point a;
 
+	private Point pos;
+
 	public Camera(Point ss, Point ms, Point a) {
 		this.ms = ms;
 		this.ss = ss;
 		this.a = a;
 	}
 
-	public AffineTransform getTransform() {
+	public Point getPos() {
 		double scale = Scale.getInstance().getScale();
 
-		AffineTransform af = new AffineTransform();
-
 		if (a == null)
-			af.translate(-(ms.x * scale - ss.x) / 2, -(ms.y * scale - ss.y) / 2);
+			return new Point(-(ms.x * scale - ss.x) / 2, -(ms.y * scale - ss.y) / 2);
 		else {
 			double mx = -(a.x * scale - ss.x / 2), my = -(a.y * scale - ss.y / 2);
 			if (ms.x * scale > ss.x) {
@@ -40,11 +38,8 @@ public class Camera {
 				else if (my < -(ms.y * scale - ss.y))
 					my = ss.y - ms.y * scale;
 			}
-			System.out.println(ms.x + " " + ms.y);
-
-			af.translate(mx, my);
+			return new Point(mx, my);
 		}
-		return af;
 	}
 
 	public void setA(Point a) {
