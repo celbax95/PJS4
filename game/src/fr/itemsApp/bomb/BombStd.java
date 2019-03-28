@@ -32,12 +32,12 @@ public class BombStd extends Bomb {
 	@Override
 	public void draw(Graphics2D g) {
 		Scale scale = Scale.getInstance();
-		AffineTransform af = new AffineTransform();
-		af.scale(scale.getScale(), scale.getScale());
-		af.translate(pos.getIX(), pos.getIY());
-		g.setTransform(af);
+		AffineTransform old = g.getTransform();
+		g.scale(scale.getScale(), scale.getScale());
+		g.translate(pos.getIX(), pos.getIY());
 		g.setColor(c);
 		g.fillRect(0, 0, DEFAULT_BOMB_SIZE, DEFAULT_BOMB_SIZE);
+		g.setTransform(old);
 	}
 
 	@Override
