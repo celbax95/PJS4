@@ -35,11 +35,13 @@ public class HUD implements Drawable {
 
 		bars = new IBar[2];
 
+		// LifeBar
 		IBar lb = LifeBar.getInstance();
 		lb.setPos(barPos[0]);
 		lb.setSize(barSize);
 		bars[0] = lb;
 
+		// CooldownBar
 		IBar cb = CooldownBar.getInstance();
 		cb.setPos(barPos[1]);
 		cb.setSize(barSize);
@@ -57,16 +59,29 @@ public class HUD implements Drawable {
 		g.setTransform(oldTransform);
 	}
 
+	/**
+	 * Change le ICharacter pour les IBar
+	 *
+	 * @param player : nouveau ICharacter
+	 */
 	public void setCharacter(ICharacter player) {
 		for (IBar b : bars) {
 			b.setCharacter(player);
 		}
 	}
 
+	/**
+	 * Change la pos
+	 *
+	 * @param player : nouvelle pos
+	 */
 	public void setPos(Point pos) {
 		this.pos = pos;
 	}
 
+	/**
+	 * @return l'instance unique de HUD
+	 */
 	public static HUD getInstance() {
 		return instance;
 	}

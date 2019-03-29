@@ -10,6 +10,9 @@ import javax.swing.ImageIcon;
 import fr.itemsApp.character.ICharacter;
 import fr.util.point.Point;
 
+/**
+ * singleton barre d'affichage du cooldown
+ */
 public class CooldownBar implements IBar {
 
 	private static IBar instance;
@@ -25,6 +28,8 @@ public class CooldownBar implements IBar {
 	private Point pos, size;
 
 	private CooldownBar() {
+		this.pos = new Point(0, 0);
+		this.size = new Point(0, 0);
 	}
 
 	@Override
@@ -34,6 +39,9 @@ public class CooldownBar implements IBar {
 		g.fill(getRect());
 	}
 
+	/**
+	 * @return rectangle noir pour cacher une partie de la barre
+	 */
 	private Rectangle getRect() {
 		int less = (int) ((double) (c.maxTimeBeforeBomb() - c.timeBeforeBomb()) * size.getIX() / c.maxTimeBeforeBomb());
 
@@ -58,6 +66,9 @@ public class CooldownBar implements IBar {
 		this.size = size;
 	}
 
+	/**
+	 * @return l'instance unique de CooldownBar
+	 */
 	public static IBar getInstance() {
 		return instance;
 	}

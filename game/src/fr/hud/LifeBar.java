@@ -10,6 +10,9 @@ import javax.swing.ImageIcon;
 import fr.itemsApp.character.ICharacter;
 import fr.util.point.Point;
 
+/**
+ * singleton barre d'affichage du cooldown
+ */
 public class LifeBar implements IBar {
 
 	private static IBar instance;
@@ -38,6 +41,9 @@ public class LifeBar implements IBar {
 		g.fill(r);
 	}
 
+	/**
+	 * @return rectangle noir pour cacher une partie de la barre
+	 */
 	private Rectangle getRect() {
 		int less = (int) ((double) c.getHealth() * size.getIX() / c.getMaxHealth());
 
@@ -62,6 +68,9 @@ public class LifeBar implements IBar {
 		this.size = size;
 	}
 
+	/**
+	 * @return l'instance unique de LifeBar
+	 */
 	public static IBar getInstance() {
 		return instance;
 	}
