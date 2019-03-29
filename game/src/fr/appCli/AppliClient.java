@@ -15,6 +15,7 @@ import fr.Camera.Camera;
 import fr.client.Client;
 import fr.gameLauncher.GameLauncher;
 import fr.itemsApp.Drawable;
+import fr.itemsApp.character.ICharacter;
 import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.scale.Scale;
@@ -40,8 +41,8 @@ public class AppliClient implements AppliScreen, Runnable {
 	private GameMap map;
 
 	private Camera camera;
-	private Object transferAim;
-	private Point aim;
+	private Object transferPlayer;
+	private ICharacter player;
 
 	private double changingScale;
 
@@ -53,7 +54,7 @@ public class AppliClient implements AppliScreen, Runnable {
 	 */
 	public AppliClient(String name, Socket socket) {
 		this.transfer = new Object();
-		this.transferAim = new Object();
+		this.transferPlayer = new Object();
 
 		this.name = name;
 		this.endApp = false;
@@ -187,8 +188,8 @@ public class AppliClient implements AppliScreen, Runnable {
 			while (!Thread.currentThread().isInterrupted()) {
 
 				// Recuperation de la camera
-				synchronized (transferAim) {
-					aim = (Point) sIn.readUnshared();
+				synchronized (transferPlayer) {
+					player = (ICharacter) sIn.readUnshared();
 				}
 
 				// Recuperation de la map
@@ -208,7 +209,8 @@ public class AppliClient implements AppliScreen, Runnable {
 
 				if (!receiving) {
 					camera = new Camera(new Point(Client.WIDTH, Client.HEIGHT),
-							new Point(map.getWidth() * map.getTileSize(), map.getHeight() * map.getTileSize()), aim);
+							new Point(map.getWidth() * map.getTileSize(), map.getHeight() * map.getTileSize()),
+							player.getCenter());
 					receiving = true;
 				}
 			}
@@ -224,8 +226,8 @@ public class AppliClient implements AppliScreen, Runnable {
 	}
 
 	private void setCamera(Graphics2D g) {
-		synchronized (transferAim) {
-			camera.setA(aim);
+		synchronized (transferPlayer) {
+			camera.setA(player.getCenter());
 		}
 		camera.update();
 		Point camPos = camera.getPos();

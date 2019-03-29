@@ -173,15 +173,12 @@ public class Application implements Runnable {
 		return map;
 	}
 
-	public Point getPlayerPos(int i) {
-		Point pos = null;
-
+	public ICharacter getPlayer(int i) {
 		try {
-			pos = players.get(i).getCenter();
+			return players.get(i);
 		} catch (Exception e) {
 		}
-
-		return pos;
+		return null;
 	}
 
 	/**
