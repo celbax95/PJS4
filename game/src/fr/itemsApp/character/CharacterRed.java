@@ -173,6 +173,11 @@ public class CharacterRed implements ICharacter {
 		death(application);
 	}
 
+	@Override
+	public int maxTimeBeforeBomb() {
+		return (int) bombCoolDown.getFreq();
+	}
+
 	/**
 	 * Bouge le joueur, et gere les collisions
 	 *
@@ -362,6 +367,11 @@ public class CharacterRed implements ICharacter {
 	@Override
 	public void setSpeed(int speed) {
 		this.speed = speed;
+	}
+
+	@Override
+	public int timeBeforeBomb() {
+		return (int) bombCoolDown.timeBefore();
 	}
 
 	/**

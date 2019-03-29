@@ -2,6 +2,7 @@ package fr.hud;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
 
@@ -11,7 +12,7 @@ import fr.util.point.Point;
 
 public class HUD implements Drawable {
 
-	private static final double rescaleRatio = 0.7;
+	protected static final double scale = 0.4;
 
 	private static Image image = (new ImageIcon(HUD.class.getResource("/images/HUD/hud.gif"))).getImage();
 
@@ -32,10 +33,13 @@ public class HUD implements Drawable {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(image, pos.getIX(), pos.getIY(), null);
+		AffineTransform oldTransform = g.getTransform();
+		g.scale(scale, scale);
+		g.drawImage(image, (int) (pos.getIX() * scale), (int) (pos.getIY() * scale), null);
 		for (int i = 0; i < bars.length; i++) {
 			bars[i].draw(g);
 		}
+		g.setTransform(oldTransform);
 	}
 
 	public void setCharacter(ICharacter player) {

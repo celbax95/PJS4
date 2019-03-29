@@ -1,7 +1,9 @@
 package fr.hud;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 
 import javax.swing.ImageIcon;
 
@@ -25,6 +27,21 @@ public class CooldownBar implements IBar {
 	@Override
 	public void draw(Graphics2D g) {
 		g.drawImage(image, pos.getIX(), pos.getIY(), null);
+		g.setColor(Color.black);
+		g.fill(getRect());
+	}
+
+	private Rectangle getRect() {
+		int maxCooldown = c.maxTimeBeforeBomb();
+		int cooldown = maxCooldown - c.timeBeforeBomb();
+		int barWidth = size.getIX();
+
+		int less = (int) ((double) cooldown * barWidth / maxCooldown);
+
+		int rectX = pos.getIX() + less;
+		int rectWidth = barWidth - less;
+
+		return new Rectangle(rectX, pos.getIY(), rectWidth, size.getIY());
 	}
 
 	@Override
@@ -36,5 +53,4 @@ public class CooldownBar implements IBar {
 	public void setPos(Point pos) {
 		this.pos = pos;
 	}
-
 }

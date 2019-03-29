@@ -29,7 +29,6 @@ public class LifeBar implements IBar {
 		g.drawImage(image, pos.getIX(), pos.getIY(), null);
 
 		Rectangle r = getRect();
-		System.out.println(r);
 		g.setColor(Color.black);
 		g.fill(r);
 	}
