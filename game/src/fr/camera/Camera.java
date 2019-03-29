@@ -75,7 +75,7 @@ public class Camera {
 
 	/**
 	 * Specification de la cible
-	 * 
+	 *
 	 * @param a : cible
 	 */
 	public void setA(Point a) {
@@ -87,11 +87,6 @@ public class Camera {
 	 */
 	private void setPos() {
 		pos = getAimedPos();
-	}
-
-	@Override
-	public String toString() {
-		return pos.toString();
 	}
 
 	/**
