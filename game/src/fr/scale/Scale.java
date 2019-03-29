@@ -6,7 +6,7 @@ package fr.scale;
  */
 public class Scale implements Runnable {
 
-	private static double maxScale = 2, minScale = 0.6;
+	private static double maxScale = 2, minScale = 0.4;
 
 	private static double step = 0.005;
 
