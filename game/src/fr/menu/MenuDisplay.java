@@ -72,6 +72,17 @@ public class MenuDisplay implements Menu {
 	private boolean sawIpAdress;
 	private boolean sawAlias;
 
+	public void changePlayersLabels(ArrayList<Player> players) {
+		for(JLabel jl : playersLabels) {
+			jl.setVisible(false);
+			this.frame.getContentPane().remove(jl);
+		}
+		for(int i = 0; i < this.players.size(); i++) {
+			this.playersLabels.get(i).setText(players.get(i).getAlias());
+			this.playersLabels.get(i).setVisible(true);
+		}
+	}
+
 	/**
 	 * Constructeur du menu (initialisation de tous ses composants)
 	 */
@@ -85,11 +96,13 @@ public class MenuDisplay implements Menu {
 		this.panel = new MenuPanel(windowSize);
 
 		players = new ArrayList<Player>();
-		
+
 		this.menuPosition = 0;
 		this.nbPlayers = NB_INIT_PLAYERS;
 		this.sawIpAdress = false;
 		this.sawAlias = false;
+
+		// composants du menu
 
 		this.host = new JButton("Host");
 		this.join = new JButton("Join");
@@ -104,7 +117,6 @@ public class MenuDisplay implements Menu {
 		this.nbPlayersLabel = new JLabel(String.valueOf(nbPlayers), SwingConstants.CENTER);
 		this.ipTextField = new JTextField("Ip Adress");
 		this.aliasTextField = new JTextField("Alias");
-		this.playersLabels = new ArrayList<JLabel>();
 		this.buttonList = new ArrayList<JButton>(
 				Arrays.asList(host, join, back, decNbPlayers, incNbPlayers, mapL, mapR, search, start, connect));
 		this.componentHostList = new ArrayList<JComponent>(
@@ -156,6 +168,36 @@ public class MenuDisplay implements Menu {
 		this.nbPlayersLabel.setForeground(Color.white);
 		this.ipTextField.setForeground(Color.gray);
 		this.aliasTextField.setForeground(Color.gray);
+
+		// labels des joueurs
+		this.playersLabels = new ArrayList<JLabel>();
+
+		for(int i = 1; i < NB_MAX_PLAYERS+1; i++) {
+			JLabel newPlayer = new JLabel("", SwingConstants.CENTER);
+			switch(i) {
+			case 1:
+				newPlayer.setBounds(130, 65, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBackground(PLAYER1_BACKGROUND_COLOR);
+				break;
+			case 2:
+				newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBackground(PLAYER2_BACKGROUND_COLOR);
+				break;
+			case 3:
+				newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*4, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBackground(PLAYER3_BACKGROUND_COLOR);
+				break;
+			case 4:
+				newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*6, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBackground(PLAYER4_BACKGROUND_COLOR);
+				break;
+			}
+			newPlayer.setOpaque(true);
+			newPlayer.setFont(BUTTON_FONT);
+			newPlayer.setForeground(Color.white);
+			newPlayer.setVisible(false);
+			this.playersLabels.add(newPlayer);
+		}
 	}
 
 	@Override
@@ -195,7 +237,7 @@ public class MenuDisplay implements Menu {
 				jc.setVisible(false);
 			}
 		} else {
-			/* ÃƒÂ  faire */ }
+		/* ÃƒÂ  faire */ }
 
 	}
 
@@ -379,7 +421,7 @@ public class MenuDisplay implements Menu {
 		back.setVisible(false);
 		hideComponents();
 	}
-	
+
 	@Override
 	public void updatePlayers(ArrayList<Player> players) {
 		if(this.players.size() != players.size()) {
@@ -399,49 +441,10 @@ public class MenuDisplay implements Menu {
 			}
 		}
 	}
-	
-	public void changePlayersLabels(ArrayList<Player> players) {
-		for(JLabel jl : playersLabels) {
-			jl.setVisible(false);
-			if(this.menuPosition == 3) {
-				this.componentStartList.remove(jl);
-			}
-			if(this.menuPosition == 4) {
-				this.componentConnectList.remove(jl);
-			}
-			this.frame.getContentPane().remove(jl);
-		}
-		for(Player p : players) {
-			JLabel newPlayer = new JLabel(String.valueOf(p.getAlias()), SwingConstants.CENTER);
-			switch(p.getNo()) {
-				case 1:
-					newPlayer.setBounds(130, 65, SIZE_BUTTON_X, SIZE_BUTTON_Y);
-					newPlayer.setBackground(PLAYER1_BACKGROUND_COLOR);
-					break;
-				case 2:
-					newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
-					newPlayer.setBackground(PLAYER2_BACKGROUND_COLOR);
-					break;
-				case 3:
-					newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*4, SIZE_BUTTON_X, SIZE_BUTTON_Y);
-					newPlayer.setBackground(PLAYER3_BACKGROUND_COLOR);
-					break;
-				case 4:
-					newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*6, SIZE_BUTTON_X, SIZE_BUTTON_Y);
-					newPlayer.setBackground(PLAYER4_BACKGROUND_COLOR);
-					break;
-			}
-			newPlayer.setOpaque(true);
-			newPlayer.setFont(BUTTON_FONT);
-			newPlayer.setForeground(Color.white);
-			newPlayer.setVisible(true);
-			this.playersLabels.add(newPlayer);
-			this.componentStartList.add(newPlayer);
-			this.frame.getContentPane().add(newPlayer);
-		}
-	}
-	
-	
+
+
+
+
 
 	public void refresh() {
 		this.frame.repaint();
@@ -515,7 +518,7 @@ public class MenuDisplay implements Menu {
 				jc.setVisible(true);
 			}
 		} else {
-			/* �ventuellement � rajouter */ }
+		/* �ventuellement � rajouter */ }
 	}
 
 	/**
