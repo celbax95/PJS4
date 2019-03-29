@@ -2,6 +2,7 @@ package fr.appCli;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,6 +15,7 @@ import com.sun.glass.events.KeyEvent;
 import fr.camera.Camera;
 import fr.client.Client;
 import fr.gameLauncher.GameLauncher;
+import fr.hud.HUD;
 import fr.itemsApp.Drawable;
 import fr.itemsApp.character.ICharacter;
 import fr.map.GameMap;
@@ -45,6 +47,8 @@ public class AppliClient implements AppliScreen, Runnable {
 	private ICharacter player;
 
 	private double changingScale;
+
+	private HUD hud;
 
 	private boolean receiving;
 
@@ -129,6 +133,8 @@ public class AppliClient implements AppliScreen, Runnable {
 		if (!receiving)
 			return;
 
+		AffineTransform oldGTransform = g.getTransform();
+
 		// Application d'un eventuel changement d'echelle
 		changeScale();
 
@@ -156,6 +162,9 @@ public class AppliClient implements AppliScreen, Runnable {
 		for (Drawable drawable : ld) {
 			drawable.draw(g);
 		}
+
+		g.setTransform(oldGTransform);
+		hud.draw(g);
 	}
 
 	@Override
@@ -211,6 +220,8 @@ public class AppliClient implements AppliScreen, Runnable {
 					camera = new Camera(new Point(Client.WIDTH, Client.HEIGHT),
 							new Point(map.getWidth() * map.getTileSize(), map.getHeight() * map.getTileSize()),
 							player.getCenter());
+					hud = new HUD(new Point(0, 0), player);
+
 					receiving = true;
 				}
 			}
