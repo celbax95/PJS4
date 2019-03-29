@@ -53,6 +53,7 @@ public class MainJPanel extends JPanel {
 	 */
 	public void closeScr() {
 		repainter.interrupt();
+		this.screen.dispose();
 		this.appScreen.close();
 	}
 

@@ -1,6 +1,12 @@
 package fr.server;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int no;
 	private String alias;
 	
@@ -12,7 +18,14 @@ public class Player {
 	public int getNo() {
 		return no;
 	}
+	public void setNo(int no) {
+		this.no = no;
+	}
 	public String getAlias() {
 		return alias;
+	}
+	
+	public String toString() {
+		return no + " " + alias;
 	}
 }

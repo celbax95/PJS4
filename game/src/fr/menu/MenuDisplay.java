@@ -25,6 +25,7 @@ import javax.swing.SwingConstants;
 
 import fr.gameLauncher.GameLauncher;
 import fr.gameLauncher.Menu;
+import fr.server.Player;
 
 public class MenuDisplay implements Menu {
 
@@ -34,6 +35,10 @@ public class MenuDisplay implements Menu {
 	private static int windowSize = 500;
 
 	private static final Color BACKGROUND_COLOR = new Color(50, 54, 57);
+	private static final Color PLAYER1_BACKGROUND_COLOR = new Color(198, 33, 69);
+	private static final Color PLAYER2_BACKGROUND_COLOR = new Color(33, 75, 198);
+	private static final Color PLAYER3_BACKGROUND_COLOR = new Color(33, 198, 99);
+	private static final Color PLAYER4_BACKGROUND_COLOR = new Color(209, 197, 31);
 	private static final Color BUTTON_BACKGROUND_COLOR = new Color(59, 89, 182);
 	private static final Color ARROWS_BACKGROUND_COLOR = new Color(80, 100, 190);
 	private static final Font BUTTON_FONT = new Font("Tahoma", Font.BOLD, 20);
@@ -51,6 +56,7 @@ public class MenuDisplay implements Menu {
 
 	private JPanel panel;
 	private JLabel nbPlayersLabel;
+	private ArrayList<JLabel> playersLabels;
 	private JTextField ipTextField;
 	private JTextField aliasTextField;
 	private JButton host, join, back, decNbPlayers, incNbPlayers, mapL, mapR, search, start, connect;
@@ -61,6 +67,8 @@ public class MenuDisplay implements Menu {
 	private ArrayList<JComponent> componentConnectList;
 	private int menuPosition;
 	private int nbPlayers;
+	private ArrayList<Player> players; 
+
 	private boolean sawIpAdress;
 	private boolean sawAlias;
 
@@ -76,6 +84,8 @@ public class MenuDisplay implements Menu {
 		this.frame.setBackground(BACKGROUND_COLOR);
 		this.panel = new MenuPanel(windowSize);
 
+		players = new ArrayList<Player>();
+		
 		this.menuPosition = 0;
 		this.nbPlayers = NB_INIT_PLAYERS;
 		this.sawIpAdress = false;
@@ -94,13 +104,14 @@ public class MenuDisplay implements Menu {
 		this.nbPlayersLabel = new JLabel(String.valueOf(nbPlayers), SwingConstants.CENTER);
 		this.ipTextField = new JTextField("Ip Adress");
 		this.aliasTextField = new JTextField("Alias");
-		buttonList = new ArrayList<JButton>(
+		this.playersLabels = new ArrayList<JLabel>();
+		this.buttonList = new ArrayList<JButton>(
 				Arrays.asList(host, join, back, decNbPlayers, incNbPlayers, mapL, mapR, search, start, connect));
-		componentHostList = new ArrayList<JComponent>(
+		this.componentHostList = new ArrayList<JComponent>(
 				Arrays.asList(search, decNbPlayers, incNbPlayers, mapL, mapR, nbPlayersLabel));
-		componentJoinList = new ArrayList<JComponent>(Arrays.asList(ipTextField, aliasTextField, connect));
-		componentStartList = new ArrayList<JComponent>(Arrays.asList(start));
-		componentConnectList = new ArrayList<JComponent>(Arrays.asList());
+		this.componentJoinList = new ArrayList<JComponent>(Arrays.asList(ipTextField, aliasTextField, connect));
+		this.componentStartList = new ArrayList<JComponent>(Arrays.asList(start));
+		this.componentConnectList = new ArrayList<JComponent>(Arrays.asList());
 
 		this.host.setBounds(145, 110, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 		this.join.setBounds(145, 260, SIZE_BUTTON_X, SIZE_BUTTON_Y);
@@ -140,8 +151,6 @@ public class MenuDisplay implements Menu {
 		this.nbPlayersLabel.setFont(BUTTON_FONT);
 		this.ipTextField.setFont(BUTTON_FONT);
 		this.aliasTextField.setFont(BUTTON_FONT);
-
-		nbPlayersLabel.setBorder(BorderFactory.createLineBorder(BUTTON_BACKGROUND_COLOR));
 
 		setForegroundButtons();
 		this.nbPlayersLabel.setForeground(Color.white);
@@ -243,11 +252,13 @@ public class MenuDisplay implements Menu {
 				case 3:
 					GameLauncher.clientClose();
 					GameLauncher.serverClose();
+					changePlayersLabels(new ArrayList<Player>());
 					nbPlayersLabel.setText(String.valueOf(nbPlayers));
 					menuPosition = 1;
 					break;
 				case 4:
 					GameLauncher.clientClose();
+					changePlayersLabels(new ArrayList<Player>());
 					menuPosition = 2;
 					break;
 				}
@@ -261,13 +272,13 @@ public class MenuDisplay implements Menu {
 					GameLauncher.createServer(TITLE, PORT, nbPlayers);
 					GameLauncher.serverStart();
 					GameLauncher.createClient(IP, PORT, "Host", MenuDisplay.menu);
+					hideComponents();
+					menuPosition = 3;
+					showComponents();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 					return;
 				}
-				hideComponents();
-				menuPosition = 3;
-				showComponents();
 
 			}
 		});
@@ -368,6 +379,69 @@ public class MenuDisplay implements Menu {
 		back.setVisible(false);
 		hideComponents();
 	}
+	
+	@Override
+	public void updatePlayers(ArrayList<Player> players) {
+		if(this.players.size() != players.size()) {
+			changePlayersLabels(players);
+			this.players = players;
+		}
+		else {
+			boolean notSame = false;
+			for(int i = 0; i < players.size(); i++) {
+				if(!players.get(i).toString().equals(this.players.get(i).toString())){
+					notSame = true;
+				}
+			}
+			if(notSame) {
+				changePlayersLabels(players);
+				this.players = players;
+			}
+		}
+	}
+	
+	public void changePlayersLabels(ArrayList<Player> players) {
+		for(JLabel jl : playersLabels) {
+			jl.setVisible(false);
+			if(this.menuPosition == 3) {
+				this.componentStartList.remove(jl);
+			}
+			if(this.menuPosition == 4) {
+				this.componentConnectList.remove(jl);
+			}
+			this.frame.getContentPane().remove(jl);
+		}
+		for(Player p : players) {
+			JLabel newPlayer = new JLabel(String.valueOf(p.getAlias()), SwingConstants.CENTER);
+			switch(p.getNo()) {
+				case 1:
+					newPlayer.setBounds(130, 65, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+					newPlayer.setBackground(PLAYER1_BACKGROUND_COLOR);
+					break;
+				case 2:
+					newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+					newPlayer.setBackground(PLAYER2_BACKGROUND_COLOR);
+					break;
+				case 3:
+					newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*4, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+					newPlayer.setBackground(PLAYER3_BACKGROUND_COLOR);
+					break;
+				case 4:
+					newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*6, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+					newPlayer.setBackground(PLAYER4_BACKGROUND_COLOR);
+					break;
+			}
+			newPlayer.setOpaque(true);
+			newPlayer.setFont(BUTTON_FONT);
+			newPlayer.setForeground(Color.white);
+			newPlayer.setVisible(true);
+			this.playersLabels.add(newPlayer);
+			this.componentStartList.add(newPlayer);
+			this.frame.getContentPane().add(newPlayer);
+		}
+	}
+	
+	
 
 	public void refresh() {
 		this.frame.repaint();

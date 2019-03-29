@@ -66,7 +66,7 @@ public class Client implements Runnable{
 					return;
 				}
 				response = String.valueOf(sIn.readUnshared());
-				//System.out.println();
+				//System.out.println(response);
 				if(response.equals("Game start")) {
 					break;
 				}
@@ -74,7 +74,7 @@ public class Client implements Runnable{
 			}
 			menu.hideWindow();
 			
-			AppliScreen appScr = new AppliClient(NAME, socket);
+			AppliScreen appScr = new AppliClient(NAME, socket, sIn, sOut);
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 			
 		} catch (IOException e) {

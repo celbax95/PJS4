@@ -78,7 +78,11 @@ public class Service implements Runnable {
 	public void run() {
 		try {
 			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-			this.myPlayer = new Player(this.server.getNoPlayerAvailable(),(String)sIn.readUnshared());
+			synchronized(this.server) {
+				this.myPlayer = new Player(this.server.getNoPlayerAvailable(),(String)sIn.readUnshared());
+				this.server.addPlayer(this.myPlayer);
+			}
+			
 			
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			while (!server.getGameOn()) {
@@ -117,7 +121,10 @@ public class Service implements Runnable {
 			}
 		} catch (IOException e) {
 			System.err.println("Joueur déconnecté");
-			server.playerLeft();
+			e.printStackTrace();
+			synchronized(server) {
+				server.playerLeft(this.myPlayer);
+			}
 			try {
 				socket.close();
 			} catch (IOException e1) {

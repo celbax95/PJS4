@@ -113,8 +113,18 @@ public class Server implements Runnable {
 		return this.nbPlayers;
 	}
 
-	protected void playerLeft() {
+	protected void playerLeft(Player player) {
 		this.nbPlayers--;
+		int noPlayerRemoved = player.getNo();
+		if(noPlayerRemoved == this.players.size()) {
+			this.players.remove(player);
+		}
+		else {
+			this.players.remove(player);
+			for(int i = noPlayerRemoved-1; i < this.players.size(); i++) {
+				this.players.get(i).setNo(this.players.get(i).getNo()-1);
+			}
+		}
 	}
 
 	/**
@@ -161,10 +171,10 @@ public class Server implements Runnable {
 		}
 	}
 	
-	synchronized public void addPlayer(Player p) {
+	public void addPlayer(Player p) {
 		players.add(p);
 	}
-	synchronized public int getNoPlayerAvailable() {
+	public int getNoPlayerAvailable() {
 		if(players.isEmpty()) {
 			return 1;
 		}
@@ -172,7 +182,7 @@ public class Server implements Runnable {
 			return players.get(players.size()-1).getNo()+1;
 		}
 	}
-	synchronized public ArrayList<Player> getPlayers(){
+	public ArrayList<Player> getPlayers(){
 		return players;
 	}
 

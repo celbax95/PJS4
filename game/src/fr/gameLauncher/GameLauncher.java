@@ -105,7 +105,7 @@ public class GameLauncher {
 		
 	}
 
-	public static void updateMenu(ArrayList<Player> readUnshared) {
-		
+	public static void updateMenu(ArrayList<Player> players) {
+		menu.updatePlayers(players);
 	}
 }

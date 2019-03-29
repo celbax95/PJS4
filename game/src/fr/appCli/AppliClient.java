@@ -41,6 +41,9 @@ public class AppliClient implements AppliScreen, Runnable {
 	private Thread myThread;
 
 	private GameMap map;
+	
+	ObjectInputStream sIn;
+	ObjectOutputStream sOut;
 
 	private Camera camera;
 	private Object transferPlayer;
@@ -56,6 +59,21 @@ public class AppliClient implements AppliScreen, Runnable {
 	 * @param name   : Nom de la fenetre de jeu
 	 * @param socket : Socket liee au serveur
 	 */
+	public AppliClient(String name, Socket socket, ObjectInputStream sIn, ObjectOutputStream sOut) {
+		this.transfer = new Object();
+
+		this.name = name;
+		this.endApp = false;
+
+		this.socket = socket;
+		this.sIn = sIn;
+		this.sOut = sOut;
+
+		myThread = new Thread(this);
+
+		listD = new ArrayList<>();
+	}
+	
 	public AppliClient(String name, Socket socket) {
 		this.transfer = new Object();
 		this.transferPlayer = new Object();
@@ -201,10 +219,20 @@ public class AppliClient implements AppliScreen, Runnable {
 			List<Drawable> listDrawables;
 
 			KeyBoard keyBoard = KeyBoard.getInstance();
-
+			ObjectOutputStream sOut;
+			ObjectInputStream sIn;
 			// Input et Output de la socket
-			ObjectOutputStream sOut = new ObjectOutputStream((socket.getOutputStream()));
-			ObjectInputStream sIn = new ObjectInputStream((socket.getInputStream()));
+			if(this.sIn == null && this.sOut == null) {
+				sOut = new ObjectOutputStream((socket.getOutputStream()));
+				sIn = new ObjectInputStream((socket.getInputStream()));
+				this.sOut = sOut;
+				this.sIn = sIn;
+			}
+			else {
+				sOut = this.sOut;
+				sIn = this.sIn;
+			}
+			
 
 			// Tant que l'application n'est pas terminee
 			while (!Thread.currentThread().isInterrupted()) {
@@ -239,6 +267,8 @@ public class AppliClient implements AppliScreen, Runnable {
 					receiving = true;
 				}
 			}
+			this.sOut.close();
+			this.sIn.close();
 		} catch (IOException e) {
 			System.err.println("Communication avec le serveur terminee");
 			close();
