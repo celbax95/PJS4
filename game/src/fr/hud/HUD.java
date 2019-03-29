@@ -32,9 +32,18 @@ public class HUD implements Drawable {
 
 	private HUD(Point pos) {
 		this.pos = pos;
+
 		bars = new IBar[2];
-		bars[0] = new LifeBar(barPos[0], barSize);
-		bars[1] = new CooldownBar(barPos[1], barSize);
+
+		IBar lb = LifeBar.getInstance();
+		lb.setPos(barPos[0]);
+		lb.setSize(barSize);
+		bars[0] = lb;
+
+		IBar cb = CooldownBar.getInstance();
+		cb.setPos(barPos[1]);
+		cb.setSize(barSize);
+		bars[1] = cb;
 	}
 
 	@Override

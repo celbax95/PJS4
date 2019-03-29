@@ -10,4 +10,6 @@ public interface IBar extends Drawable {
 
 	void setPos(Point pos);
 
+	void setSize(Point size);
+
 }

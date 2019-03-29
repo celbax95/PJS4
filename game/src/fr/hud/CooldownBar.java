@@ -12,15 +12,19 @@ import fr.util.point.Point;
 
 public class CooldownBar implements IBar {
 
+	private static IBar instance;
+
 	private static Image image = (new ImageIcon(HUD.class.getResource("/images/HUD/cooldownBar.gif"))).getImage();
+
+	static {
+		instance = new CooldownBar();
+	}
 
 	private ICharacter c;
 
 	private Point pos, size;
 
-	public CooldownBar(Point pos, Point size) {
-		this.pos = pos;
-		this.size = size;
+	private CooldownBar() {
 	}
 
 	@Override
@@ -47,5 +51,14 @@ public class CooldownBar implements IBar {
 	@Override
 	public void setPos(Point pos) {
 		this.pos = pos;
+	}
+
+	@Override
+	public void setSize(Point size) {
+		this.size = size;
+	}
+
+	public static IBar getInstance() {
+		return instance;
 	}
 }

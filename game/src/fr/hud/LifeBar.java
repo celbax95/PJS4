@@ -12,15 +12,21 @@ import fr.util.point.Point;
 
 public class LifeBar implements IBar {
 
+	private static IBar instance;
+
 	private static Image image = (new ImageIcon(HUD.class.getResource("/images/HUD/lifeBar.gif"))).getImage();
+
+	static {
+		instance = new LifeBar();
+	}
 
 	private ICharacter c;
 
 	private Point pos, size;
 
-	public LifeBar(Point pos, Point size) {
-		this.pos = pos;
-		this.size = size;
+	private LifeBar() {
+		this.pos = new Point(0, 0);
+		this.size = new Point(0, 0);
 	}
 
 	@Override
@@ -49,6 +55,15 @@ public class LifeBar implements IBar {
 	@Override
 	public void setPos(Point pos) {
 		this.pos = pos;
+	}
+
+	@Override
+	public void setSize(Point size) {
+		this.size = size;
+	}
+
+	public static IBar getInstance() {
+		return instance;
 	}
 
 }
