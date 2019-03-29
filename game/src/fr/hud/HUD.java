@@ -24,11 +24,11 @@ public class HUD implements Drawable {
 
 	private Point pos;
 
-	public HUD(Point pos, ICharacter c) {
+	public HUD(Point pos) {
 		this.pos = pos;
 		bars = new IBar[2];
-		bars[0] = new LifeBar(c, barPos[0], barSize);
-		bars[1] = new CooldownBar(c, barPos[1], barSize);
+		bars[0] = new LifeBar(barPos[0], barSize);
+		bars[1] = new CooldownBar(barPos[1], barSize);
 	}
 
 	@Override
@@ -47,5 +47,4 @@ public class HUD implements Drawable {
 			b.setCharacter(player);
 		}
 	}
-
 }

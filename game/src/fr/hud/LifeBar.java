@@ -18,8 +18,7 @@ public class LifeBar implements IBar {
 
 	private Point pos, size;
 
-	public LifeBar(ICharacter c, Point pos, Point size) {
-		this.c = c;
+	public LifeBar(Point pos, Point size) {
 		this.pos = pos;
 		this.size = size;
 	}
@@ -34,14 +33,10 @@ public class LifeBar implements IBar {
 	}
 
 	private Rectangle getRect() {
-		int health = c.getHealth();
-		int maxHealth = c.getMaxHealth();
-		int barWidth = size.getIX();
-
-		int less = (int) ((double) health * barWidth / maxHealth);
+		int less = (int) ((double) c.getHealth() * size.getIX() / c.getMaxHealth());
 
 		int rectX = pos.getIX() + less;
-		int rectWidth = barWidth - less;
+		int rectWidth = size.getIX() - less;
 
 		return new Rectangle(rectX, pos.getIY(), rectWidth, size.getIY());
 	}

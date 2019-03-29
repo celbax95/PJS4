@@ -164,8 +164,11 @@ public class AppliClient implements AppliScreen, Runnable {
 		}
 
 		g.setTransform(oldGTransform);
-		hud.setCharacter(player);
-		hud.draw(g);
+
+		if (player != null) {
+			hud.setCharacter(player);
+			hud.draw(g);
+		}
 	}
 
 	@Override
@@ -221,7 +224,7 @@ public class AppliClient implements AppliScreen, Runnable {
 					camera = new Camera(new Point(Client.WIDTH, Client.HEIGHT),
 							new Point(map.getWidth() * map.getTileSize(), map.getHeight() * map.getTileSize()),
 							player.getCenter());
-					hud = new HUD(new Point(0, 0), player);
+					hud = new HUD(new Point(0, 0));
 
 					receiving = true;
 				}
@@ -239,7 +242,7 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	private void setCamera(Graphics2D g) {
 		synchronized (transferPlayer) {
-			camera.setA(player.getCenter());
+			camera.setA(player != null ? player.getCenter() : null);
 		}
 		camera.update();
 		Point camPos = camera.getPos();

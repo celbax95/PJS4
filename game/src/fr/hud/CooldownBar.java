@@ -18,8 +18,7 @@ public class CooldownBar implements IBar {
 
 	private Point pos, size;
 
-	public CooldownBar(ICharacter c, Point pos, Point size) {
-		this.c = c;
+	public CooldownBar(Point pos, Point size) {
 		this.pos = pos;
 		this.size = size;
 	}
@@ -32,14 +31,10 @@ public class CooldownBar implements IBar {
 	}
 
 	private Rectangle getRect() {
-		int maxCooldown = c.maxTimeBeforeBomb();
-		int cooldown = maxCooldown - c.timeBeforeBomb();
-		int barWidth = size.getIX();
-
-		int less = (int) ((double) cooldown * barWidth / maxCooldown);
+		int less = (int) ((double) (c.maxTimeBeforeBomb() - c.timeBeforeBomb()) * size.getIX() / c.maxTimeBeforeBomb());
 
 		int rectX = pos.getIX() + less;
-		int rectWidth = barWidth - less;
+		int rectWidth = size.getIX() - less;
 
 		return new Rectangle(rectX, pos.getIY(), rectWidth, size.getIY());
 	}
