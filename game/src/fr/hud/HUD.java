@@ -26,8 +26,8 @@ public class HUD implements Drawable {
 	public HUD(Point pos, ICharacter c) {
 		this.pos = pos;
 		bars = new IBar[2];
-		bars[0] = new LifeBar(c, barPos[0]);
-		bars[1] = new CooldownBar(c, barPos[1]);
+		bars[0] = new LifeBar(c, barPos[0], barSize);
+		bars[1] = new CooldownBar(c, barPos[1], barSize);
 	}
 
 	@Override
@@ -35,6 +35,12 @@ public class HUD implements Drawable {
 		g.drawImage(image, pos.getIX(), pos.getIY(), null);
 		for (int i = 0; i < bars.length; i++) {
 			bars[i].draw(g);
+		}
+	}
+
+	public void setCharacter(ICharacter player) {
+		for (IBar b : bars) {
+			b.setCharacter(player);
 		}
 	}
 

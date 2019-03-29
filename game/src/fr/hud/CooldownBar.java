@@ -14,16 +14,22 @@ public class CooldownBar implements IBar {
 
 	private ICharacter c;
 
-	private Point pos;
+	private Point pos, size;
 
-	public CooldownBar(ICharacter c, Point pos) {
+	public CooldownBar(ICharacter c, Point pos, Point size) {
 		this.c = c;
 		this.pos = pos;
+		this.size = size;
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		g.drawImage(image, pos.getIX(), pos.getIY(), null);
+	}
+
+	@Override
+	public void setCharacter(ICharacter player) {
+		this.c = player;
 	}
 
 	@Override

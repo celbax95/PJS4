@@ -164,6 +164,7 @@ public class AppliClient implements AppliScreen, Runnable {
 		}
 
 		g.setTransform(oldGTransform);
+		hud.setCharacter(player);
 		hud.draw(g);
 	}
 

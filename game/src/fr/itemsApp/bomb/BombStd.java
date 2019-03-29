@@ -21,7 +21,7 @@ public class BombStd extends Bomb {
 
 	private static final int TIME = 2200;
 	private static final int EXPLOSION_TIME = 1200;
-	private static final int DAMAGE = 101;
+	private static final int DAMAGE = 30;
 
 	public BombStd(Point tile, int explosionSize) {
 		// Calcul de la position de la bombe
