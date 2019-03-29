@@ -1,4 +1,4 @@
-package fr.Camera;
+package fr.camera;
 
 import fr.scale.Scale;
 import fr.util.point.Point;

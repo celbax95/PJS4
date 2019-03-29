@@ -11,7 +11,7 @@ import java.util.List;
 
 import com.sun.glass.events.KeyEvent;
 
-import fr.Camera.Camera;
+import fr.camera.Camera;
 import fr.client.Client;
 import fr.gameLauncher.GameLauncher;
 import fr.itemsApp.Drawable;
