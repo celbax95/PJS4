@@ -43,6 +43,8 @@ public class AppliClient implements AppliScreen, Runnable {
 	private Object transferAim;
 	private Point aim;
 
+	private double changingScale;
+
 	private boolean receiving;
 
 	/**
@@ -78,7 +80,12 @@ public class AppliClient implements AppliScreen, Runnable {
 			scale.increase();
 		else if (keyBoard.isPressed(KeyEvent.VK_SUBTRACT))
 			scale.decrease();
-		scale.update();
+		changingScale = scale.update();
+		if (changingScale != 0) {
+			// camera.getPos();
+			camera.move(-changingScale * map.getHeight() * map.getTileSize() * 0.5,
+					-changingScale * map.getHeight() * map.getTileSize() * 0.5);
+		}
 	}
 
 	/**

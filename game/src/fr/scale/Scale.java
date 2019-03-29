@@ -101,7 +101,7 @@ public class Scale implements Runnable {
 					else
 						tmpScale -= step * difference * animationSpeedFactor;
 
-					Thread.sleep(15);
+					Thread.sleep(16);
 				}
 				synchronized (lock) {
 					lock.wait();
@@ -132,8 +132,10 @@ public class Scale implements Runnable {
 	/**
 	 * met a jour la valeur reelle de scale par rapport a l'animation
 	 */
-	public void update() {
+	public double update() {
+		double tmp = tmpScale - scale;
 		scale = tmpScale;
+		return tmp;
 	}
 
 	/**

@@ -6,9 +6,11 @@ import fr.util.point.PointCalc;
 
 public class Camera {
 
-	private static final double changingStep = 10;
+	private static final double changingStep = 3;
 
-	private static final double step = 5;
+	private static final double step = 8;
+
+	private static final double acceleration = 50;
 
 	private Point ms;
 
@@ -52,20 +54,33 @@ public class Camera {
 		return pos;
 	}
 
+	public void move(double x, double y) {
+		pos.translate(x, y);
+	}
+
 	public void setA(Point a) {
 		this.a = a;
+	}
+
+	private void setPos() {
+		pos = getAimedPos();
+	}
+
+	@Override
+	public String toString() {
+		return pos.toString();
 	}
 
 	public void update() {
 		Point ap = getAimedPos();
 		Point d = PointCalc.compare(pos, ap);
 		if (d.x > changingStep) {
-			pos.x += step * Math.signum(ap.x - pos.x);
+			pos.x += step * Math.signum(ap.x - pos.x) * (d.x * (1 / acceleration));
 		} else {
 			pos.x = ap.x;
 		}
 		if (d.y > changingStep) {
-			pos.y += step * Math.signum(ap.y - pos.y);
+			pos.y += step * Math.signum(ap.y - pos.y) * (d.y * (1 / acceleration));
 		} else {
 			pos.y = ap.y;
 		}
