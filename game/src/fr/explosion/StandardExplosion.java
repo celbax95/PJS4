@@ -2,12 +2,10 @@ package fr.explosion;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
 
 import fr.application.Application;
-import fr.scale.Scale;
 
 /**
  * Explosion standard
@@ -38,11 +36,7 @@ public class StandardExplosion extends Explosion {
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-		Scale scale = Scale.getInstance();
-		AffineTransform af = new AffineTransform();
-		af.scale(scale.getScale(), scale.getScale());
-		af.translate(pos.getIX(), pos.getIY());
-		g.drawImage(img[type], af, null);
+		g.drawImage(img[type], pos.getIX(), pos.getIY(), null);
 	}
 
 	/**

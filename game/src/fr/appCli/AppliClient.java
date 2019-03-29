@@ -74,23 +74,29 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	/**
 	 * Change le scale suivant les touches du clavier pressees
+	 *
+	 * @param g
 	 */
-	private void changeScale() {
+	private double changeScale() {
 
 		KeyBoard keyBoard = KeyBoard.getInstance();
 
 		Scale scale = Scale.getInstance();
 
+		// reception de commande pour changer le scale
 		if (keyBoard.isPressed(KeyEvent.VK_ADD))
 			scale.increase();
 		else if (keyBoard.isPressed(KeyEvent.VK_SUBTRACT))
 			scale.decrease();
 		changingScale = scale.update();
+
 		if (changingScale != 0) {
-			// camera.getPos();
+			// alignement de la camera
 			camera.move(-changingScale * map.getHeight() * map.getTileSize() * 0.5,
 					-changingScale * map.getHeight() * map.getTileSize() * 0.5);
 		}
+
+		return scale.getScale();
 	}
 
 	/**
@@ -135,10 +141,13 @@ public class AppliClient implements AppliScreen, Runnable {
 
 		AffineTransform oldGTransform = g.getTransform();
 
-		// Application d'un eventuel changement d'echelle
-		changeScale();
+		// Eventuel changement d'echelle
+		double scale = changeScale();
 
+		// Calcul de la position de la camera
 		setCamera(g);
+
+		g.scale(scale, scale);
 
 		// creation d'un cache
 		List<Drawable> ld;

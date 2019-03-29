@@ -14,7 +14,6 @@ import fr.itemsApp.bomb.BombFactory;
 import fr.itemsApp.bomb.IBomb;
 import fr.map.GameMap;
 import fr.map.MapTile;
-import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.point.PointCalc;
 import fr.util.time.Cooldown;
@@ -104,10 +103,7 @@ public class CharacterRed implements ICharacter {
 	@Override
 	public void draw(Graphics2D g) {
 
-		Scale scale = Scale.getInstance();
-
 		AffineTransform af = new AffineTransform();
-		af.scale(scale.getScale(), scale.getScale());
 		af.translate(pos.x, pos.y);
 		af.rotate(angleOfView, DEFAULT_SIZE / 2, DEFAULT_SIZE / 2);
 
