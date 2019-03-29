@@ -2,12 +2,9 @@ package fr.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
 
@@ -78,12 +75,11 @@ public class Service implements Runnable {
 	public void run() {
 		try {
 			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-			synchronized(this.server) {
-				this.myPlayer = new Player(this.server.getNoPlayerAvailable(),(String)sIn.readUnshared());
+			synchronized (this.server) {
+				this.myPlayer = new Player(this.server.getNoPlayerAvailable(), (String) sIn.readUnshared());
 				this.server.addPlayer(this.myPlayer);
 			}
-			
-			
+
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			while (!server.getGameOn()) {
 				if (Thread.currentThread().isInterrupted()) {
@@ -95,7 +91,7 @@ public class Service implements Runnable {
 				sOut.writeUnshared(server.getPlayers());
 				sOut.flush();
 				sOut.reset();
-				
+
 			}
 			sOut.writeUnshared("Game start");
 			sOut.flush();
@@ -107,7 +103,7 @@ public class Service implements Runnable {
 				application = server.getApplication();
 				application.addPlayer(this.myPlayer.getNo());
 			}
-			
+
 			while (!Thread.currentThread().isInterrupted()) {
 				sOut.writeUnshared(application.getPlayer(myPlayer));
 				sOut.writeUnshared(application.getMap());
@@ -121,8 +117,8 @@ public class Service implements Runnable {
 			}
 		} catch (IOException e) {
 			System.err.println("Joueur déconnecté");
-			e.printStackTrace();
-			synchronized(server) {
+			// e.printStackTrace();
+			synchronized (server) {
 				server.playerLeft(this.myPlayer);
 			}
 			try {

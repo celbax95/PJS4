@@ -16,42 +16,89 @@ public class GameLauncher {
 	private static Server server;
 	private static Client cli;
 	private static Menu menu;
-	
+
+	/**
+	 * Fermeture du client
+	 */
+	public static void clientClose() {
+		cli.close();
+	}
+
+	/**
+	 * Crée un client
+	 * 
+	 * @param ip
+	 *            Adresse IP du serveur auquel veut se connecter le client
+	 * @param port
+	 *            Numéro du port du serveur auquel veut se connecter le client
+	 * @param menu
+	 *            Menu actuellement utilisé
+	 * @throws IOException
+	 */
+	public static void createClient(String ip, int port, String alias, Menu menu) throws IOException {
+		cli = new Client(ip, port, alias, menu);
+	}
+
+	/**
+	 * Crée un serveur
+	 * 
+	 * @param title
+	 *            Le titre de la fenêtre gérée par le serveur
+	 * @param port
+	 *            Port du serveur
+	 * @param nbPlayer
+	 *            Nombres de joueurs supportés par le serveur
+	 */
+	public static void createServer(String title, int port, int nbPlayers) {
+		server = new Server(title, port, nbPlayers);
+	}
+
+	public static int getServerNbPlayers() {
+		return server.getNbPlayers();
+	}
+
+	/**
+	 * Teste si le menu est instancié
+	 * 
+	 * @exception Renvoie
+	 *                MenuNotSet si le menu n'est pas instancié
+	 */
+	public static void isMenuSet() throws MenuNotSet {
+		if (menu == null) {
+			throw new MenuNotSet();
+		}
+	}
+
+	public static void menuBack() {
+		menu.back();
+	}
+
 	/**
 	 * Affiche le menu
+	 * 
 	 * @see Menu
-	 * @exception Lance une exception si le menu n'a pas été initialisé
+	 * @exception Lance
+	 *                une exception si le menu n'a pas été initialisé
 	 */
 	public static void menuDisplay() throws MenuNotSet {
 		isMenuSet();
 		menu.display();
 	}
-	
+
 	/**
-	 * Crée un serveur
-	 * @param title Le titre de la fenêtre gérée par le serveur
-	 * @param port Port du serveur
-	 * @param nbPlayer Nombres de joueurs supportés par le serveur
+	 * Reset du menu
 	 */
-	public static void createServer(String title,int port, int nbPlayers) {
-		server = new Server(title, port, nbPlayers);
+	public static void resetMenu() {
+		clientClose();
+		if (server != null) {
+			serverClose();
+		}
+		MainJPanel.setNewInstance();
+		Screen.setNewInstance();
+		menu.reset();
+
 	}
-	/**
-	 * Crée un client
-	 * @param ip Adresse IP du serveur auquel veut se connecter le client
-	 * @param port Numéro du port du serveur auquel veut se connecter le client
-	 * @param menu Menu actuellement utilisé
-	 * @throws IOException 
-	 */
-	public static void createClient(String ip, int port, String alias, Menu menu) throws IOException {
-		cli = new Client(ip, port, alias, menu);
-	}
-	/**
-	 * Mise en marche du serveur
-	 */
-	public static void serverStart() {
-		server.start();
-	}
+
 	/**
 	 * Fermeture du serveur
 	 */
@@ -62,47 +109,23 @@ public class GameLauncher {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * Fermeture du client
-	 */
-	public static void clientClose() {
-		cli.close();
-	}
-	
-	public static int getServerNbPlayers() {
-		return server.getNbPlayers();
-	}
-	
+
 	/**
 	 * Lance une partie
 	 */
 	public static void serverSetGameOn() {
 		server.setGameOn();
 	}
+
 	/**
-	 * Teste si le menu est instancié
-	 * @exception Renvoie MenuNotSet si le menu n'est pas instancié
+	 * Mise en marche du serveur
 	 */
-	public static void isMenuSet() throws MenuNotSet {
-		if(menu==null) {
-			throw new MenuNotSet();
-		}
+	public static void serverStart() {
+		server.start();
 	}
+
 	public static void setMenu(Menu menu) {
 		GameLauncher.menu = menu;
-	}
-	/**
-	 * Reset du menu
-	 */
-	public static void resetMenu() {
-		clientClose();
-		if(server!=null) {
-			serverClose();
-		}
-		MainJPanel.setNewInstance();
-		Screen.setNewInstance();
-		menu.reset();
-		
 	}
 
 	public static void updateMenu(ArrayList<Player> players) {

@@ -12,4 +12,6 @@ public interface Menu {
 	public void reset();
 
 	public void updatePlayers(ArrayList<Player> players);
+
+	public void back();
 }

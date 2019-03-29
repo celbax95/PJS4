@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -67,21 +66,10 @@ public class MenuDisplay implements Menu {
 	private ArrayList<JComponent> componentConnectList;
 	private int menuPosition;
 	private int nbPlayers;
-	private ArrayList<Player> players; 
+	private ArrayList<Player> players;
 
 	private boolean sawIpAdress;
 	private boolean sawAlias;
-
-	public void changePlayersLabels(ArrayList<Player> players) {
-		for(JLabel jl : playersLabels) {
-			jl.setVisible(false);
-			this.frame.getContentPane().remove(jl);
-		}
-		for(int i = 0; i < this.players.size(); i++) {
-			this.playersLabels.get(i).setText(players.get(i).getAlias());
-			this.playersLabels.get(i).setVisible(true);
-		}
-	}
 
 	/**
 	 * Constructeur du menu (initialisation de tous ses composants)
@@ -137,7 +125,7 @@ public class MenuDisplay implements Menu {
 		this.mapR.setBounds(145 + SIZE_BUTTON_X, 110 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X / 3, SIZE_BUTTON_Y);
 		this.nbPlayersLabel.setBounds(130 + SIZE_BUTTON_X / 3, 110, SIZE_BUTTON_X / 2, SIZE_BUTTON_Y);
 		this.ipTextField.setBounds(145, 110, SIZE_BUTTON_X, SIZE_BUTTON_Y);
-		this.aliasTextField.setBounds(145, 140+SIZE_BUTTON_Y*2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+		this.aliasTextField.setBounds(145, 140 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 
 		setFocusPaintedButtons();
 
@@ -172,23 +160,23 @@ public class MenuDisplay implements Menu {
 		// labels des joueurs
 		this.playersLabels = new ArrayList<JLabel>();
 
-		for(int i = 1; i < NB_MAX_PLAYERS+1; i++) {
+		for (int i = 1; i < NB_MAX_PLAYERS + 1; i++) {
 			JLabel newPlayer = new JLabel("", SwingConstants.CENTER);
-			switch(i) {
+			switch (i) {
 			case 1:
-				newPlayer.setBounds(130, 65, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBounds(145, 60, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 				newPlayer.setBackground(PLAYER1_BACKGROUND_COLOR);
 				break;
 			case 2:
-				newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBounds(145, 60 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 				newPlayer.setBackground(PLAYER2_BACKGROUND_COLOR);
 				break;
 			case 3:
-				newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*4, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBounds(145, 60 + SIZE_BUTTON_Y * 4, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 				newPlayer.setBackground(PLAYER3_BACKGROUND_COLOR);
 				break;
 			case 4:
-				newPlayer.setBounds(130, 65+SIZE_BUTTON_Y*6, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBounds(145, 60 + SIZE_BUTTON_Y * 6, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 				newPlayer.setBackground(PLAYER4_BACKGROUND_COLOR);
 				break;
 			}
@@ -197,6 +185,23 @@ public class MenuDisplay implements Menu {
 			newPlayer.setForeground(Color.white);
 			newPlayer.setVisible(false);
 			this.playersLabels.add(newPlayer);
+		}
+	}
+
+	@Override
+	public void back() {
+		back.doClick();
+	}
+
+	public void changePlayersLabels(ArrayList<Player> players) {
+		System.out.println("update");
+		for (JLabel jl : playersLabels) {
+			jl.setVisible(false);
+		}
+		System.out.println(players.size());
+		for (int i = 0; i < players.size(); i++) {
+			this.playersLabels.get(i).setText(players.get(i).getAlias());
+			this.playersLabels.get(i).setVisible(true);
 		}
 	}
 
@@ -237,7 +242,7 @@ public class MenuDisplay implements Menu {
 				jc.setVisible(false);
 			}
 		} else {
-		/* ÃƒÂ  faire */ }
+			/* ÃƒÂ  faire */ }
 
 	}
 
@@ -294,13 +299,12 @@ public class MenuDisplay implements Menu {
 				case 3:
 					GameLauncher.clientClose();
 					GameLauncher.serverClose();
-					changePlayersLabels(new ArrayList<Player>());
 					nbPlayersLabel.setText(String.valueOf(nbPlayers));
+					GameLauncher.updateMenu(new ArrayList<Player>());
 					menuPosition = 1;
 					break;
 				case 4:
 					GameLauncher.clientClose();
-					changePlayersLabels(new ArrayList<Player>());
 					menuPosition = 2;
 					break;
 				}
@@ -413,6 +417,9 @@ public class MenuDisplay implements Menu {
 		for (JComponent jc : componentStartList) {
 			this.frame.getContentPane().add(jc);
 		}
+		for (JLabel jl : playersLabels) {
+			this.frame.getContentPane().add(jl);
+		}
 		this.frame.add(panel);
 		this.frame.pack();
 		this.frame.setVisible(true);
@@ -421,30 +428,6 @@ public class MenuDisplay implements Menu {
 		back.setVisible(false);
 		hideComponents();
 	}
-
-	@Override
-	public void updatePlayers(ArrayList<Player> players) {
-		if(this.players.size() != players.size()) {
-			changePlayersLabels(players);
-			this.players = players;
-		}
-		else {
-			boolean notSame = false;
-			for(int i = 0; i < players.size(); i++) {
-				if(!players.get(i).toString().equals(this.players.get(i).toString())){
-					notSame = true;
-				}
-			}
-			if(notSame) {
-				changePlayersLabels(players);
-				this.players = players;
-			}
-		}
-	}
-
-
-
-
 
 	public void refresh() {
 		this.frame.repaint();
@@ -518,7 +501,26 @@ public class MenuDisplay implements Menu {
 				jc.setVisible(true);
 			}
 		} else {
-		/* �ventuellement � rajouter */ }
+			/* �ventuellement � rajouter */ }
+	}
+
+	@Override
+	public void updatePlayers(ArrayList<Player> players) {
+		if (this.players.size() != players.size()) {
+			changePlayersLabels(players);
+			this.players = players;
+		} else {
+			boolean notSame = false;
+			for (int i = 0; i < players.size(); i++) {
+				if (!players.get(i).toString().equals(this.players.get(i).toString())) {
+					notSame = true;
+				}
+			}
+			if (notSame) {
+				changePlayersLabels(players);
+				this.players = players;
+			}
+		}
 	}
 
 	/**
