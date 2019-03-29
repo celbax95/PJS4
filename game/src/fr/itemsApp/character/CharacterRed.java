@@ -316,7 +316,8 @@ public class CharacterRed implements ICharacter {
 		// Explosion Damage
 		List<IExplosion> explosions = application.getExplosions();
 
-		Point tile = application.getMap().getTileFor(pos.x, pos.y);
+		Point tile = getCenter();
+		tile = application.getMap().getTileFor(tile.x, tile.y);
 
 		for (IExplosion e : explosions) {
 			Point eTile = e.getTile();
