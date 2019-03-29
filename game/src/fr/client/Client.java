@@ -94,7 +94,11 @@ public class Client implements Runnable {
 				if (response.equals("Game start")) {
 					break;
 				}
-				GameLauncher.updateMenu((ArrayList<Player>) sIn.readUnshared());
+				synchronized(this) {
+					if (!Thread.currentThread().isInterrupted()) {
+						GameLauncher.updateMenu((ArrayList<Player>) sIn.readUnshared());
+					}
+				}
 			}
 			menu.hideWindow();
 
@@ -102,9 +106,10 @@ public class Client implements Runnable {
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 
 		} catch (IOException e) {
-			GameLauncher.updateMenu(new ArrayList<Player>());
 			GameLauncher.menuBack();
+			close();
 			System.err.println("Client ferme");
+			return;
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

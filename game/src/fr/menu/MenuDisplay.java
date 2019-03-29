@@ -488,6 +488,7 @@ public class MenuDisplay implements Menu {
 				}
 				jc.setVisible(true);
 			}
+			GameLauncher.updateMenu(new ArrayList<Player>());
 		} else if (menuPosition == 2) {
 			for (JComponent jc : componentJoinList) {
 				jc.setVisible(true);

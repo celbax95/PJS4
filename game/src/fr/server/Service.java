@@ -88,7 +88,9 @@ public class Service implements Runnable {
 				sOut.writeUnshared("ok");
 				sOut.flush();
 				sOut.reset();
-				sOut.writeUnshared(server.getPlayers());
+				synchronized(this.server) {
+					sOut.writeUnshared(server.getPlayers());
+				}
 				sOut.flush();
 				sOut.reset();
 

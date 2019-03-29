@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import fr.appCli.AppliClient;
 import fr.application.Application;
+import fr.gameLauncher.GameLauncher;
 import fr.screen.AppliScreen;
 import fr.screen.Screen;
 
@@ -71,8 +72,8 @@ public class Server implements Runnable {
 			if (this.application != null) {
 				this.application.stop();
 			}
-
 			serveur.close();
+			GameLauncher.updateMenu(new ArrayList<Player>());
 		} catch (IOException e) {
 		}
 	}
@@ -124,6 +125,9 @@ public class Server implements Runnable {
 			for(int i = noPlayerRemoved-1; i < this.players.size(); i++) {
 				this.players.get(i).setNo(this.players.get(i).getNo()-1);
 			}
+		}
+		if(this.nbPlayers == 0) {
+			close();
 		}
 	}
 
