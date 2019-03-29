@@ -12,6 +12,8 @@ import fr.util.point.Point;
 
 public class HUD implements Drawable {
 
+	private static HUD instance;
+
 	protected static final double scale = 0.4;
 
 	private static Image image = (new ImageIcon(HUD.class.getResource("/images/HUD/hud.gif"))).getImage();
@@ -20,11 +22,15 @@ public class HUD implements Drawable {
 
 	private static final Point[] barPos = { new Point(465, 42), new Point(466, 149) };
 
+	static {
+		instance = new HUD(new Point(0, 0));
+	}
+
 	private IBar[] bars;
 
 	private Point pos;
 
-	public HUD(Point pos) {
+	private HUD(Point pos) {
 		this.pos = pos;
 		bars = new IBar[2];
 		bars[0] = new LifeBar(barPos[0], barSize);
@@ -46,5 +52,13 @@ public class HUD implements Drawable {
 		for (IBar b : bars) {
 			b.setCharacter(player);
 		}
+	}
+
+	public void setPos(Point pos) {
+		this.pos = pos;
+	}
+
+	public static HUD getInstance() {
+		return instance;
 	}
 }

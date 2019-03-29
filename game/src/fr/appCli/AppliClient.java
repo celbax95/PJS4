@@ -224,7 +224,8 @@ public class AppliClient implements AppliScreen, Runnable {
 					camera = new Camera(new Point(Client.WIDTH, Client.HEIGHT),
 							new Point(map.getWidth() * map.getTileSize(), map.getHeight() * map.getTileSize()),
 							player.getCenter());
-					hud = new HUD(new Point(0, 0));
+
+					hud = HUD.getInstance();
 
 					receiving = true;
 				}
