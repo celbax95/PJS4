@@ -38,6 +38,8 @@ public class CharacterRed implements ICharacter {
 
 	private static final int timeBetweenDamages = 500;
 
+	private static final int MAX_HEALTH = 100;
+
 	private int speed;
 
 	private double angleOfView;
@@ -157,6 +159,11 @@ public class CharacterRed implements ICharacter {
 	@Override
 	public int getHealth() {
 		return health;
+	}
+
+	@Override
+	public int getMaxHealth() {
+		return MAX_HEALTH;
 	}
 
 	@Override

@@ -36,8 +36,13 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	int getHealth();
 
 	/**
+	 * @return la vie max du ICharacter
+	 */
+	int getMaxHealth();
+
+	/**
 	 * Fait regarder le ICharacter dans une direction
-	 * 
+	 *
 	 * @param angle : angle dans lequel le ICharacter doit regarder
 	 */
 	void setAngle(double angle);
