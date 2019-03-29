@@ -4,6 +4,9 @@ import fr.scale.Scale;
 import fr.util.point.Point;
 import fr.util.point.PointCalc;
 
+/**
+ * Camera
+ */
 public class Camera {
 
 	private static final double changingStep = 3;
@@ -27,6 +30,9 @@ public class Camera {
 		this.pos = a.clone();
 	}
 
+	/**
+	 * @return La position visee par la camera
+	 */
 	public Point getAimedPos() {
 		double scale = Scale.getInstance().getScale();
 
@@ -50,18 +56,35 @@ public class Camera {
 		}
 	}
 
+	/**
+	 * @return position courante de la camera
+	 */
 	public Point getPos() {
 		return pos;
 	}
 
+	/**
+	 * Fait bouger la camera
+	 *
+	 * @param x : deplacement en x
+	 * @param y : deplacement en y
+	 */
 	public void move(double x, double y) {
 		pos.translate(x, y);
 	}
 
+	/**
+	 * Specification de la cible
+	 * 
+	 * @param a : cible
+	 */
 	public void setA(Point a) {
 		this.a = a;
 	}
 
+	/**
+	 * Affactation de la position de la camera a la position visee
+	 */
 	private void setPos() {
 		pos = getAimedPos();
 	}
@@ -71,6 +94,9 @@ public class Camera {
 		return pos.toString();
 	}
 
+	/**
+	 * Mouvement de la camera vers sa position visee
+	 */
 	public void update() {
 		Point ap = getAimedPos();
 		Point d = PointCalc.compare(pos, ap);
