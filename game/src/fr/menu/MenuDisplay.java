@@ -34,10 +34,10 @@ public class MenuDisplay implements Menu {
 	private static int windowSize = 500;
 
 	private static final Color BACKGROUND_COLOR = new Color(50, 54, 57);
-	private static final Color PLAYER1_BACKGROUND_COLOR = new Color(198, 33, 69);
-	private static final Color PLAYER2_BACKGROUND_COLOR = new Color(33, 75, 198);
-	private static final Color PLAYER3_BACKGROUND_COLOR = new Color(33, 198, 99);
-	private static final Color PLAYER4_BACKGROUND_COLOR = new Color(209, 197, 31);
+	private static final Color PLAYER_RED_BACKGROUND_COLOR = new Color(198, 33, 69);
+	private static final Color PLAYER_BLUE_BACKGROUND_COLOR = new Color(33, 75, 198);
+	private static final Color PLAYER_GREEN_BACKGROUND_COLOR = new Color(33, 198, 99);
+	private static final Color PLAYER_YELLOW_BACKGROUND_COLOR = new Color(209, 197, 31);
 	private static final Color BUTTON_BACKGROUND_COLOR = new Color(59, 89, 182);
 	private static final Color ARROWS_BACKGROUND_COLOR = new Color(80, 100, 190);
 	private static final Font BUTTON_FONT = new Font("Tahoma", Font.BOLD, 20);
@@ -164,20 +164,20 @@ public class MenuDisplay implements Menu {
 			JLabel newPlayer = new JLabel("", SwingConstants.CENTER);
 			switch (i) {
 			case 1:
-				newPlayer.setBounds(145, 60, SIZE_BUTTON_X, SIZE_BUTTON_Y);
-				newPlayer.setBackground(PLAYER1_BACKGROUND_COLOR);
+				newPlayer.setBounds(145, 40, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBackground(PLAYER_RED_BACKGROUND_COLOR);
 				break;
 			case 2:
-				newPlayer.setBounds(145, 60 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
-				newPlayer.setBackground(PLAYER2_BACKGROUND_COLOR);
+				newPlayer.setBounds(145, 60 + SIZE_BUTTON_Y, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBackground(PLAYER_BLUE_BACKGROUND_COLOR);
 				break;
 			case 3:
-				newPlayer.setBounds(145, 60 + SIZE_BUTTON_Y * 4, SIZE_BUTTON_X, SIZE_BUTTON_Y);
-				newPlayer.setBackground(PLAYER3_BACKGROUND_COLOR);
+				newPlayer.setBounds(145, 80 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBackground(PLAYER_GREEN_BACKGROUND_COLOR);
 				break;
 			case 4:
-				newPlayer.setBounds(145, 60 + SIZE_BUTTON_Y * 6, SIZE_BUTTON_X, SIZE_BUTTON_Y);
-				newPlayer.setBackground(PLAYER4_BACKGROUND_COLOR);
+				newPlayer.setBounds(145, 100 + SIZE_BUTTON_Y * 3, SIZE_BUTTON_X, SIZE_BUTTON_Y);
+				newPlayer.setBackground(PLAYER_YELLOW_BACKGROUND_COLOR);
 				break;
 			}
 			newPlayer.setOpaque(true);
@@ -194,11 +194,9 @@ public class MenuDisplay implements Menu {
 	}
 
 	public void changePlayersLabels(ArrayList<Player> players) {
-		System.out.println("update");
 		for (JLabel jl : playersLabels) {
 			jl.setVisible(false);
 		}
-		System.out.println(players.size());
 		for (int i = 0; i < players.size(); i++) {
 			this.playersLabels.get(i).setText(players.get(i).getAlias());
 			this.playersLabels.get(i).setVisible(true);
