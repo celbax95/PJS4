@@ -17,7 +17,7 @@ public class Scale implements Runnable {
 	private static Scale instance;
 
 	static {
-		instance = new Scale(1);
+		instance = new Scale(1.2);
 	}
 
 	private static long holdDelay = 50;
