@@ -234,17 +234,19 @@ public class AppliClient implements AppliScreen, Runnable {
 					player = (ICharacter) sIn.readUnshared();
 				}
 
+				System.out.println("no problem client 0");
+				
+				Object[] envoiClient = (Object[]) sIn.readUnshared();
 				// Recuperation de la map
-				map = (GameMap) sIn.readUnshared();
-				System.out.println("no problem client 1");
+				map = (GameMap) envoiClient[0];
 				// Recuperation des elements
-				listDrawables = (List<Drawable>) sIn.readUnshared();
-				System.out.println("no problem client 2");
+				listDrawables = (List<Drawable>) envoiClient[1];
+				System.out.println("no problem client 1");
 				// Elements dans le cache
 				synchronized (transfer) {
 					listD = new ArrayList<>(listDrawables);
 				}
-				System.out.println("no problem client 3");
+				System.out.println("no problem client 2");
 				sOut.writeUnshared(keyBoard.getKeys());
 				sOut.flush();
 				sOut.reset();
@@ -259,6 +261,7 @@ public class AppliClient implements AppliScreen, Runnable {
 					receiving = true;
 				}
 				System.out.println("no problem client 4");
+				System.out.println("no problem client 3");
 			}
 			this.sOut.close();
 			this.sIn.close();

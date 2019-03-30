@@ -55,6 +55,12 @@ public class Service implements Runnable {
 	public Service(Socket serverSocket) {
 		this.server = null;
 		this.socket = serverSocket;
+		try {
+			this.sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+			this.sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		myThread = new Thread(this);
 	}
 
@@ -78,13 +84,12 @@ public class Service implements Runnable {
 	@Override
 	public void run() {
 		try {
-			this.sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 			synchronized (this.server) {
 				this.myPlayer = new Player(this.server.getNoPlayerAvailable(), (String) sIn.readUnshared());
 				this.server.addPlayer(this.myPlayer);
 			}
 
-			this.sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+			
 			while (!server.getGameOn()) {
 				if (Thread.currentThread().isInterrupted()) {
 					return;
@@ -111,19 +116,21 @@ public class Service implements Runnable {
 			}
 			//int i = 0;
 			while (!Thread.currentThread().isInterrupted()) {
+<<<<<<< HEAD
 				sOut.writeUnshared(application.getPlayer(myPlayer));
 				sOut.flush();
 				sOut.reset();
 				sOut.writeUnshared(application.getMap());
+=======
+				synchronized(application) {
+					sOut.writeUnshared(new Object[]{application.getMap(), application.getDrawables()});
+				}
+>>>>>>> Correction de bug du menu et de lancement 3
 				sOut.flush();
 				sOut.reset();
 				System.out.println("no problem 1 "+myPlayer.getAlias());
-				sOut.writeUnshared(application.getDrawables());
-				sOut.flush();
-				sOut.reset();
-				System.out.println("no problem 2 "+myPlayer.getAlias());
 				List<Integer> cliKeys = (List<Integer>) sIn.readUnshared();
-				System.out.println("no problem 3 "+myPlayer.getAlias());
+				System.out.println("no problem 2 "+myPlayer.getAlias());
 				synchronized(application) {
 					if (!application.managePlayer(myPlayer.getNo(), cliKeys)) {
 						// Quand le joueur est mort
