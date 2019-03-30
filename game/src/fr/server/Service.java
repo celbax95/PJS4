@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.List;
 
 import fr.application.Application;
+import fr.itemsApp.Drawable;
 
 /**
  * Le Service du jeu qui communique avec le client via le serveur
@@ -116,18 +117,19 @@ public class Service implements Runnable {
 			}
 			//int i = 0;
 			while (!Thread.currentThread().isInterrupted()) {
-<<<<<<< HEAD
-				sOut.writeUnshared(application.getPlayer(myPlayer));
-				sOut.flush();
+				synchronized(application) {
+					sOut.writeUnshared(application.getPlayer(myPlayer));
+					sOut.flush();
+				}
 				sOut.reset();
 				sOut.writeUnshared(application.getMap());
-=======
 				synchronized(application) {
 					sOut.writeUnshared(new Object[]{application.getMap(), application.getDrawables()});
+					sOut.flush();
 				}
->>>>>>> Correction de bug du menu et de lancement 3
 				sOut.flush();
 				sOut.reset();
+				
 				System.out.println("no problem 1 "+myPlayer.getAlias());
 				List<Integer> cliKeys = (List<Integer>) sIn.readUnshared();
 				System.out.println("no problem 2 "+myPlayer.getAlias());

@@ -90,7 +90,7 @@ public class Client implements Runnable {
 					return;
 				}
 				response = String.valueOf(sIn.readUnshared());
-				// System.out.println(response);
+				//System.out.println(response);
 				if (response.equals("Game start")) {
 					break;
 				}

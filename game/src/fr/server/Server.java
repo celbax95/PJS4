@@ -156,7 +156,7 @@ public class Server implements Runnable {
 					Service s;
 					s = new Service(this, socket);
 					synchronized (this) {
-						if(first == null) {
+						if (first == null) {
 							first = s;
 						}
 					}

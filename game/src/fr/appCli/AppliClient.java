@@ -60,18 +60,10 @@ public class AppliClient implements AppliScreen, Runnable {
 	 * @param socket : Socket liee au serveur
 	 */
 	public AppliClient(String name, Socket socket, ObjectInputStream sIn, ObjectOutputStream sOut) {
-		this.transfer = new Object();
-
-		this.name = name;
-		this.endApp = false;
-
-		this.socket = socket;
+		this(name, socket);
+		
 		this.sIn = sIn;
 		this.sOut = sOut;
-
-		myThread = new Thread(this);
-
-		listD = new ArrayList<>();
 	}
 	
 	public AppliClient(String name, Socket socket) {
@@ -85,8 +77,8 @@ public class AppliClient implements AppliScreen, Runnable {
 		this.socket = socket;
 		// testVersion(socket);
 
-		myThread = new Thread(this);
 
+		myThread = new Thread(this);
 		listD = new ArrayList<>();
 	}
 
@@ -219,10 +211,6 @@ public class AppliClient implements AppliScreen, Runnable {
 			List<Drawable> listDrawables;
 
 			KeyBoard keyBoard = KeyBoard.getInstance();
-			
-			// Input et Output de la socket
-			ObjectOutputStream sOut = this.sOut;
-			ObjectInputStream sIn = this.sIn;
 			
 			
 
