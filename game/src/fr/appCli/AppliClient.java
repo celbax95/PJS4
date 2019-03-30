@@ -124,11 +124,11 @@ public class AppliClient implements AppliScreen, Runnable {
 	public void close() {
 		myThread.interrupt();
 		endApp = true;
-		try {
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 
 	/**
@@ -219,19 +219,11 @@ public class AppliClient implements AppliScreen, Runnable {
 			List<Drawable> listDrawables;
 
 			KeyBoard keyBoard = KeyBoard.getInstance();
-			ObjectOutputStream sOut;
-			ObjectInputStream sIn;
+			
 			// Input et Output de la socket
-			if(this.sIn == null && this.sOut == null) {
-				sOut = new ObjectOutputStream((socket.getOutputStream()));
-				sIn = new ObjectInputStream((socket.getInputStream()));
-				this.sOut = sOut;
-				this.sIn = sIn;
-			}
-			else {
-				sOut = this.sOut;
-				sIn = this.sIn;
-			}
+			ObjectOutputStream sOut = this.sOut;
+			ObjectInputStream sIn = this.sIn;
+			
 			
 
 			// Tant que l'application n'est pas terminee
@@ -244,15 +236,15 @@ public class AppliClient implements AppliScreen, Runnable {
 
 				// Recuperation de la map
 				map = (GameMap) sIn.readUnshared();
-
+				System.out.println("no problem client 1");
 				// Recuperation des elements
 				listDrawables = (List<Drawable>) sIn.readUnshared();
-
+				System.out.println("no problem client 2");
 				// Elements dans le cache
 				synchronized (transfer) {
 					listD = new ArrayList<>(listDrawables);
 				}
-
+				System.out.println("no problem client 3");
 				sOut.writeUnshared(keyBoard.getKeys());
 				sOut.flush();
 				sOut.reset();
@@ -266,6 +258,7 @@ public class AppliClient implements AppliScreen, Runnable {
 
 					receiving = true;
 				}
+				System.out.println("no problem client 4");
 			}
 			this.sOut.close();
 			this.sIn.close();

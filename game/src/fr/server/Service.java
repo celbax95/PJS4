@@ -102,14 +102,14 @@ public class Service implements Runnable {
 			sOut.writeUnshared("Game start");
 			sOut.flush();
 			sOut.reset();
+			
 			synchronized (server) {
 				while (server.getApplication() == null) {
 					this.wait();
 				}
-				application = server.getApplication();
 				application.addPlayer(this.myPlayer.getNo());
 			}
-
+			//int i = 0;
 			while (!Thread.currentThread().isInterrupted()) {
 				sOut.writeUnshared(application.getPlayer(myPlayer));
 				sOut.flush();
@@ -117,17 +117,22 @@ public class Service implements Runnable {
 				sOut.writeUnshared(application.getMap());
 				sOut.flush();
 				sOut.reset();
+				System.out.println("no problem 1 "+myPlayer.getAlias());
 				sOut.writeUnshared(application.getDrawables());
 				sOut.flush();
 				sOut.reset();
+				System.out.println("no problem 2 "+myPlayer.getAlias());
 				List<Integer> cliKeys = (List<Integer>) sIn.readUnshared();
-				if (!application.managePlayer(myPlayer.getNo(), cliKeys)) {
-					// Quand le joueur est mort
+				System.out.println("no problem 3 "+myPlayer.getAlias());
+				synchronized(application) {
+					if (!application.managePlayer(myPlayer.getNo(), cliKeys)) {
+						// Quand le joueur est mort
+					}
 				}
 			}
 		} catch (IOException e) {
 			System.err.println("Joueur déconnecté");
-			// e.printStackTrace();
+			e.printStackTrace();
 			synchronized (server) {
 				server.playerLeft(this.myPlayer);
 			}

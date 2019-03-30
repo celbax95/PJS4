@@ -175,7 +175,9 @@ public class Server implements Runnable {
 			this.gameOn = true;
 			(this.application = new Application(WIDTH, HEIGHT)).start();
 			AppliScreen appScr = new AppliClient(title, socketHost, first.getSIn(), first.getSOut());
-			Service.setApplication(application);
+			synchronized(this.application) {
+				Service.setApplication(application);
+			}
 			notifyAll();
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 		}
