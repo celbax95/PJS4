@@ -24,7 +24,11 @@ public class Service implements Runnable {
 	private Server server;
 
 	private Player myPlayer;
-
+	
+	ObjectInputStream sIn;
+	
+	ObjectOutputStream sOut;
+	
 	/**
 	 * constructeur Service vide
 	 */
@@ -74,13 +78,13 @@ public class Service implements Runnable {
 	@Override
 	public void run() {
 		try {
-			ObjectInputStream sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+			this.sIn = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
 			synchronized (this.server) {
 				this.myPlayer = new Player(this.server.getNoPlayerAvailable(), (String) sIn.readUnshared());
 				this.server.addPlayer(this.myPlayer);
 			}
 
-			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+			this.sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			while (!server.getGameOn()) {
 				if (Thread.currentThread().isInterrupted()) {
 					return;
@@ -108,7 +112,11 @@ public class Service implements Runnable {
 
 			while (!Thread.currentThread().isInterrupted()) {
 				sOut.writeUnshared(application.getPlayer(myPlayer));
+				sOut.flush();
+				sOut.reset();
 				sOut.writeUnshared(application.getMap());
+				sOut.flush();
+				sOut.reset();
 				sOut.writeUnshared(application.getDrawables());
 				sOut.flush();
 				sOut.reset();
@@ -145,5 +153,13 @@ public class Service implements Runnable {
 
 	public static void setApplication(Application app) {
 		Service.application = app;
+	}
+	
+	public ObjectInputStream getSIn(){
+		return this.sIn;
+	}
+	
+	public ObjectOutputStream getSOut() {
+		return this.sOut;
 	}
 }

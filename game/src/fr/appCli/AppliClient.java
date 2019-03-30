@@ -270,8 +270,8 @@ public class AppliClient implements AppliScreen, Runnable {
 			this.sOut.close();
 			this.sIn.close();
 		} catch (IOException e) {
-			e.printStackTrace();
 			System.err.println("Communication avec le serveur terminee");
+			e.printStackTrace();
 			close();
 			GameLauncher.resetMenu();
 		} catch (ClassNotFoundException e1) {

@@ -29,6 +29,7 @@ public class Server implements Runnable {
 	private boolean gameOn;
 	private ServerSocket serveur;
 	private ArrayList<Service> services;
+	private Service first;
 	private Thread threadServ;
 	private Socket socketHost;
 	private Application application;
@@ -154,6 +155,11 @@ public class Server implements Runnable {
 				if (socket != null) {
 					Service s;
 					s = new Service(this, socket);
+					synchronized (this) {
+						if(first == null) {
+							first = s;
+						}
+					}
 					synchronized (services) {
 						services.add(s);
 					}
@@ -168,7 +174,7 @@ public class Server implements Runnable {
 			this.threadServ.interrupt();
 			this.gameOn = true;
 			(this.application = new Application(WIDTH, HEIGHT)).start();
-			AppliScreen appScr = new AppliClient(title, socketHost);
+			AppliScreen appScr = new AppliClient(title, socketHost, first.getSIn(), first.getSOut());
 			Service.setApplication(application);
 			notifyAll();
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
