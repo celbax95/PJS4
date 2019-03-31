@@ -11,13 +11,21 @@ public class CharacterFactory {
 		factory = new CharacterFactory();
 	}
 
+	/**
+	 * @return L'instance unique de CharacterFactory
+	 */
+	public static CharacterFactory getInstance() {
+		return factory;
+	}
+
 	private CharacterFactory() {
 	}
 
 	/**
 	 * Cree un character
 	 *
-	 * @param type : type du character
+	 * @param type
+	 *            : type du character
 	 * @return le character cree
 	 */
 	public ICharacter create(String type) {
@@ -26,13 +34,6 @@ public class CharacterFactory {
 			return new CharacterRed(0, 0, 100, 1400, 500);
 		}
 		return null;
-	}
-
-	/**
-	 * @return L'instance unique de CharacterFactory
-	 */
-	public static CharacterFactory getInstance() {
-		return factory;
 	}
 
 }

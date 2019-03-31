@@ -1,7 +1,9 @@
 package fr.itemsApp.bomb;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 
 import fr.application.Application;
 import fr.explosion.IExplosion;
@@ -14,12 +16,19 @@ import fr.util.point.Point;
 public class BombStd extends Bomb {
 
 	private static final long serialVersionUID = 1L;
-
-	private static Color c = Color.black;
+	private static Image bomb = (new ImageIcon(BombStd.class.getResource("/images/bombs/standard/dropped/4.png")))
+			.getImage();
 
 	private static final int TIME = 2200;
 	private static final int EXPLOSION_TIME = 1200;
 	private static final int DAMAGE = 30;
+
+	/**
+	 * @return Taille de la bombe
+	 */
+	public static int getSIZE() {
+		return DEFAULT_BOMB_SIZE;
+	}
 
 	public BombStd(Point tile, int explosionSize) {
 		// Calcul de la position de la bombe
@@ -29,8 +38,7 @@ public class BombStd extends Bomb {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(c);
-		g.fillRect(pos.getIX(), pos.getIY(), DEFAULT_BOMB_SIZE, DEFAULT_BOMB_SIZE);
+		g.drawImage(bomb, pos.getIX(), pos.getIY(), DEFAULT_BOMB_SIZE, DEFAULT_BOMB_SIZE, null);
 	}
 
 	@Override
@@ -51,12 +59,5 @@ public class BombStd extends Bomb {
 		if (cooldown.isDone()) {
 			explode(a);
 		}
-	}
-
-	/**
-	 * @return Taille de la bombe
-	 */
-	public static int getSIZE() {
-		return DEFAULT_BOMB_SIZE;
 	}
 }
