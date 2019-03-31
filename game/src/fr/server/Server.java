@@ -182,6 +182,16 @@ public class Server implements Runnable {
 	}
 	
 	public void addPlayer(Player p) {
+		int i = 0;
+		for(Player player : players) {
+			if(player.getAlias().equals(p.getAlias())) {
+				i++;
+			}
+		}
+		if(i != 0) {
+			i++;
+			p.setAlias(p.getAlias()+" "+i);	
+		}
 		players.add(p);
 	}
 	public int getNoPlayerAvailable() {

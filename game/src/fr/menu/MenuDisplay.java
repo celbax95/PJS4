@@ -108,7 +108,7 @@ public class MenuDisplay implements Menu {
 		this.buttonList = new ArrayList<JButton>(
 				Arrays.asList(host, join, back, decNbPlayers, incNbPlayers, mapL, mapR, search, start, connect));
 		this.componentHostList = new ArrayList<JComponent>(
-				Arrays.asList(search, decNbPlayers, incNbPlayers, mapL, mapR, nbPlayersLabel));
+				Arrays.asList(search, decNbPlayers, incNbPlayers, mapL, mapR, nbPlayersLabel, aliasTextField));
 		this.componentJoinList = new ArrayList<JComponent>(Arrays.asList(ipTextField, aliasTextField, connect));
 		this.componentStartList = new ArrayList<JComponent>(Arrays.asList(start));
 		this.componentConnectList = new ArrayList<JComponent>(Arrays.asList());
@@ -258,7 +258,9 @@ public class MenuDisplay implements Menu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menuPosition = 1;
+				aliasTextField.setBounds(145, nbPlayersLabel.getY()-(SIZE_BUTTON_Y+SIZE_BUTTON_Y/2), SIZE_BUTTON_X, SIZE_BUTTON_Y);
 				showComponents();
+				search.requestFocusInWindow();
 				host.setVisible(false);
 				join.setVisible(false);
 				back.setVisible(true);
@@ -268,6 +270,7 @@ public class MenuDisplay implements Menu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menuPosition = 2;
+				aliasTextField.setBounds(145, 140 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 				showComponents();
 				connect.requestFocusInWindow();
 				host.setVisible(false);
@@ -283,6 +286,8 @@ public class MenuDisplay implements Menu {
 				case 1:
 					nbPlayers = NB_INIT_PLAYERS;
 					nbPlayersLabel.setText(String.valueOf(nbPlayers));
+					aliasTextField.setForeground(Color.gray);
+					aliasTextField.setText("Alias");
 					menuPosition = 0;
 					break;
 				case 2:
@@ -290,7 +295,7 @@ public class MenuDisplay implements Menu {
 					ipTextField.setForeground(Color.gray);
 					ipTextField.setText("Ip Adress");
 					aliasTextField.setForeground(Color.gray);
-					aliasTextField.setText("Ip Adress");
+					aliasTextField.setText("Alias");
 					sawIpAdress = false;
 					sawAlias = false;
 					break;
@@ -315,7 +320,7 @@ public class MenuDisplay implements Menu {
 				try {
 					GameLauncher.createServer(TITLE, PORT, nbPlayers);
 					GameLauncher.serverStart();
-					GameLauncher.createClient(IP, PORT, "Host", MenuDisplay.menu);
+					GameLauncher.createClient(IP, PORT, aliasTextField.getText(), MenuDisplay.menu);
 					hideComponents();
 					menuPosition = 3;
 					showComponents();

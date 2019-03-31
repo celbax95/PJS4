@@ -40,8 +40,12 @@ public class Client implements Runnable {
 		}
 		this.menu = menu;
 		myThread = new Thread(this);
-
-		this.alias = alias;
+		if(!alias.equals("Alias") && !alias.equals("")) {
+			this.alias = alias;
+		}
+		else {
+			this.alias = "Player";
+		}
 
 		this.start();
 	}

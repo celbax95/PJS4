@@ -24,6 +24,9 @@ public class Player implements Serializable{
 	public String getAlias() {
 		return alias;
 	}
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
 	
 	public String toString() {
 		return no + " " + alias;
