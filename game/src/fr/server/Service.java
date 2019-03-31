@@ -130,9 +130,7 @@ public class Service implements Runnable {
 				sOut.flush();
 				sOut.reset();
 				
-				System.out.println("no problem 1 "+myPlayer.getAlias());
 				List<Integer> cliKeys = (List<Integer>) sIn.readUnshared();
-				System.out.println("no problem 2 "+myPlayer.getAlias());
 				synchronized(application) {
 					if (!application.managePlayer(myPlayer.getNo(), cliKeys)) {
 						// Quand le joueur est mort

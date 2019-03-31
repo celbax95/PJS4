@@ -174,12 +174,10 @@ public class Server implements Runnable {
 			this.threadServ.interrupt();
 			this.gameOn = true;
 			(this.application = new Application(WIDTH, HEIGHT)).start();
-			AppliScreen appScr = new AppliClient(title, socketHost, first.getSIn(), first.getSOut());
 			synchronized(this.application) {
 				Service.setApplication(application);
 			}
 			notifyAll();
-			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 		}
 	}
 	

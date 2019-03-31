@@ -229,12 +229,11 @@ public class AppliClient implements AppliScreen, Runnable {
 				map = (GameMap) envoiClient[0];
 				// Recuperation des elements
 				listDrawables = (List<Drawable>) envoiClient[1];
-				System.out.println("no problem client 1");
+				
 				// Elements dans le cache
 				synchronized (transfer) {
 					listD = new ArrayList<>(listDrawables);
 				}
-				System.out.println("no problem client 2");
 				sOut.writeUnshared(keyBoard.getKeys());
 				sOut.flush();
 				sOut.reset();
@@ -255,7 +254,7 @@ public class AppliClient implements AppliScreen, Runnable {
 			this.sIn.close();
 		} catch (IOException e) {
 			System.err.println("Communication avec le serveur terminee");
-			e.printStackTrace();
+			//e.printStackTrace();
 			close();
 			GameLauncher.resetMenu();
 		} catch (ClassNotFoundException e1) {
