@@ -119,5 +119,12 @@ public class Client implements Runnable {
 	public void start() {
 		myThread.start();
 	}
+	
+	public static int getWidth() {
+		return WIDTH;
+	}
+	public static int getHeight() {
+		return HEIGHT;
+	}
 
 }

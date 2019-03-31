@@ -118,11 +118,10 @@ public class Service implements Runnable {
 			//int i = 0;
 			while (!Thread.currentThread().isInterrupted()) {
 				synchronized(application) {
-					sOut.writeUnshared(application.getPlayer(myPlayer));
+					sOut.writeUnshared(application.getPlayer(myPlayer.getNo()));
 					sOut.flush();
 				}
 				sOut.reset();
-				sOut.writeUnshared(application.getMap());
 				synchronized(application) {
 					sOut.writeUnshared(new Object[]{application.getMap(), application.getDrawables()});
 					sOut.flush();
@@ -139,14 +138,14 @@ public class Service implements Runnable {
 			}
 		} catch (IOException e) {
 			System.err.println("Joueur déconnecté");
-			e.printStackTrace();
+			//e.printStackTrace();
 			synchronized (server) {
 				server.playerLeft(this.myPlayer);
 			}
 			try {
 				socket.close();
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				//e1.printStackTrace();
 			}
 			myThread.interrupt();
 		} catch (ClassNotFoundException e) {

@@ -222,7 +222,6 @@ public class AppliClient implements AppliScreen, Runnable {
 					player = (ICharacter) sIn.readUnshared();
 				}
 
-				System.out.println("no problem client 0");
 				
 				Object[] envoiClient = (Object[]) sIn.readUnshared();
 				// Recuperation de la map
@@ -239,7 +238,7 @@ public class AppliClient implements AppliScreen, Runnable {
 				sOut.reset();
 
 				if (!receiving) {
-					camera = new Camera(new Point(Client.WIDTH, Client.HEIGHT),
+					camera = new Camera(new Point(Client.getWidth(), Client.getHeight()),
 							new Point(map.getWidth() * map.getTileSize(), map.getHeight() * map.getTileSize()),
 							player.getCenter());
 
@@ -247,8 +246,6 @@ public class AppliClient implements AppliScreen, Runnable {
 
 					receiving = true;
 				}
-				System.out.println("no problem client 4");
-				System.out.println("no problem client 3");
 			}
 			this.sOut.close();
 			this.sIn.close();
