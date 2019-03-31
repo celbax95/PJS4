@@ -33,8 +33,12 @@ public class Client implements Runnable {
 	private String alias;
 
 	public Client(String ip, int port, String alias, Menu menu) throws IOException {
-
-		socket = connexion(ip, port);
+		if(ip.equals("Ip Adress")) {
+			socket = connexion("localhost", port);
+		}
+		else {
+			socket = connexion(ip, port);
+		}
 		if (socket.isClosed()) {
 			throw new IOException();
 		}
