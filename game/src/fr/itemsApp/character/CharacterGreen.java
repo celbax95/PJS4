@@ -9,13 +9,14 @@ import javax.swing.ImageIcon;
 /**
  * Personnage
  */
-public class CharacterRed extends ACharacter {
+public class CharacterGreen extends ACharacter {
 
-	private static Image imgS = (new ImageIcon(CharacterRed.class.getResource("/images/characters/red/stand.png")))
+	protected static final long serialVersionUID = 1L;
+	private static Image imgS = (new ImageIcon(CharacterGreen.class.getResource("/images/characters/green/stand.png")))
 			.getImage();
 	private static Image[] imgD = {
-			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_1.png"))).getImage(),
-			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_2.png"))).getImage() };
+			(new ImageIcon(CharacterGreen.class.getResource("/images/characters/green/walk_1.png"))).getImage(),
+			(new ImageIcon(CharacterGreen.class.getResource("/images/characters/green/walk_2.png"))).getImage() };
 
 	/**
 	 * @param x
@@ -27,7 +28,7 @@ public class CharacterRed extends ACharacter {
 	 * @param speed
 	 *            : Vitesse du personnage
 	 */
-	public CharacterRed(double x, double y, int health, int bombCoolDown, int speed) {
+	public CharacterGreen(double x, double y, int health, int bombCoolDown, int speed) {
 		super(x, y, health, bombCoolDown, speed);
 	}
 
