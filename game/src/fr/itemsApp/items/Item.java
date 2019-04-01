@@ -7,6 +7,8 @@ import fr.util.point.Point;
 
 public abstract class Item implements CollectableItem, PlaceableItem {
 
+	protected final int SIZE = 110;
+
 	protected Point pos;
 	protected Character holder;
 
