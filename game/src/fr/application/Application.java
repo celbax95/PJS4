@@ -11,6 +11,7 @@ import fr.itemsApp.Manageable;
 import fr.itemsApp.bomb.IBomb;
 import fr.itemsApp.character.CharacterFactory;
 import fr.itemsApp.character.ICharacter;
+import fr.itemsApp.items.PlaceableItem;
 import fr.map.GameMap;
 import fr.util.point.Point;
 import fr.util.point.PointCalc;
@@ -33,6 +34,7 @@ public class Application implements Runnable {
 
 	private List<IExplosion> explosions;
 	private List<IBomb> bombs;
+	private List<PlaceableItem> items;
 
 	private Timer timerApploop;
 
@@ -43,18 +45,19 @@ public class Application implements Runnable {
 	 * @param height : Hauteur de la fenetre
 	 */
 	public Application(int width, int height) {
-		players = new HashMap<>();
-		drawables = new Vector<>();
-		manageables = new Vector<>();
-		explosions = new Vector<>();
-		bombs = new Vector<>();
-		timerApploop = new Timer();
-		myThread = new Thread(this);
+		this.players = new HashMap<>();
+		this.drawables = new Vector<>();
+		this.manageables = new Vector<>();
+		this.explosions = new Vector<>();
+		this.bombs = new Vector<>();
+		this.items = new Vector<>();
+		this.timerApploop = new Timer();
+		this.myThread = new Thread(this);
 
 		// Chargement de la map depuis le fichier "/maps/1.bmap"
-		map = new GameMap("/maps/2.bmap");
-		spawnPlaces = map.getSpawnPoints();
-		currentSpawnPoint = 0;
+		this.map = new GameMap("/maps/2.bmap");
+		this.spawnPlaces = this.map.getSpawnPoints();
+		this.currentSpawnPoint = 0;
 	}
 
 	/**
@@ -63,7 +66,7 @@ public class Application implements Runnable {
 	 * @param bomb : bombe a ajouter
 	 */
 	public void addBomb(IBomb bomb) {
-		bombs.add(bomb);
+		this.bombs.add(bomb);
 	}
 
 	/**
@@ -72,7 +75,7 @@ public class Application implements Runnable {
 	 * @param drawable : Drawable a ajouter
 	 */
 	public void addDrawable(Drawable drawable) {
-		drawables.add(drawable);
+		this.drawables.add(drawable);
 	}
 
 	/**
@@ -81,7 +84,16 @@ public class Application implements Runnable {
 	 * @param explosion : Explosion a ajouter
 	 */
 	public void addExplosion(IExplosion explosion) {
-		explosions.add(explosion);
+		this.explosions.add(explosion);
+	}
+
+	/**
+	 * Ajoute un Item
+	 *
+	 * @param item : Item a ajouter
+	 */
+	public void addExplosion(PlaceableItem item) {
+		this.items.add(item);
 	}
 
 	/**
@@ -90,7 +102,7 @@ public class Application implements Runnable {
 	 * @param manageable : Manageable a ajouter
 	 */
 	public void addManageable(Manageable manageable) {
-		manageables.add(manageable);
+		this.manageables.add(manageable);
 	}
 
 	/**
@@ -103,20 +115,20 @@ public class Application implements Runnable {
 		int id = no;
 
 		// Choix aleatoire parmi les emplacements de spawn existants
-		Point spawnPlace = spawnPlaces.get(currentSpawnPoint);
-		currentSpawnPoint = (currentSpawnPoint + 1) % spawnPlaces.size();
+		Point spawnPlace = this.spawnPlaces.get(this.currentSpawnPoint);
+		this.currentSpawnPoint = (this.currentSpawnPoint + 1) % this.spawnPlaces.size();
 
 		ICharacter character = CharacterFactory.getInstance().create("red");
 		character.setPos(new Point(spawnPlace.x, spawnPlace.y));
 		character.setId(id);
 
-		character.setAngle(PointCalc.getAngle(PointCalc.sub(map.getCenter(), character.getCenter())));
+		character.setAngle(PointCalc.getAngle(PointCalc.sub(this.map.getCenter(), character.getCenter())));
 
-		players.put(id, character);
+		this.players.put(id, character);
 
 		// Ajout du joueur au listes de gestion
-		addDrawable(character);
-		addManageable(character);
+		this.addDrawable(character);
+		this.addManageable(character);
 	}
 
 	/**
@@ -125,11 +137,11 @@ public class Application implements Runnable {
 	 * @param id
 	 */
 	public void deletePlayer(int id) {
-		ICharacter character = players.get(id);
+		ICharacter character = this.players.get(id);
 		if (character != null) {
-			players.remove(id);
-			removeDrawable(character);
-			removeManageable(character);
+			this.players.remove(id);
+			this.removeDrawable(character);
+			this.removeManageable(character);
 		}
 	}
 
@@ -137,40 +149,47 @@ public class Application implements Runnable {
 	 * @return La liste de toutes les bombes
 	 */
 	public List<IBomb> getBombs() {
-		return bombs;
+		return this.bombs;
 	}
 
 	/**
 	 * @return Liste des elments Drawbles
 	 */
 	public List<Drawable> getDrawables() {
-		return drawables;
+		return this.drawables;
 	}
 
 	/**
 	 * @return liste des explosions en cours
 	 */
 	public List<IExplosion> getExplosions() {
-		return explosions;
+		return this.explosions;
+	}
+
+	/**
+	 * @return liste des items
+	 */
+	public List<PlaceableItem> getItems() {
+		return this.items;
 	}
 
 	/**
 	 * @return Liste des elments Manageable
 	 */
 	public List<Manageable> getManageables() {
-		return manageables;
+		return this.manageables;
 	}
 
 	/**
 	 * @return La map du jeu
 	 */
 	public GameMap getMap() {
-		return map;
+		return this.map;
 	}
 
 	public ICharacter getPlayer(int i) {
 		try {
-			return players.get(i);
+			return this.players.get(i);
 		} catch (Exception e) {
 		}
 		return null;
@@ -183,7 +202,7 @@ public class Application implements Runnable {
 	 * @param clickedKeys : Touches active du clavier du joueur
 	 */
 	public boolean managePlayer(int id, List<Integer> clickedKeys) {
-		ICharacter character = players.get(id);
+		ICharacter character = this.players.get(id);
 		if (character != null) {
 			character.actions(this, clickedKeys);
 			return true;
@@ -197,7 +216,7 @@ public class Application implements Runnable {
 	 * @param bomb : la bombe a supprimer
 	 */
 	public void removeBomb(IBomb bomb) {
-		bombs.remove(bomb);
+		this.bombs.remove(bomb);
 	}
 
 	/**
@@ -206,7 +225,7 @@ public class Application implements Runnable {
 	 * @param drawable : Drawable a supprimer
 	 */
 	public void removeDrawable(Drawable drawable) {
-		drawables.remove(drawable);
+		this.drawables.remove(drawable);
 	}
 
 	/**
@@ -215,7 +234,16 @@ public class Application implements Runnable {
 	 * @param explosion : explosion a enlever
 	 */
 	public void removeExplosion(IExplosion explosion) {
-		explosions.remove(explosion);
+		this.explosions.remove(explosion);
+	}
+
+	/**
+	 * Enleve un item de la liste d'item
+	 *
+	 * @param item : item a enlever
+	 */
+	public void removeExplosion(PlaceableItem item) {
+		this.items.remove(item);
 	}
 
 	/**
@@ -224,7 +252,7 @@ public class Application implements Runnable {
 	 * @param manageable : Manageable a supprimer
 	 */
 	public void removeManageable(Manageable manageable) {
-		manageables.remove(manageable);
+		this.manageables.remove(manageable);
 	}
 
 	/**
@@ -235,20 +263,19 @@ public class Application implements Runnable {
 
 		// Temps d'un passage dans la boucle while, pour la synchro des elements (ex :
 		// vitesse de deplacement)
-		timerApploop.tick();
+		this.timerApploop.tick();
 		while (!Thread.currentThread().isInterrupted()) {
 
 			// Gestion des elements
-			for (int i = 0; i < manageables.size(); i++) {
-				manageables.get(i).manage(this, timerApploop.lastTickS());
-			}
+			for (int i = 0; i < this.manageables.size(); i++)
+				this.manageables.get(i).manage(this, this.timerApploop.lastTickS());
 
 			// Pause pour optimisation
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
 			}
-			timerApploop.tick();
+			this.timerApploop.tick();
 		}
 	}
 
@@ -256,10 +283,10 @@ public class Application implements Runnable {
 	 * Lancement du jeu
 	 */
 	public void start() {
-		myThread.start();
+		this.myThread.start();
 	}
 
 	public void stop() {
-		myThread.interrupt();
+		this.myThread.interrupt();
 	}
 }
