@@ -23,13 +23,18 @@ public abstract class Item implements CollectableItem, PlaceableItem {
 	public abstract void draw(Graphics2D g);
 
 	@Override
-	public Point getTile() {
+	public Point getPos() {
 		return this.pos;
 	}
 
 	@Override
-	public void setTile(Point pos) {
-		this.pos = pos;
+	public Point getTile() {
+		return this.tile;
+	}
+
+	@Override
+	public void setTile(Point tile, int tileSize) {
+		this.tile = tile;
 	}
 
 	@Override

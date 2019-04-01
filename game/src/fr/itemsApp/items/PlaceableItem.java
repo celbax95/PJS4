@@ -25,13 +25,18 @@ public interface PlaceableItem extends Drawable {
 	/**
 	 * @return la position de l'item
 	 */
+	Point getPos();
+
+	/**
+	 * @return la position de l'item
+	 */
 	Point getTile();
 
 	/**
 	 * Change la position de l'item
 	 *
-	 * @param pos : nouvelle position =======
-	 * @param pos : nouvelle position >>>>>>> javadoc
+	 * @param tile     : nouvelle position
+	 * @param tileSize : taille d'une tile
 	 */
-	void setTile(Point pos);
+	void setTile(Point tile, int tileSize);
 }
