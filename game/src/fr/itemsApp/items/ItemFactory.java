@@ -22,7 +22,7 @@ public class ItemFactory {
 		}
 	}
 
-	public ItemFactory getInstance() {
+	public static ItemFactory getInstance() {
 		return instance;
 	}
 
