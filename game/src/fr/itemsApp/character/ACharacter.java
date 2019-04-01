@@ -7,6 +7,7 @@ import fr.application.Application;
 import fr.explosion.IExplosion;
 import fr.itemsApp.bomb.BombFactory;
 import fr.itemsApp.bomb.IBomb;
+import fr.itemsApp.items.PlaceableItem;
 import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.util.point.Point;
@@ -139,6 +140,18 @@ public abstract class ACharacter implements ICharacter {
 		return this.health;
 	}
 
+	private void getItem(Application application) {
+
+		List<PlaceableItem> items = application.getItems();
+
+		Point tile = application.getMap().getTileFor(this.pos.x, this.pos.y);
+
+		for (PlaceableItem item : items)
+			if (tile.x == item.getTile().x && tile.y == item.getTile().y) {
+
+			}
+	}
+
 	@Override
 	public int getMaxHealth() {
 		return MAX_HEALTH;
@@ -149,6 +162,7 @@ public abstract class ACharacter implements ICharacter {
 		this.move(application, timeSinceLastCall);
 		this.setDamage(application);
 		this.death(application);
+		this.getItem(application);
 		this.regen(timeSinceLastCall);
 	}
 
@@ -296,6 +310,7 @@ public abstract class ACharacter implements ICharacter {
 		}
 	}
 
+	@Override
 	public void setExplosionSize(int explosionSize) {
 		this.explosionSize = explosionSize;
 	}
