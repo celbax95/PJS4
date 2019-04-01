@@ -40,6 +40,8 @@ public interface PlaceableItem extends Drawable {
 	 */
 	void setTile(Point tile, int tileSize);
 
+	boolean useNow();
+
 	/**
 	 * Ajoute un item a la liste d'items de l'appliçcation
 	 *
