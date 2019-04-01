@@ -2,10 +2,8 @@ package fr.tiles;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 
 import fr.application.Application;
-import fr.scale.Scale;
 
 /**
  * Zone d'apparition des objets
@@ -36,16 +34,8 @@ public class Spawner extends MapTileSuper {
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-		Scale scale = Scale.getInstance();
-
-		AffineTransform oldTransform = g.getTransform();
-
-		g.scale(scale.getScale(), scale.getScale());
-		g.translate(pos.getIX(), pos.getIY());
-
 		g.setColor(c);
-		g.fillRect(0, 0, DEFAULT_SIZE, DEFAULT_SIZE);
-		g.setTransform(oldTransform);
+		g.fillRect(this.pos.getIX(), this.pos.getIY(), DEFAULT_SIZE, DEFAULT_SIZE);
 	}
 
 	/**

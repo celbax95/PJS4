@@ -2,12 +2,10 @@ package fr.explosion;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
 
 import fr.application.Application;
-import fr.scale.Scale;
 
 /**
  * Explosion standard
@@ -17,12 +15,12 @@ public class StandardExplosion extends Explosion {
 	private static final long serialVersionUID = 1L;
 
 	private static Image[] img = {
-			((new ImageIcon(Character.class.getResource("/images/explosions/standard/0.png"))).getImage()
-					.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_DEFAULT)),
-			((new ImageIcon(Character.class.getResource("/images/explosions/standard/1.png"))).getImage()
-					.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_DEFAULT)),
-			((new ImageIcon(Character.class.getResource("/images/explosions/standard/2.png"))).getImage()
-					.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_DEFAULT)), };
+			new ImageIcon(Character.class.getResource("/images/explosions/standard/0.png")).getImage()
+					.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_DEFAULT),
+			new ImageIcon(Character.class.getResource("/images/explosions/standard/1.png")).getImage()
+					.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_DEFAULT),
+			new ImageIcon(Character.class.getResource("/images/explosions/standard/2.png")).getImage()
+					.getScaledInstance(TILE_SIZE, TILE_SIZE, Image.SCALE_DEFAULT), };
 
 	/**
 	 * constructeur StandardExplosion
@@ -38,11 +36,7 @@ public class StandardExplosion extends Explosion {
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-		Scale scale = Scale.getInstance();
-		AffineTransform af = new AffineTransform();
-		af.scale(scale.getScale(), scale.getScale());
-		af.translate(pos.getIX(), pos.getIY());
-		g.drawImage(img[type], af, null);
+		g.drawImage(img[this.type], this.pos.getIX(), this.pos.getIY(), null);
 	}
 
 	/**
@@ -54,8 +48,7 @@ public class StandardExplosion extends Explosion {
 	 */
 	@Override
 	public void manage(Application application, double timeSinceLastCall) {
-		if (explosionTime.isDone()) {
-			delete(application);
-		}
+		if (this.explosionTime.isDone())
+			this.delete(application);
 	}
 }

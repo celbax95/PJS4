@@ -30,14 +30,14 @@ public abstract class Explosion implements IExplosion {
 	 * constructeur Explosion
 	 */
 	public Explosion() {
-		tileSize = TILE_SIZE;
-		type = 0;
-		tile = new Point(0, 0);
-		this.pos = getPosfromTile(tile);
+		this.tileSize = TILE_SIZE;
+		this.type = 0;
+		this.tile = new Point(0, 0);
+		this.pos = this.getPosfromTile(this.tile);
 		this.damage = 0;
 		this.explosionTime = new Cooldown(0);
 		try {
-			String cheminBombe = ".\\BanqueSon\\bombe.wav";
+			String cheminBombe = "game\\BanqueSon\\bombe.wav";
 			AudioPlayer audioPlayerBombe = new AudioPlayer(cheminBombe);
 			audioPlayerBombe.play();
 		} catch (Exception ex) {
@@ -50,8 +50,7 @@ public abstract class Explosion implements IExplosion {
 	/**
 	 * Supprime une explosion de l'application
 	 *
-	 * @param application
-	 *            : application
+	 * @param application : application
 	 */
 	protected void delete(Application application) {
 		application.removeExplosion(this);
@@ -61,26 +60,25 @@ public abstract class Explosion implements IExplosion {
 
 	@Override
 	public int getDamage() {
-		return damage;
+		return this.damage;
 	}
 
 	/**
-	 * @param tile
-	 *            : élément du jeu possedant une largeur et une hauteur
+	 * @param tile : élément du jeu possedant une largeur et une hauteur
 	 * @return la position de la tile
 	 */
 	private Point getPosfromTile(Point tile) {
-		return new Point(tile.x * tileSize, tile.y * tileSize);
+		return new Point(tile.x * this.tileSize, tile.y * this.tileSize);
 	}
 
 	@Override
 	public Point getTile() {
-		return tile;
+		return this.tile;
 	}
 
 	/**
-	 * @param explosionTime
-	 *            : temps mis par l'explosion avant de disparaitre du terrain
+	 * @param explosionTime : temps mis par l'explosion avant de disparaitre du
+	 *                      terrain
 	 */
 	@Override
 	public void setCooldown(int explosionTime) {
@@ -89,8 +87,7 @@ public abstract class Explosion implements IExplosion {
 
 	/**
 	 *
-	 * @param damage
-	 *            : dommage provoqués par une explosion
+	 * @param damage : dommage provoqués par une explosion
 	 */
 	@Override
 	public void setDamage(int damage) {
@@ -99,20 +96,18 @@ public abstract class Explosion implements IExplosion {
 
 	/**
 	 *
-	 * @param tile
-	 *            : élément du jeu possedant une largeur et une hauteur
+	 * @param tile : élément du jeu possedant une largeur et une hauteur
 	 */
 	@Override
 	public void setTile(Point tile) {
 		this.tile = tile;
-		this.pos = getPosfromTile(tile);
+		this.pos = this.getPosfromTile(tile);
 	}
 
 	/**
 	 *
-	 * @param type
-	 *            : type de l'explosion (1 direction droite ou gauche) (2 direction
-	 *            haut ou bas)
+	 * @param type : type de l'explosion (1 direction droite ou gauche) (2 direction
+	 *             haut ou bas)
 	 */
 	@Override
 	public void setType(int type) {

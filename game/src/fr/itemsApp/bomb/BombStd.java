@@ -8,7 +8,6 @@ import javax.swing.ImageIcon;
 import fr.application.Application;
 import fr.explosion.IExplosion;
 import fr.explosion.StandardExplosion;
-import fr.scale.Scale;
 import fr.util.point.Point;
 
 /**
@@ -54,16 +53,16 @@ public class BombStd extends Bomb {
 			this.explode(a);
 	}
 
+	@Override
+	public void SonExplosion() {
+		// TODO Auto-generated method stub
+
+	}
+
 	/**
 	 * @return Taille de la bombe
 	 */
 	public static int getSIZE() {
 		return DEFAULT_BOMB_SIZE;
-	}
-
-	@Override
-	public void SonExplosion() {
-		// TODO Auto-generated method stub
-		
 	}
 }

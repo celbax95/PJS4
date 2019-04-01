@@ -2,6 +2,7 @@ package fr.appCli;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,6 +15,7 @@ import com.sun.glass.events.KeyEvent;
 import fr.camera.Camera;
 import fr.client.Client;
 import fr.gameLauncher.GameLauncher;
+import fr.hud.HUD;
 import fr.itemsApp.Drawable;
 import fr.itemsApp.character.ICharacter;
 import fr.map.GameMap;
@@ -39,7 +41,7 @@ public class AppliClient implements AppliScreen, Runnable {
 	private Thread myThread;
 
 	private GameMap map;
-	
+
 	ObjectInputStream sIn;
 	ObjectOutputStream sOut;
 
@@ -49,19 +51,10 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	private double changingScale;
 
+	private HUD hud;
+
 	private boolean receiving;
 
-	/**
-	 * @param name   : Nom de la fenetre de jeu
-	 * @param socket : Socket liee au serveur
-	 */
-	public AppliClient(String name, Socket socket, ObjectInputStream sIn, ObjectOutputStream sOut) {
-		this(name, socket);
-		
-		this.sIn = sIn;
-		this.sOut = sOut;
-	}
-	
 	public AppliClient(String name, Socket socket) {
 		this.transfer = new Object();
 		this.transferPlayer = new Object();
@@ -71,17 +64,26 @@ public class AppliClient implements AppliScreen, Runnable {
 		this.receiving = false;
 
 		this.socket = socket;
-		// testVersion(socket);
 
+		this.myThread = new Thread(this);
+		this.listD = new ArrayList<>();
+	}
 
-		myThread = new Thread(this);
-		listD = new ArrayList<>();
+	/**
+	 * @param name   : Nom de la fenetre de jeu
+	 * @param socket : Socket liee au serveur
+	 */
+	public AppliClient(String name, Socket socket, ObjectInputStream sIn, ObjectOutputStream sOut) {
+		this(name, socket);
+
+		this.sIn = sIn;
+		this.sOut = sOut;
 	}
 
 	/**
 	 * Change le scale suivant les touches du clavier pressees
 	 */
-	private void changeScale() {
+	private double changeScale() {
 
 		KeyBoard keyBoard = KeyBoard.getInstance();
 
@@ -91,12 +93,12 @@ public class AppliClient implements AppliScreen, Runnable {
 			scale.increase();
 		else if (keyBoard.isPressed(KeyEvent.VK_SUBTRACT))
 			scale.decrease();
-		changingScale = scale.update();
-		if (changingScale != 0) {
-			// camera.getPos();
-			camera.move(-changingScale * map.getHeight() * map.getTileSize() * 0.5,
-					-changingScale * map.getHeight() * map.getTileSize() * 0.5);
-		}
+		this.changingScale = scale.update();
+		if (this.changingScale != 0)
+			this.camera.move(-this.changingScale * this.map.getHeight() * this.map.getTileSize() * 0.5,
+					-this.changingScale * this.map.getHeight() * this.map.getTileSize() * 0.5);
+
+		return scale.getScale();
 	}
 
 	/**
@@ -104,13 +106,13 @@ public class AppliClient implements AppliScreen, Runnable {
 	 */
 	@Override
 	public void close() {
-		myThread.interrupt();
-		endApp = true;
-			try {
-				socket.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		this.myThread.interrupt();
+		this.endApp = true;
+		try {
+			this.socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -119,8 +121,8 @@ public class AppliClient implements AppliScreen, Runnable {
 	public void closeSocket() {
 		try {
 			System.out.println("FIN");
-			if (socket != null)
-				socket.close();
+			if (this.socket != null)
+				this.socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -133,39 +135,44 @@ public class AppliClient implements AppliScreen, Runnable {
 	 */
 	@Override
 	public void draw(Graphics2D g) throws EndApp {
-		if (endApp)
+		if (this.endApp)
 			throw new EndApp();
 
-		if (!receiving)
+		if (!this.receiving)
 			return;
 
-		// Application d'un eventuel changement d'echelle
-		changeScale();
+		AffineTransform oldTransform = g.getTransform();
 
-		setCamera(g);
+		// Application d'un eventuel changement d'echelle
+		double scale = this.changeScale();
+
+		this.setCamera(g);
+
+		g.scale(scale, scale);
 
 		// creation d'un cache
 		List<Drawable> ld;
 
 		// initialisation du cache
-		synchronized (transfer) {
-			ld = listD;
+		synchronized (this.transfer) {
+			ld = this.listD;
 		}
 
 		// Affichage de la map
-		MapTile[][] mt = map.getMap();
-		if (mt != null) {
-			for (MapTile[] mapTiles : mt) {
-				for (MapTile mapTile : mapTiles) {
+		MapTile[][] mt = this.map.getMap();
+		if (mt != null)
+			for (MapTile[] mapTiles : mt)
+				for (MapTile mapTile : mapTiles)
 					mapTile.draw(g);
-				}
-			}
-		}
 
 		// Affichage des elements
-		for (Drawable drawable : ld) {
+		for (Drawable drawable : ld)
 			drawable.draw(g);
-		}
+
+		g.setTransform(oldTransform);
+
+		this.hud.setCharacter(this.player);
+		this.hud.draw(g);
 	}
 
 	@Override
@@ -175,7 +182,7 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	@Override
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
 	/**
@@ -189,65 +196,64 @@ public class AppliClient implements AppliScreen, Runnable {
 			List<Drawable> listDrawables;
 
 			KeyBoard keyBoard = KeyBoard.getInstance();
-			
-			
 
 			// Tant que l'application n'est pas terminee
 			while (!Thread.currentThread().isInterrupted()) {
 
 				// Recuperation de la camera
-				synchronized (transferPlayer) {
-					player = (ICharacter) sIn.readUnshared();
+				synchronized (this.transferPlayer) {
+					this.player = (ICharacter) this.sIn.readUnshared();
 				}
 
-				
-				Object[] envoiClient = (Object[]) sIn.readUnshared();
+				Object[] envoiClient = (Object[]) this.sIn.readUnshared();
 				// Recuperation de la map
-				map = (GameMap) envoiClient[0];
+				this.map = (GameMap) envoiClient[0];
 				// Recuperation des elements
 				listDrawables = (List<Drawable>) envoiClient[1];
-				
-				// Elements dans le cache
-				synchronized (transfer) {
-					listD = new ArrayList<>(listDrawables);
-				}
-				sOut.writeUnshared(keyBoard.getKeys());
-				sOut.flush();
-				sOut.reset();
 
-				if (!receiving) {
-					camera = new Camera(new Point(Client.getWidth(), Client.getHeight()),
-							new Point(map.getWidth() * map.getTileSize(), map.getHeight() * map.getTileSize()),
-							player.getCenter());
-					receiving = true;
+				// Elements dans le cache
+				synchronized (this.transfer) {
+					this.listD = new ArrayList<>(listDrawables);
+				}
+				this.sOut.writeUnshared(keyBoard.getKeys());
+				this.sOut.flush();
+				this.sOut.reset();
+
+				if (!this.receiving) {
+					this.camera = new Camera(new Point(Client.getWidth(), Client.getHeight()),
+							new Point(this.map.getWidth() * this.map.getTileSize(),
+									this.map.getHeight() * this.map.getTileSize()),
+							this.player.getCenter());
+					this.hud = HUD.getInstance();
+					this.receiving = true;
 				}
 			}
 			this.sOut.close();
 			this.sIn.close();
 		} catch (IOException e) {
 			System.err.println("Communication avec le serveur terminee");
-			//e.printStackTrace();
-			close();
+			// e.printStackTrace();
+			this.close();
 			GameLauncher.resetMenu();
 		} catch (ClassNotFoundException e1) {
 			System.err.println("Erreur de Reception depuis le serveur");
-			close();
+			this.close();
 			GameLauncher.resetMenu();
 		}
 	}
 
 	private void setCamera(Graphics2D g) {
-		synchronized (transferPlayer) {
-			camera.setA(player.getCenter());
+		synchronized (this.transferPlayer) {
+			this.camera.setA(this.player.getCenter());
 		}
-		camera.update();
-		Point camPos = camera.getPos();
+		this.camera.update();
+		Point camPos = this.camera.getPos();
 		g.translate(camPos.x, camPos.y);
 	}
 
 	@Override
 	public void start() {
-		myThread.start();
+		this.myThread.start();
 	}
 
 	/*

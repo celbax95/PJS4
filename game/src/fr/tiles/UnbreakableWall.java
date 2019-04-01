@@ -6,7 +6,6 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 import fr.application.Application;
-import fr.scale.Scale;
 
 /**
  * Mur Incassable
@@ -14,7 +13,7 @@ import fr.scale.Scale;
 public class UnbreakableWall extends MapTileSuper {
 
 	private static final long serialVersionUID = 1L;
-	private static Image wall = (new ImageIcon(UnbreakableWall.class.getResource("/images/map/walls/unbreakable.png")))
+	private static Image wall = new ImageIcon(UnbreakableWall.class.getResource("/images/map/walls/unbreakable.png"))
 			.getImage();
 
 	private static final boolean walkable = false;
@@ -23,10 +22,8 @@ public class UnbreakableWall extends MapTileSuper {
 	/**
 	 * Constructeur UnbreakableWall
 	 *
-	 * @param x
-	 *            : abscisse du point ou est placé l'element
-	 * @param y
-	 *            : ordonnée du point ou est placé l'element
+	 * @param x : abscisse du point ou est placé l'element
+	 * @param y : ordonnée du point ou est placé l'element
 	 */
 	public UnbreakableWall(int x, int y) {
 		super(x, y);
@@ -35,19 +32,17 @@ public class UnbreakableWall extends MapTileSuper {
 	/**
 	 * affiche le mur incassable
 	 *
-	 * @param g
-	 *            : permet l'affichage
+	 * @param g : permet l'affichage
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(wall, pos.getIX(), pos.getIY(), DEFAULT_SIZE, DEFAULT_SIZE, null);
+		g.drawImage(wall, this.pos.getIX(), this.pos.getIY(), DEFAULT_SIZE, DEFAULT_SIZE, null);
 	}
 
 	/**
 	 * permet d'interagir avec le mur incassable
 	 *
-	 * @param m
-	 *            : l'application
+	 * @param m : l'application
 	 */
 	@Override
 	public void interact(Application m) {
