@@ -35,9 +35,13 @@ public abstract class Item implements CollectableItem, PlaceableItem {
 	@Override
 	public void setTile(Point tile, int tileSize) {
 		this.tile = tile;
+		this.pos = new Point(tile.getIX() * tileSize, tile.getIY() * tileSize);
 	}
 
 	@Override
 	public abstract void use(Application application);
 
+	public static void addToLists(Item item, Application application) {
+		application.addDrawable(item);
+	}
 }

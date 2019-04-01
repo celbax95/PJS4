@@ -8,6 +8,7 @@ import fr.application.Application;
 import fr.itemsApp.bomb.IBomb;
 import fr.itemsApp.items.ItemFactory;
 import fr.itemsApp.items.PlaceableItem;
+import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.tiles.Floor;
 import fr.util.point.Point;
@@ -31,7 +32,7 @@ public class ExplosionCreator implements Serializable {
 
 		this.explosions = new ArrayList<>();
 
-		MapTile[][] m = application.getMap().getMap();
+		GameMap map = application.getMap();
 
 		// horizontal
 
@@ -48,13 +49,13 @@ public class ExplosionCreator implements Serializable {
 		this.explosions.add(explosion);
 
 		for (int i = 1; i <= sizeExplosion; i++) {
-			if (continueRight && (continueRight = this.setExplosion(m, bombe, 1, tile.getIX() + i, tile.getIY())))
+			if (continueRight && (continueRight = this.setExplosion(map, bombe, 1, tile.getIX() + i, tile.getIY())))
 				;
-			if (continueLeft && (continueLeft = this.setExplosion(m, bombe, 1, tile.getIX() - i, tile.getIY())))
+			if (continueLeft && (continueLeft = this.setExplosion(map, bombe, 1, tile.getIX() - i, tile.getIY())))
 				;
-			if (continueUp && (continueUp = this.setExplosion(m, bombe, 2, tile.getIX(), tile.getIY() - i)))
+			if (continueUp && (continueUp = this.setExplosion(map, bombe, 2, tile.getIX(), tile.getIY() - i)))
 				;
-			if (continueDown && (continueDown = this.setExplosion(m, bombe, 2, tile.getIX(), tile.getIY() + i)))
+			if (continueDown && (continueDown = this.setExplosion(map, bombe, 2, tile.getIX(), tile.getIY() + i)))
 				;
 		}
 		for (IExplosion e : this.explosions) {
@@ -76,24 +77,28 @@ public class ExplosionCreator implements Serializable {
 	 * @param x       : abscisse du point ou doit etre placee l'explosion
 	 * @param y       : ordonnée du point ou doit etre placee l'explosion
 	 */
-	private boolean setExplosion(MapTile[][] mapTile, IBomb bombe, int type, int x, int y) {
-		if (x < 0 || x > mapTile.length || y < 0 || y > mapTile[0].length)
+	private boolean setExplosion(GameMap map, IBomb bombe, int type, int x, int y) {
+
+		MapTile[][] mapTiles = map.getMap();
+
+		if (x < 0 || x > mapTiles.length || y < 0 || y > mapTiles[0].length)
 			return false;
 
-		if (mapTile[x][y].isDestroyable() || mapTile[x][y].isWalkable()) {
+		if (mapTiles[x][y].isDestroyable() || mapTiles[x][y].isWalkable()) {
 			IExplosion ex = bombe.getExplosion();
 			ex.setTile(new Point(x, y));
 			ex.setType(type);
 			this.explosions.add(ex);
 		}
 
-		if (mapTile[x][y].isDestroyable()) {
-			Point tile = mapTile[x][y].getTile();
-			mapTile[x][y] = new Floor(tile.getIX(), tile.getIY());
+		if (mapTiles[x][y].isDestroyable()) {
+			Point tile = mapTiles[x][y].getTile();
+			mapTiles[x][y] = new Floor(tile.getIX(), tile.getIY());
 			ItemFactory ifa = ItemFactory.getInstance();
 			PlaceableItem pa = ifa.createRandom();
+			pa.setTile(new Point(tile), map.getTileSize());
 		}
 
-		return !mapTile[x][y].isDestroyable() || mapTile[x][y].isWalkable();
+		return !mapTiles[x][y].isDestroyable() || mapTiles[x][y].isWalkable();
 	}
 }
