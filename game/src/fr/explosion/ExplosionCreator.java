@@ -7,6 +7,7 @@ import java.util.List;
 import fr.application.Application;
 import fr.itemsApp.bomb.IBomb;
 import fr.itemsApp.items.ItemFactory;
+import fr.itemsApp.items.PlaceableItem;
 import fr.map.MapTile;
 import fr.tiles.Floor;
 import fr.util.point.Point;
@@ -28,7 +29,7 @@ public class ExplosionCreator implements Serializable {
 	 */
 	public void create(Application application, IBomb bombe) {
 
-		explosions = new ArrayList<>();
+		this.explosions = new ArrayList<>();
 
 		MapTile[][] m = application.getMap().getMap();
 
@@ -44,19 +45,19 @@ public class ExplosionCreator implements Serializable {
 		explosion.setTile(tile.clone());
 		explosion.setType(0);
 
-		explosions.add(explosion);
+		this.explosions.add(explosion);
 
 		for (int i = 1; i <= sizeExplosion; i++) {
-			if (continueRight && (continueRight = setExplosion(m, bombe, 1, tile.getIX() + i, tile.getIY())))
+			if (continueRight && (continueRight = this.setExplosion(m, bombe, 1, tile.getIX() + i, tile.getIY())))
 				;
-			if (continueLeft && (continueLeft = setExplosion(m, bombe, 1, tile.getIX() - i, tile.getIY())))
+			if (continueLeft && (continueLeft = this.setExplosion(m, bombe, 1, tile.getIX() - i, tile.getIY())))
 				;
-			if (continueUp && (continueUp = setExplosion(m, bombe, 2, tile.getIX(), tile.getIY() - i)))
+			if (continueUp && (continueUp = this.setExplosion(m, bombe, 2, tile.getIX(), tile.getIY() - i)))
 				;
-			if (continueDown && (continueDown = setExplosion(m, bombe, 2, tile.getIX(), tile.getIY() + i)))
+			if (continueDown && (continueDown = this.setExplosion(m, bombe, 2, tile.getIX(), tile.getIY() + i)))
 				;
 		}
-		for (IExplosion e : explosions) {
+		for (IExplosion e : this.explosions) {
 			application.addDrawable(e);
 			application.addManageable(e);
 			application.addExplosion(e);
@@ -83,13 +84,16 @@ public class ExplosionCreator implements Serializable {
 			IExplosion ex = bombe.getExplosion();
 			ex.setTile(new Point(x, y));
 			ex.setType(type);
-			explosions.add(ex);
+			this.explosions.add(ex);
 		}
 
 		if (mapTile[x][y].isDestroyable()) {
-			mapTile[x][y] = new Floor(mapTile[x][y].getTile().getIX(), mapTile[x][y].getTile().getIY());
+			Point tile = mapTile[x][y].getTile();
+			mapTile[x][y] = new Floor(tile.getIX(), tile.getIY());
+			ItemFactory ifa = ItemFactory.getInstance();
+			PlaceableItem pa = ifa.createRandom();
 		}
 
-		return (!mapTile[x][y].isDestroyable() || mapTile[x][y].isWalkable());
+		return !mapTile[x][y].isDestroyable() || mapTile[x][y].isWalkable();
 	}
 }
