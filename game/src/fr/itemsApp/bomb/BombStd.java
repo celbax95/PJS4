@@ -16,29 +16,22 @@ import fr.util.point.Point;
 public class BombStd extends Bomb {
 
 	private static final long serialVersionUID = 1L;
-	private static Image bomb = (new ImageIcon(BombStd.class.getResource("/images/bombs/standard/dropped/4.png")))
+	private static Image bomb = new ImageIcon(BombStd.class.getResource("/images/bombs/standard/dropped/4.png"))
 			.getImage();
 
 	private static final int TIME = 2200;
 	private static final int EXPLOSION_TIME = 1200;
-	private static final int DAMAGE = 30;
-
-	/**
-	 * @return Taille de la bombe
-	 */
-	public static int getSIZE() {
-		return DEFAULT_BOMB_SIZE;
-	}
+	private static final int DAMAGE = 50;
 
 	public BombStd(Point tile, int explosionSize) {
 		// Calcul de la position de la bombe
-		super(new Point((tile.getIX() * TILE_SIZE) + (TILE_SIZE - DEFAULT_BOMB_SIZE) / 2,
-				(tile.getIY() * TILE_SIZE) + (TILE_SIZE - DEFAULT_BOMB_SIZE) / 2), tile, TIME, explosionSize);
+		super(new Point(tile.getIX() * TILE_SIZE + (TILE_SIZE - DEFAULT_BOMB_SIZE) / 2,
+				tile.getIY() * TILE_SIZE + (TILE_SIZE - DEFAULT_BOMB_SIZE) / 2), tile, TIME, explosionSize);
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(bomb, pos.getIX(), pos.getIY(), DEFAULT_BOMB_SIZE, DEFAULT_BOMB_SIZE, null);
+		g.drawImage(bomb, this.pos.getIX(), this.pos.getIY(), DEFAULT_BOMB_SIZE, DEFAULT_BOMB_SIZE, null);
 	}
 
 	@Override
@@ -56,8 +49,14 @@ public class BombStd extends Bomb {
 
 	@Override
 	public void manage(Application a, double t) {
-		if (cooldown.isDone()) {
-			explode(a);
-		}
+		if (this.cooldown.isDone())
+			this.explode(a);
+	}
+
+	/**
+	 * @return Taille de la bombe
+	 */
+	public static int getSIZE() {
+		return DEFAULT_BOMB_SIZE;
 	}
 }
