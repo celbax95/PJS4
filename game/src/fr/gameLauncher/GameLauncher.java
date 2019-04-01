@@ -17,9 +17,9 @@ public class GameLauncher {
 	private static Server server;
 	private static Client cli;
 	private static Menu menu;
-	static String Cmenu = ".\\BanqueSon\\menu.wav";
+	static String Cmenu = "game\\BanqueSon\\menu.wav";
 
-	static String Cjeu = ".\\BanqueSon\\Yeah2.wav";
+	static String Cjeu = "game\\BanqueSon\\Yeah2.wav";
 	static Object Smenu = null;
 	static Object Sjeu = null;
 
@@ -33,12 +33,9 @@ public class GameLauncher {
 	/**
 	 * Crée un client
 	 *
-	 * @param ip
-	 *            Adresse IP du serveur auquel veut se connecter le client
-	 * @param port
-	 *            Numéro du port du serveur auquel veut se connecter le client
-	 * @param menu
-	 *            Menu actuellement utilisé
+	 * @param ip   Adresse IP du serveur auquel veut se connecter le client
+	 * @param port Numéro du port du serveur auquel veut se connecter le client
+	 * @param menu Menu actuellement utilisé
 	 * @throws IOException
 	 */
 	public static void createClient(String ip, int port, String alias, Menu menu) throws IOException {
@@ -48,12 +45,9 @@ public class GameLauncher {
 	/**
 	 * Crée un serveur
 	 *
-	 * @param title
-	 *            Le titre de la fenêtre gérée par le serveur
-	 * @param port
-	 *            Port du serveur
-	 * @param nbPlayer
-	 *            Nombres de joueurs supportés par le serveur
+	 * @param title    Le titre de la fenêtre gérée par le serveur
+	 * @param port     Port du serveur
+	 * @param nbPlayer Nombres de joueurs supportés par le serveur
 	 */
 	public static void createServer(String title, int port, int nbPlayers) {
 		server = new Server(title, port, nbPlayers);
@@ -63,9 +57,10 @@ public class GameLauncher {
 		return server.getNbPlayers();
 	}
 
+	@SuppressWarnings("finally")
 	public static AudioPlayer initialiserSon(String chemin) {
 
-		if (chemin.equals(Cmenu)) {
+		if (chemin.equals(Cmenu))
 			try {
 				AudioPlayer SoundMenu = new AudioPlayer(chemin);
 				Smenu = SoundMenu;
@@ -76,8 +71,7 @@ public class GameLauncher {
 			} finally {
 				return (AudioPlayer) Smenu;
 			}
-
-		} else if (chemin.equals(Cjeu)) {
+		else if (chemin.equals(Cjeu))
 			try {
 				AudioPlayer SoundMenu = new AudioPlayer(chemin);
 				Sjeu = SoundMenu;
@@ -88,20 +82,18 @@ public class GameLauncher {
 			} finally {
 				return (AudioPlayer) Sjeu;
 			}
-		} else
+		else
 			return null;
 	}
 
 	/**
 	 * Teste si le menu est instancié
 	 *
-	 * @exception Renvoie
-	 *                MenuNotSet si le menu n'est pas instancié
+	 * @exception Renvoie MenuNotSet si le menu n'est pas instancié
 	 */
 	public static void isMenuSet() throws MenuNotSet {
-		if (menu == null) {
+		if (menu == null)
 			throw new MenuNotSet();
-		}
 	}
 
 	public static void lancerSon(AudioPlayer monSon) {
@@ -116,8 +108,7 @@ public class GameLauncher {
 	 * Affiche le menu
 	 *
 	 * @see Menu
-	 * @exception Lance
-	 *                une exception si le menu n'a pas été initialisé
+	 * @exception Lance une exception si le menu n'a pas été initialisé
 	 */
 	public static void menuDisplay() throws MenuNotSet {
 
@@ -133,9 +124,8 @@ public class GameLauncher {
 	public static void resetMenu() {
 
 		clientClose();
-		if (server != null) {
+		if (server != null)
 			serverClose();
-		}
 		MainJPanel.setNewInstance();
 		Screen.setNewInstance();
 		menu.reset();
