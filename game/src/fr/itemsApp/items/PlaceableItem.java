@@ -25,7 +25,7 @@ public interface PlaceableItem extends Drawable {
 	/**
 	 * @return la position de l'item
 	 */
-	Point getPos();
+	Point getTile();
 
 	/**
 	 * Change la position de l'item
@@ -33,5 +33,5 @@ public interface PlaceableItem extends Drawable {
 	 * @param pos : nouvelle position =======
 	 * @param pos : nouvelle position >>>>>>> javadoc
 	 */
-	void setPos(Point pos);
+	void setTile(Point pos);
 }

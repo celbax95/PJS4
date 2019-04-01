@@ -10,7 +10,7 @@ public abstract class Item implements CollectableItem, PlaceableItem {
 
 	protected final int SIZE = 110;
 
-	protected Point pos;
+	protected Point pos, tile;
 	protected ICharacter holder;
 
 	@Override
@@ -23,12 +23,12 @@ public abstract class Item implements CollectableItem, PlaceableItem {
 	public abstract void draw(Graphics2D g);
 
 	@Override
-	public Point getPos() {
+	public Point getTile() {
 		return this.pos;
 	}
 
 	@Override
-	public void setPos(Point pos) {
+	public void setTile(Point pos) {
 		this.pos = pos;
 	}
 
