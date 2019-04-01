@@ -16,6 +16,6 @@ public class BombUpgrade extends Item {
 
 	@Override
 	public void use(Application application) {
+		this.holder.setExplosionSize(this.holder.getExplosionSize() + 1);
 	}
-
 }

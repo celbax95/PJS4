@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 
 import fr.application.Application;
 import fr.itemsApp.Drawable;
+import fr.itemsApp.character.ICharacter;
 import fr.util.point.Point;
 
 public interface PlaceableItem extends Drawable {
@@ -16,7 +17,7 @@ public interface PlaceableItem extends Drawable {
 	 *
 	 * @return l'item sous forme de CollectableItem
 	 */
-	CollectableItem collect(Application application, Character character);
+	CollectableItem collect(Application application, ICharacter character);
 
 	@Override
 	void draw(Graphics2D g);
