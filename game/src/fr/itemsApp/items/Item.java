@@ -40,8 +40,4 @@ public abstract class Item implements CollectableItem, PlaceableItem {
 
 	@Override
 	public abstract void use(Application application);
-
-	public static void addToLists(Item item, Application application) {
-		application.addDrawable(item);
-	}
 }

@@ -39,4 +39,14 @@ public interface PlaceableItem extends Drawable {
 	 * @param tileSize : taille d'une tile
 	 */
 	void setTile(Point tile, int tileSize);
+
+	/**
+	 * Ajoute un item a la liste d'items de l'appliçcation
+	 *
+	 * @param item        : item a ajouter
+	 * @param application : application
+	 */
+	public static void addToLists(Item item, Application application) {
+		application.addDrawable(item);
+	}
 }
