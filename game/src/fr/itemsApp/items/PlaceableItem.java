@@ -47,6 +47,7 @@ public interface PlaceableItem extends Drawable {
 	 * @param application : application
 	 */
 	public static void addToLists(Item item, Application application) {
+		application.addItem(item);
 		application.addDrawable(item);
 	}
 }
