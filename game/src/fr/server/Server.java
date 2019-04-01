@@ -5,11 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import fr.appCli.AppliClient;
 import fr.application.Application;
 import fr.gameLauncher.GameLauncher;
-import fr.screen.AppliScreen;
-import fr.screen.Screen;
 
 /**
  * Serveur
@@ -20,6 +17,7 @@ public class Server implements Runnable {
 	private static final int MARGE_H = 35;
 	private static final int MARGE_T = 2;
 	private static final int MARGE_W = 6;
+	private final int PORT;
 	private String title;
 
 	private final int NB_PLAYERS;
@@ -27,7 +25,7 @@ public class Server implements Runnable {
 	private ArrayList<Player> players;
 
 	private boolean gameOn;
-	private ServerSocket serveur;
+	private ServerSocket server;
 	private ArrayList<Service> services;
 	private Service first;
 	private Thread threadServ;
@@ -47,7 +45,7 @@ public class Server implements Runnable {
 	public Server(String title, int port, int nbPlayers) {
 
 		try {
-			serveur = new ServerSocket(port);
+			this.server = new ServerSocket(port);
 			this.threadServ = new Thread(this);
 			this.services = new ArrayList<Service>();
 			this.title = title;
@@ -57,7 +55,22 @@ public class Server implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.PORT = port;
 		this.NB_PLAYERS = nbPlayers;
+	}
+
+	public void addPlayer(Player p) {
+		int i = 0;
+		for (Player player : players) {
+			if (player.getAlias().equals(p.getAlias())) {
+				i++;
+			}
+		}
+		if (i != 0) {
+			i++;
+			p.setAlias(p.getAlias() + " " + i);
+		}
+		players.add(p);
 	}
 
 	/**
@@ -73,7 +86,7 @@ public class Server implements Runnable {
 			if (this.application != null) {
 				this.application.stop();
 			}
-			serveur.close();
+			server.close();
 			GameLauncher.updateMenu(new ArrayList<Player>());
 		} catch (IOException e) {
 		}
@@ -89,10 +102,6 @@ public class Server implements Runnable {
 
 	protected Application getApplication() {
 		return application;
-	}
-
-	public boolean getGameOn() {
-		return gameOn;
 	}
 
 	/*
@@ -111,23 +120,38 @@ public class Server implements Runnable {
 	 * } catch (IOException | ClassNotFoundException e) { e.printStackTrace(); } }
 	 */
 
+	public boolean getGameOn() {
+		return gameOn;
+	}
+
 	public int getNbPlayers() {
 		return this.nbPlayers;
+	}
+
+	public int getNoPlayerAvailable() {
+		if (players.isEmpty()) {
+			return 1;
+		} else {
+			return players.get(players.size() - 1).getNo() + 1;
+		}
+	}
+
+	public ArrayList<Player> getPlayers() {
+		return players;
 	}
 
 	protected void playerLeft(Player player) {
 		this.nbPlayers--;
 		int noPlayerRemoved = player.getNo();
-		if(noPlayerRemoved == this.players.size()) {
+		if (noPlayerRemoved == this.players.size()) {
 			this.players.remove(player);
-		}
-		else {
+		} else {
 			this.players.remove(player);
-			for(int i = noPlayerRemoved-1; i < this.players.size(); i++) {
-				this.players.get(i).setNo(this.players.get(i).getNo()-1);
+			for (int i = noPlayerRemoved - 1; i < this.players.size(); i++) {
+				this.players.get(i).setNo(this.players.get(i).getNo() - 1);
 			}
 		}
-		if(this.nbPlayers == 0) {
+		if (this.nbPlayers == 0) {
 			close();
 		}
 	}
@@ -138,32 +162,52 @@ public class Server implements Runnable {
 	@Override
 	public void run() {
 		while (!Thread.currentThread().isInterrupted()) {
-			if (nbPlayers < NB_PLAYERS) {
-				Socket socket = null;
 
-				try {
-					socket = serveur.accept();
-					if (this.socketHost == null) {
-						this.socketHost = socket;
-					}
-					this.nbPlayers++;
-					System.out.println("Connecte !");
-				} catch (IOException e) {
-					System.err.println("Serveur ferme");
-					break;
+			Socket socket = null;
+
+			try {
+				socket = server.accept();
+				if (this.socketHost == null) {
+					this.socketHost = socket;
 				}
-				if (socket != null) {
-					Service s;
-					s = new Service(this, socket);
-					synchronized (this) {
-						if (first == null) {
-							first = s;
-						}
+				this.nbPlayers++;
+				System.out.println("Connecte !");
+			} catch (IOException e) {
+				System.err.println("Serveur ferme");
+				break;
+			}
+			if (socket != null) {
+				Service s;
+				s = new Service(this, socket);
+				synchronized (this) {
+					if (first == null) {
+						first = s;
 					}
-					synchronized (services) {
-						services.add(s);
+				}
+				synchronized (services) {
+					services.add(s);
+				}
+				s.start();
+			}
+
+			// Cas de connexions quand le serveur est plein
+
+			boolean resetServerSocket = false;
+			while (nbPlayers >= NB_PLAYERS && !Thread.currentThread().isInterrupted()) {
+				if (!resetServerSocket) {
+					resetServerSocket = true;
+					try {
+						this.server.close();
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-					s.start();
+				}
+			}
+			if (resetServerSocket) {
+				try {
+					this.server = new ServerSocket(PORT);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}
@@ -174,36 +218,11 @@ public class Server implements Runnable {
 			this.threadServ.interrupt();
 			this.gameOn = true;
 			(this.application = new Application(WIDTH, HEIGHT)).start();
-			synchronized(this.application) {
+			synchronized (this.application) {
 				Service.setApplication(application);
 			}
 			notifyAll();
 		}
-	}
-	
-	public void addPlayer(Player p) {
-		int i = 0;
-		for(Player player : players) {
-			if(player.getAlias().equals(p.getAlias())) {
-				i++;
-			}
-		}
-		if(i != 0) {
-			i++;
-			p.setAlias(p.getAlias()+" "+i);	
-		}
-		players.add(p);
-	}
-	public int getNoPlayerAvailable() {
-		if(players.isEmpty()) {
-			return 1;
-		}
-		else {
-			return players.get(players.size()-1).getNo()+1;
-		}
-	}
-	public ArrayList<Player> getPlayers(){
-		return players;
 	}
 
 	/**
