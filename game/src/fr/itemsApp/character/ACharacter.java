@@ -28,37 +28,7 @@ public abstract class ACharacter implements ICharacter {
 
 	protected static final int MAX_HEALTH = 100;
 
-	/**
-	 * Verification de l'alignement entre deux intervalles
-	 *
-	 * @param p1
-	 *            : Position de la premiere borne de l'intervalle 1
-	 * @param s1
-	 *            : Distance jusqu'a la deuxieme borne de l'intervale 1
-	 * @param p2
-	 *            : Position de la premiere borne de l'intervalle 2
-	 * @param s2
-	 *            : Distance jusqu'a la deuxieme borne de l'intervale 2
-	 * @return Intervalles alignees
-	 */
-	private static boolean isAligned(int p1, int s1, int p2, int s2) {
-		return (isBetween(p2, p1, p1 + s1) || isBetween(p1, p2, p2 + s2) || isBetween(p2 + s2 / 2, p1, p1 + s1));
-	}
-
-	/**
-	 * Verification qu'un point est entre deux autres points sur une droite
-	 *
-	 * @param p
-	 *            : point test
-	 * @param p1
-	 *            : point 1
-	 * @param p2
-	 *            : point 2
-	 * @return Le point est entre les deux autres
-	 */
-	public static boolean isBetween(int p, int p1, int p2) {
-		return (p1 < p && p < p2);
-	}
+	protected static final double REGEN = 2;
 
 	protected int speed;
 
@@ -78,66 +48,58 @@ public abstract class ACharacter implements ICharacter {
 
 	protected int id;
 
-	protected int health;
+	protected double health;
 
 	/**
-	 * @param x
-	 *            : Position x
-	 * @param y
-	 *            : Position y
-	 * @param bombCoolDown
-	 *            : Temps entre chaque pose de bombe
-	 * @param speed
-	 *            : Vitesse du personnage
+	 * @param x            : Position x
+	 * @param y            : Position y
+	 * @param bombCoolDown : Temps entre chaque pose de bombe
+	 * @param speed        : Vitesse du personnage
 	 */
-	public ACharacter(double x, double y, int health, int bombCoolDown, int speed) {
-		pos = new Point(x, y);
+	public ACharacter(double x, double y, double health, int bombCoolDown, int speed) {
+		this.pos = new Point(x, y);
 		this.speed = speed;
 		this.health = health;
-		lastDamage = new Cooldown(timeBetweenDamages);
-		moves = new Point(0, 0);
-		angleOfView = 0;
-		walkStep = 0;
+		this.lastDamage = new Cooldown(timeBetweenDamages);
+		this.moves = new Point(0, 0);
+		this.angleOfView = 0;
+		this.walkStep = 0;
 		this.bombCoolDown = new Cooldown(bombCoolDown);
-		defaultBomb = "std";
+		this.defaultBomb = "std";
 	}
 
 	@Override
 	public void actions(Application application, List<Integer> clickedKeys) {
-		setMoves(clickedKeys);
-		dropBomb(application, clickedKeys);
+		this.setMoves(clickedKeys);
+		this.dropBomb(application, clickedKeys);
 	}
 
 	@Override
-	public void damage(int health) {
+	public void damage(double health) {
 		this.health -= health;
-		lastDamage.reset();
+		this.lastDamage.reset();
 	}
 
 	/**
 	 * Gere si le joueur est mort
 	 *
-	 * @param application
-	 *            : application
+	 * @param application : application
 	 */
 	private void death(Application application) {
-		if (health <= 0) {
-			application.deletePlayer(id);
-		}
+		if (this.health <= 0)
+			application.deletePlayer(this.id);
 	}
 
 	/**
 	 * Pose une bombe sur la tile sur laquelle est le character
 	 *
-	 * @param application
-	 *            : Application
-	 * @param clickedKeys
-	 *            : Touches appuyees du clavier
+	 * @param application : Application
+	 * @param clickedKeys : Touches appuyees du clavier
 	 */
 	public void dropBomb(Application application, List<Integer> clickedKeys) {
-		if (clickedKeys.contains(KeyEvent.VK_R)) {
-			if (bombCoolDown.isDone()) {
-				Point tile = application.getMap().getTileFor(pos.getIX(), pos.getIY());
+		if (clickedKeys.contains(KeyEvent.VK_R))
+			if (this.bombCoolDown.isDone()) {
+				Point tile = application.getMap().getTileFor(this.pos.getIX(), this.pos.getIY());
 				List<IBomb> bombs = application.getBombs();
 				for (IBomb b : bombs) {
 					Point btile = b.getTile();
@@ -145,29 +107,28 @@ public abstract class ACharacter implements ICharacter {
 						return;
 				}
 
-				IBomb bomb = BombFactory.getInstance().create(defaultBomb, application, this);
+				IBomb bomb = BombFactory.getInstance().create(this.defaultBomb, application, this);
 				IBomb.addToLists(application, bomb);
-				bombCoolDown.reset();
+				this.bombCoolDown.reset();
 				bomb.start();
 			}
-		}
 	}
 
 	/**
 	 * @return Temps entre chaque pose de bombe
 	 */
 	public Cooldown getBombCoolDown() {
-		return bombCoolDown;
+		return this.bombCoolDown;
 	}
 
 	@Override
 	public Point getCenter() {
-		return new Point(pos.x + DEFAULT_SIZE / 2, pos.y + DEFAULT_SIZE / 2);
+		return new Point(this.pos.x + DEFAULT_SIZE / 2, this.pos.y + DEFAULT_SIZE / 2);
 	}
 
 	@Override
-	public int getHealth() {
-		return health;
+	public double getHealth() {
+		return this.health;
 	}
 
 	@Override
@@ -177,63 +138,57 @@ public abstract class ACharacter implements ICharacter {
 
 	@Override
 	public void manage(Application application, double timeSinceLastCall) {
-		move(application, timeSinceLastCall);
-		setDamage(application);
-		death(application);
+		this.move(application, timeSinceLastCall);
+		this.setDamage(application);
+		this.death(application);
+		this.regen(timeSinceLastCall);
 	}
 
 	@Override
 	public int maxTimeBeforeBomb() {
-		return (int) bombCoolDown.getFreq();
+		return (int) this.bombCoolDown.getFreq();
 	}
 
 	/**
 	 * Bouge le joueur, et gere les collisions
 	 *
-	 * @param map
-	 *            : Carte de la partie
-	 * @param t
-	 *            : Temps entre chaque appel
+	 * @param map : Carte de la partie
+	 * @param t   : Temps entre chaque appel
 	 */
 	public void move(Application application, double t) {
 
 		GameMap map = application.getMap();
 
-		double x = pos.x;
-		double y = pos.y;
+		double x = this.pos.x;
+		double y = this.pos.y;
 
-		double newSpeed = speed;
+		double newSpeed = this.speed;
 
 		List<IBomb> bombs = application.getBombs();
 
-		for (IBomb b : bombs) {
-			if (isAligned(pos.getIX() + collideMargin, DEFAULT_SIZE - collideMargin * 2, b.getPos().getIX(),
+		for (IBomb b : bombs)
+			if (isAligned(this.pos.getIX() + collideMargin, DEFAULT_SIZE - collideMargin * 2, b.getPos().getIX(),
 					b.getSize().getIX())
-					&& isAligned(pos.getIY() + collideMargin, DEFAULT_SIZE - collideMargin * 2, b.getPos().getIY(),
-							b.getSize().getIY())) {
-				// Si le Character est sur une bombe
-
-				if (moves.x == 0 && moves.y == 0) {
+					&& isAligned(this.pos.getIY() + collideMargin, DEFAULT_SIZE - collideMargin * 2, b.getPos().getIY(),
+							b.getSize().getIY()))
+				if (this.moves.x == 0 && this.moves.y == 0) {
 					// Si le Character est immobile
 
-					Point center = getCenter();
+					Point center = this.getCenter();
 					Point bcenter = b.getCenter();
 
 					Point pushDir = PointCalc.sub(center, bcenter);
 					pushDir.normalize();
 
-					x += (pushDir.x * speed / 1.5 * t);
-					y += (pushDir.y * speed / 1.5 * t);
-				} else {
+					x += pushDir.x * this.speed / 1.5 * t;
+					y += pushDir.y * this.speed / 1.5 * t;
+				} else
 					newSpeed *= 0.5;
-				}
-			}
-		}
 
-		x += (moves.x * newSpeed * t);
-		y += (moves.y * newSpeed * t);
+		x += this.moves.x * newSpeed * t;
+		y += this.moves.y * newSpeed * t;
 
-		Point tMove = new Point(x - pos.x, y - pos.y);
+		Point tMove = new Point(x - this.pos.x, y - this.pos.y);
 		tMove.normalize();
 
 		Point tile = map.getTileFor(x + DEFAULT_SIZE / 2, y + DEFAULT_SIZE / 2);
@@ -242,7 +197,7 @@ public abstract class ACharacter implements ICharacter {
 		MapTile mapTile;
 
 		// Collisions
-		for (int mtx = (int) (tile.x - 1); mtx <= tile.x + 1; mtx++) {
+		for (int mtx = (int) (tile.x - 1); mtx <= tile.x + 1; mtx++)
 			for (int mty = (int) (tile.y - 1); mty <= tile.y + 1; mty++) {
 
 				// Selection d'un tile dans la map
@@ -256,52 +211,48 @@ public abstract class ACharacter implements ICharacter {
 				// Verification de collision avec les tiles nom walkable
 				if (!mapTile.isWalkable()) {
 					// X
-					if (isAligned(pos.getIY() + collideMargin, DEFAULT_SIZE - collideMargin * 2,
-							mapTile.getPos().getIY(), mapTile.getSize())) {
-
+					if (isAligned(this.pos.getIY() + collideMargin, DEFAULT_SIZE - collideMargin * 2,
+							mapTile.getPos().getIY(), mapTile.getSize()))
 						// Droite
 						if (tMove.x > 0 && isBetween((int) x + DEFAULT_SIZE, mapTile.getPos().getIX(),
-								mapTile.getPos().getIX() + mapTile.getSize())) {
+								mapTile.getPos().getIX() + mapTile.getSize()))
 							x = mapTile.getPos().x - DEFAULT_SIZE;
-							// On ne peut pas aller a droite
-						}
-
-						// Gauche
+						// On ne peut pas aller a droite
 						else if (tMove.x < 0 && isBetween((int) x, mapTile.getPos().getIX(),
-								mapTile.getPos().getIX() + mapTile.getSize())) {
+								mapTile.getPos().getIX() + mapTile.getSize()))
 							x = mapTile.getPos().x + mapTile.getSize();
-							// On ne peut pas aller a gauche
-						}
-					}
+					// On ne peut pas aller a gauche
 
 					// Y
-					if (isAligned(pos.getIX() + collideMargin, DEFAULT_SIZE - collideMargin * 2,
-							mapTile.getPos().getIX(), mapTile.getSize())) {
-
+					if (isAligned(this.pos.getIX() + collideMargin, DEFAULT_SIZE - collideMargin * 2,
+							mapTile.getPos().getIX(), mapTile.getSize()))
 						// Haut
 						if (tMove.y > 0 && isBetween((int) y + DEFAULT_SIZE, mapTile.getPos().getIY(),
-								mapTile.getPos().getIY() + mapTile.getSize())) {
+								mapTile.getPos().getIY() + mapTile.getSize()))
 							y = mapTile.getPos().y - DEFAULT_SIZE;
-							// On ne peut pas aller en haut
-						}
-
-						// Bas
+						// On ne peut pas aller en haut
 						else if (tMove.y < 0 && isBetween((int) y, mapTile.getPos().getIY(),
-								mapTile.getPos().getIY() + mapTile.getSize())) {
+								mapTile.getPos().getIY() + mapTile.getSize()))
 							y = mapTile.getPos().y + mapTile.getSize();
-							// On ne peut pas aller en bas
-						}
-					}
+					// On ne peut pas aller en bas
 				}
 			}
-		}
 
 		// Affectation du deplacement
-		pos.x = x;
-		pos.y = y;
+		this.pos.x = x;
+		this.pos.y = y;
 
 		// Mise a jour de l'animation de deplacement
-		walkStep = (walkStep + 1) % walkFrequence;
+		this.walkStep = (this.walkStep + 1) % walkFrequence;
+	}
+
+	/**
+	 * Regenaire la vie du joueur
+	 *
+	 * @param timeSinceLastCall : temps ecoule depuis le derneir appel
+	 */
+	private void regen(double timeSinceLastCall) {
+		this.health += REGEN * timeSinceLastCall;
 	}
 
 	@Override
@@ -321,19 +272,19 @@ public abstract class ACharacter implements ICharacter {
 	 */
 	private void setDamage(Application application) {
 
-		if (!lastDamage.isDone())
+		if (!this.lastDamage.isDone())
 			return;
 
 		// Explosion Damage
 		List<IExplosion> explosions = application.getExplosions();
 
-		Point tile = getCenter();
+		Point tile = this.getCenter();
 		tile = application.getMap().getTileFor(tile.x, tile.y);
 
 		for (IExplosion e : explosions) {
 			Point eTile = e.getTile();
 			if (tile.x == eTile.x && tile.y == eTile.y)
-				damage(e.getDamage());
+				this.damage(e.getDamage());
 		}
 	}
 
@@ -350,26 +301,24 @@ public abstract class ACharacter implements ICharacter {
 	/**
 	 * Demande au character de bouger dans une direction
 	 *
-	 * @param clickedKeys
-	 *            : Touches appuyees du clavier
+	 * @param clickedKeys : Touches appuyees du clavier
 	 */
 	public void setMoves(List<Integer> clickedKeys) {
-		moves.setLocation(0, 0);
+		this.moves.setLocation(0, 0);
 		if (clickedKeys.contains(KeyEvent.VK_Z))
-			moves.y--;
+			this.moves.y--;
 		if (clickedKeys.contains(KeyEvent.VK_S))
-			moves.y++;
+			this.moves.y++;
 		if (clickedKeys.contains(KeyEvent.VK_Q))
-			moves.x--;
+			this.moves.x--;
 		if (clickedKeys.contains(KeyEvent.VK_D))
-			moves.x++;
+			this.moves.x++;
 
 		// Normalisation pour que le personnage n'aille pas plus vite en diagonale
-		moves.normalize();
+		this.moves.normalize();
 
-		if (!(moves.x == 0 && moves.y == 0)) {
-			angleOfView = moves.getAngle();
-		}
+		if (!(this.moves.x == 0 && this.moves.y == 0))
+			this.angleOfView = this.moves.getAngle();
 	}
 
 	@Override
@@ -384,6 +333,31 @@ public abstract class ACharacter implements ICharacter {
 
 	@Override
 	public int timeBeforeBomb() {
-		return (int) bombCoolDown.timeBefore();
+		return (int) this.bombCoolDown.timeBefore();
+	}
+
+	/**
+	 * Verification de l'alignement entre deux intervalles
+	 *
+	 * @param p1 : Position de la premiere borne de l'intervalle 1
+	 * @param s1 : Distance jusqu'a la deuxieme borne de l'intervale 1
+	 * @param p2 : Position de la premiere borne de l'intervalle 2
+	 * @param s2 : Distance jusqu'a la deuxieme borne de l'intervale 2
+	 * @return Intervalles alignees
+	 */
+	private static boolean isAligned(int p1, int s1, int p2, int s2) {
+		return isBetween(p2, p1, p1 + s1) || isBetween(p1, p2, p2 + s2) || isBetween(p2 + s2 / 2, p1, p1 + s1);
+	}
+
+	/**
+	 * Verification qu'un point est entre deux autres points sur une droite
+	 *
+	 * @param p  : point test
+	 * @param p1 : point 1
+	 * @param p2 : point 2
+	 * @return Le point est entre les deux autres
+	 */
+	public static boolean isBetween(int p, int p1, int p2) {
+		return p1 < p && p < p2;
 	}
 }

@@ -17,7 +17,7 @@ public class LifeBar implements IBar {
 
 	private static IBar instance;
 
-	private static Image image = (new ImageIcon(HUD.class.getResource("/images/HUD/lifeBar.gif"))).getImage();
+	private static Image image = new ImageIcon(HUD.class.getResource("/images/HUD/lifeBar.gif")).getImage();
 
 	static {
 		instance = new LifeBar();
@@ -34,9 +34,9 @@ public class LifeBar implements IBar {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(image, pos.getIX(), pos.getIY(), null);
+		g.drawImage(image, this.pos.getIX(), this.pos.getIY(), null);
 
-		Rectangle r = getRect();
+		Rectangle r = this.getRect();
 		g.setColor(Color.black);
 		g.fill(r);
 	}
@@ -45,12 +45,12 @@ public class LifeBar implements IBar {
 	 * @return rectangle noir pour cacher une partie de la barre
 	 */
 	private Rectangle getRect() {
-		int less = (int) ((double) c.getHealth() * size.getIX() / c.getMaxHealth());
+		int less = (int) (this.c.getHealth() * this.size.getX() / this.c.getMaxHealth());
 
-		int rectX = pos.getIX() + less;
-		int rectWidth = size.getIX() - less;
+		int rectX = this.pos.getIX() + less;
+		int rectWidth = this.size.getIX() - less;
 
-		return new Rectangle(rectX, pos.getIY(), rectWidth, size.getIY());
+		return new Rectangle(rectX, this.pos.getIY(), rectWidth, this.size.getIY());
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	 *
 	 * @param health : vie a enlever au IChraracter
 	 */
-	void damage(int health);
+	void damage(double health);
 
 	/**
 	 * @return Coordones du centre du personnage
@@ -33,7 +33,7 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	/**
 	 * @return vie du IChraracter
 	 */
-	int getHealth();
+	double getHealth();
 
 	/**
 	 * @return la vie max du ICharacter
