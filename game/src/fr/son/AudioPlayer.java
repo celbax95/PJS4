@@ -44,7 +44,7 @@ public class AudioPlayer {
 	// Mettre l'audio en pause
 	public void pause() {
 		if (status.equals("paused")) {
-			System.out.println("audio is already paused");
+			// System.out.println("audio is already paused");
 			return;
 		}
 		this.currentFrame = this.clip.getMicrosecondPosition();
