@@ -43,7 +43,7 @@ public interface PlaceableItem extends Drawable {
 	boolean useNow();
 
 	/**
-	 * Ajoute un item a la liste d'items de l'appliçcation
+	 * Ajoute un item a la liste d'items de l'application
 	 *
 	 * @param pa          : item a ajouter
 	 * @param application : application
@@ -51,5 +51,16 @@ public interface PlaceableItem extends Drawable {
 	public static void addToLists(PlaceableItem pa, Application application) {
 		application.addItem(pa);
 		application.addDrawable(pa);
+	}
+
+	/**
+	 * Enleve un item a la liste d'items de l'application
+	 *
+	 * @param pa          : item a enlever
+	 * @param application : application
+	 */
+	public static void removeFromLists(PlaceableItem pa, Application application) {
+		application.removeItem(pa);
+		application.removeDrawable(pa);
 	}
 }

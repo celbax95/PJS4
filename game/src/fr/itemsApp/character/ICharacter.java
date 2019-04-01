@@ -41,6 +41,11 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	double getHealth();
 
 	/**
+	 * @return taille d'explosion standard maximale
+	 */
+	int getMaxExplosionSize();
+
+	/**
 	 * @return la vie max du ICharacter
 	 */
 	int getMaxHealth();

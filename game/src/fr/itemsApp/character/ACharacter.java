@@ -29,6 +29,8 @@ public abstract class ACharacter implements ICharacter {
 
 	protected static final int MAX_HEALTH = 100;
 
+	protected static final int MAX_EXPLOSION_SIZE = 5;
+
 	protected static final double REGEN = 2;
 
 	protected int speed;
@@ -76,6 +78,27 @@ public abstract class ACharacter implements ICharacter {
 	public void actions(Application application, List<Integer> clickedKeys) {
 		this.setMoves(clickedKeys);
 		this.dropBomb(application, clickedKeys);
+	}
+
+	private void collectItem(Application application) {
+
+		List<PlaceableItem> items = application.getItems();
+
+		Point tile = this.getCenter();
+		tile = application.getMap().getTileFor(tile.x, tile.y);
+
+		PlaceableItem itemToUse = null;
+
+		for (PlaceableItem item : items)
+			if (tile.x == item.getTile().x && tile.y == item.getTile().y)
+				itemToUse = item;
+
+		if (itemToUse != null)
+			if (itemToUse.useNow()) {
+				PlaceableItem.removeFromLists(itemToUse, application);
+				itemToUse.collect(application, this).use(application);
+			}
+
 	}
 
 	@Override
@@ -140,16 +163,9 @@ public abstract class ACharacter implements ICharacter {
 		return this.health;
 	}
 
-	private void getItem(Application application) {
-
-		List<PlaceableItem> items = application.getItems();
-
-		Point tile = application.getMap().getTileFor(this.pos.x, this.pos.y);
-
-		for (PlaceableItem item : items)
-			if (tile.x == item.getTile().x && tile.y == item.getTile().y) {
-
-			}
+	@Override
+	public int getMaxExplosionSize() {
+		return MAX_EXPLOSION_SIZE;
 	}
 
 	@Override
@@ -162,7 +178,7 @@ public abstract class ACharacter implements ICharacter {
 		this.move(application, timeSinceLastCall);
 		this.setDamage(application);
 		this.death(application);
-		this.getItem(application);
+		this.collectItem(application);
 		this.regen(timeSinceLastCall);
 	}
 

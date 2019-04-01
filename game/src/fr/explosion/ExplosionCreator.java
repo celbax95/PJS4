@@ -81,7 +81,7 @@ public class ExplosionCreator implements Serializable {
 
 		MapTile[][] mapTiles = application.getMap().getMap();
 
-		if (x < 0 || x > mapTiles.length || y < 0 || y > mapTiles[0].length)
+		if (x < 0 || x >= mapTiles.length || y < 0 || y >= mapTiles[0].length)
 			return false;
 
 		if (mapTiles[x][y].isDestroyable() || mapTiles[x][y].isWalkable()) {
@@ -98,8 +98,9 @@ public class ExplosionCreator implements Serializable {
 			PlaceableItem pa = ifa.createRandom();
 			pa.setTile(new Point(tile), application.getMap().getTileSize());
 			PlaceableItem.addToLists(pa, application);
+			return false;
 		}
 
-		return !mapTiles[x][y].isDestroyable() || mapTiles[x][y].isWalkable();
+		return mapTiles[x][y].isWalkable();
 	}
 }

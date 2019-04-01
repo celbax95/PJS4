@@ -20,7 +20,10 @@ public class BombUpgrade extends Item {
 
 	@Override
 	public void use(Application application) {
-		this.holder.setExplosionSize(this.holder.getExplosionSize() + 1);
+		if (this.holder.getExplosionSize() < this.holder.getMaxExplosionSize()) {
+			this.holder.setExplosionSize(this.holder.getExplosionSize() + 1);
+			System.out.println(this.holder.getExplosionSize());
+		}
 	}
 
 	@Override
