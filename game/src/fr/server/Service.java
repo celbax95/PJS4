@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.util.List;
 
 import fr.application.Application;
-import fr.itemsApp.Drawable;
 
 /**
  * Le Service du jeu qui communique avec le client via le serveur
@@ -25,11 +24,11 @@ public class Service implements Runnable {
 	private Server server;
 
 	private Player myPlayer;
-	
+
 	ObjectInputStream sIn;
-	
+
 	ObjectOutputStream sOut;
-	
+
 	/**
 	 * constructeur Service vide
 	 */
@@ -74,8 +73,16 @@ public class Service implements Runnable {
 		this.socket.close();
 	}
 
+	public ObjectInputStream getSIn() {
+		return this.sIn;
+	}
+
 	public Socket getSocket() {
 		return socket;
+	}
+
+	public ObjectOutputStream getSOut() {
+		return this.sOut;
 	}
 
 	/**
@@ -90,7 +97,6 @@ public class Service implements Runnable {
 				this.server.addPlayer(this.myPlayer);
 			}
 
-			
 			while (!server.getGameOn()) {
 				if (Thread.currentThread().isInterrupted()) {
 					return;
@@ -98,7 +104,7 @@ public class Service implements Runnable {
 				sOut.writeUnshared("ok");
 				sOut.flush();
 				sOut.reset();
-				synchronized(this.server) {
+				synchronized (this.server) {
 					sOut.writeUnshared(server.getPlayers());
 				}
 				sOut.flush();
@@ -108,29 +114,29 @@ public class Service implements Runnable {
 			sOut.writeUnshared("Game start");
 			sOut.flush();
 			sOut.reset();
-			
+
 			synchronized (server) {
 				while (server.getApplication() == null) {
 					this.wait();
 				}
 				application.addPlayer(this.myPlayer.getNo());
 			}
-			//int i = 0;
+			// int i = 0;
 			while (!Thread.currentThread().isInterrupted()) {
-				synchronized(application) {
+				synchronized (application) {
 					sOut.writeUnshared(application.getPlayer(myPlayer.getNo()));
 					sOut.flush();
 				}
 				sOut.reset();
-				synchronized(application) {
-					sOut.writeUnshared(new Object[]{application.getMap(), application.getDrawables()});
+				synchronized (application) {
+					sOut.writeUnshared(new Object[] { application.getMap(), application.getDrawables() });
 					sOut.flush();
 				}
 				sOut.flush();
 				sOut.reset();
-				
+
 				List<Integer> cliKeys = (List<Integer>) sIn.readUnshared();
-				synchronized(application) {
+				synchronized (application) {
 					if (!application.managePlayer(myPlayer.getNo(), cliKeys)) {
 						// Quand le joueur est mort
 					}
@@ -138,14 +144,14 @@ public class Service implements Runnable {
 			}
 		} catch (IOException e) {
 			System.err.println("Joueur déconnecté");
-			//e.printStackTrace();
+			// e.printStackTrace();
 			synchronized (server) {
 				server.playerLeft(this.myPlayer);
 			}
 			try {
 				socket.close();
 			} catch (IOException e1) {
-				//e1.printStackTrace();
+				// e1.printStackTrace();
 			}
 			myThread.interrupt();
 		} catch (ClassNotFoundException e) {
@@ -164,13 +170,5 @@ public class Service implements Runnable {
 
 	public static void setApplication(Application app) {
 		Service.application = app;
-	}
-	
-	public ObjectInputStream getSIn(){
-		return this.sIn;
-	}
-	
-	public ObjectOutputStream getSOut() {
-		return this.sOut;
 	}
 }

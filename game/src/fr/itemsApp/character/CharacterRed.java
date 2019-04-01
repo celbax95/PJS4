@@ -11,6 +11,8 @@ import javax.swing.ImageIcon;
  */
 public class CharacterRed extends ACharacter {
 
+	private static final long serialVersionUID = 1L;
+
 	private static Image imgS = (new ImageIcon(CharacterRed.class.getResource("/images/characters/red/stand.png")))
 			.getImage();
 	private static Image[] imgD = {
@@ -18,14 +20,10 @@ public class CharacterRed extends ACharacter {
 			(new ImageIcon(CharacterRed.class.getResource("/images/characters/red/walk_2.png"))).getImage() };
 
 	/**
-	 * @param x
-	 *            : Position x
-	 * @param y
-	 *            : Position y
-	 * @param bombCoolDown
-	 *            : Temps entre chaque pose de bombe
-	 * @param speed
-	 *            : Vitesse du personnage
+	 * @param x            : Position x
+	 * @param y            : Position y
+	 * @param bombCoolDown : Temps entre chaque pose de bombe
+	 * @param speed        : Vitesse du personnage
 	 */
 	public CharacterRed(double x, double y, int health, int bombCoolDown, int speed) {
 		super(x, y, health, bombCoolDown, speed);
