@@ -50,6 +50,8 @@ public abstract class ACharacter implements ICharacter {
 
 	protected double health;
 
+	private int explosionSize;
+
 	/**
 	 * @param x            : Position x
 	 * @param y            : Position y
@@ -65,6 +67,7 @@ public abstract class ACharacter implements ICharacter {
 		this.angleOfView = 0;
 		this.walkStep = 0;
 		this.bombCoolDown = new Cooldown(bombCoolDown);
+		this.explosionSize = 1;
 		this.defaultBomb = "std";
 	}
 
@@ -124,6 +127,11 @@ public abstract class ACharacter implements ICharacter {
 	@Override
 	public Point getCenter() {
 		return new Point(this.pos.x + DEFAULT_SIZE / 2, this.pos.y + DEFAULT_SIZE / 2);
+	}
+
+	@Override
+	public int getExplosionSize() {
+		return this.explosionSize;
 	}
 
 	@Override
@@ -286,6 +294,10 @@ public abstract class ACharacter implements ICharacter {
 			if (tile.x == eTile.x && tile.y == eTile.y)
 				this.damage(e.getDamage());
 		}
+	}
+
+	public void setExplosionSize(int explosionSize) {
+		this.explosionSize = explosionSize;
 	}
 
 	@Override

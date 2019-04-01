@@ -31,6 +31,11 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	Point getCenter();
 
 	/**
+	 * @return La taille standard des explosions
+	 */
+	int getExplosionSize();
+
+	/**
 	 * @return vie du IChraracter
 	 */
 	double getHealth();
@@ -58,6 +63,13 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	 * @param bombCoolDown : nouveau cooldown
 	 */
 	void setBombCoolDown(int bombCoolDown);
+
+	/**
+	 * Change la taille des explosions
+	 *
+	 * @param explosionSize : nouvelle taille
+	 */
+	void setExplosionSize(int explosionSize);
 
 	/**
 	 * Change la vie du ICharacter
