@@ -92,7 +92,7 @@ public class Application implements Runnable {
 	 *
 	 * @param item : Item a ajouter
 	 */
-	public void addExplosion(PlaceableItem item) {
+	public void addItem(PlaceableItem item) {
 		this.items.add(item);
 	}
 
@@ -242,7 +242,7 @@ public class Application implements Runnable {
 	 *
 	 * @param item : item a enlever
 	 */
-	public void removeExplosion(PlaceableItem item) {
+	public void removeItem(PlaceableItem item) {
 		this.items.remove(item);
 	}
 
