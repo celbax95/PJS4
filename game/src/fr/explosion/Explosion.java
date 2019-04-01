@@ -1,9 +1,10 @@
 package fr.explosion;
 
 import fr.application.Application;
+import fr.son.AudioPlayer;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;
-import son.AudioPlayer;
+
 /**
  *
  * Classe abstraite Explosion
@@ -37,10 +38,9 @@ public abstract class Explosion implements IExplosion {
 		this.explosionTime = new Cooldown(0);
 		try {
 			String cheminBombe = ".\\BanqueSon\\bombe.wav";
-			AudioPlayer audioPlayerBombe = new AudioPlayer(cheminBombe);	
+			AudioPlayer audioPlayerBombe = new AudioPlayer(cheminBombe);
 			audioPlayerBombe.play();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			System.out.println("Error with playing sound.");
 			ex.printStackTrace();
 
@@ -50,7 +50,8 @@ public abstract class Explosion implements IExplosion {
 	/**
 	 * Supprime une explosion de l'application
 	 *
-	 * @param application : application
+	 * @param application
+	 *            : application
 	 */
 	protected void delete(Application application) {
 		application.removeExplosion(this);
@@ -64,7 +65,8 @@ public abstract class Explosion implements IExplosion {
 	}
 
 	/**
-	 * @param tile : élément du jeu possedant une largeur et une hauteur
+	 * @param tile
+	 *            : élément du jeu possedant une largeur et une hauteur
 	 * @return la position de la tile
 	 */
 	private Point getPosfromTile(Point tile) {
@@ -77,8 +79,8 @@ public abstract class Explosion implements IExplosion {
 	}
 
 	/**
-	 * @param explosionTime : temps mis par l'explosion avant de disparaitre du
-	 *                      terrain
+	 * @param explosionTime
+	 *            : temps mis par l'explosion avant de disparaitre du terrain
 	 */
 	@Override
 	public void setCooldown(int explosionTime) {
@@ -87,7 +89,8 @@ public abstract class Explosion implements IExplosion {
 
 	/**
 	 *
-	 * @param damage : dommage provoqués par une explosion
+	 * @param damage
+	 *            : dommage provoqués par une explosion
 	 */
 	@Override
 	public void setDamage(int damage) {
@@ -96,7 +99,8 @@ public abstract class Explosion implements IExplosion {
 
 	/**
 	 *
-	 * @param tile : élément du jeu possedant une largeur et une hauteur
+	 * @param tile
+	 *            : élément du jeu possedant une largeur et une hauteur
 	 */
 	@Override
 	public void setTile(Point tile) {
@@ -106,8 +110,9 @@ public abstract class Explosion implements IExplosion {
 
 	/**
 	 *
-	 * @param type : type de l'explosion (1 direction droite ou gauche) (2 direction
-	 *             haut ou bas)
+	 * @param type
+	 *            : type de l'explosion (1 direction droite ou gauche) (2 direction
+	 *            haut ou bas)
 	 */
 	@Override
 	public void setType(int type) {

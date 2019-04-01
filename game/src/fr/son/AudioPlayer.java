@@ -1,4 +1,4 @@
-package son;
+package fr.son;
 
 //Java program to play an Audio
 //file using Clip Object

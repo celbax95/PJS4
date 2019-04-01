@@ -8,7 +8,7 @@ import fr.screen.MainJPanel;
 import fr.screen.Screen;
 import fr.server.Player;
 import fr.server.Server;
-import son.AudioPlayer;
+import fr.son.AudioPlayer;
 
 /**
  * Classe de lancement du jeu
@@ -22,6 +22,7 @@ public class GameLauncher {
 	static String Cjeu = ".\\BanqueSon\\Yeah2.wav";
 	static Object Smenu = null;
 	static Object Sjeu = null;
+
 	/**
 	 * Fermeture du client
 	 */
@@ -31,7 +32,7 @@ public class GameLauncher {
 
 	/**
 	 * Crée un client
-	 * 
+	 *
 	 * @param ip
 	 *            Adresse IP du serveur auquel veut se connecter le client
 	 * @param port
@@ -46,7 +47,7 @@ public class GameLauncher {
 
 	/**
 	 * Crée un serveur
-	 * 
+	 *
 	 * @param title
 	 *            Le titre de la fenêtre gérée par le serveur
 	 * @param port
@@ -62,9 +63,38 @@ public class GameLauncher {
 		return server.getNbPlayers();
 	}
 
+	public static AudioPlayer initialiserSon(String chemin) {
+
+		if (chemin.equals(Cmenu)) {
+			try {
+				AudioPlayer SoundMenu = new AudioPlayer(chemin);
+				Smenu = SoundMenu;
+
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			} finally {
+				return (AudioPlayer) Smenu;
+			}
+
+		} else if (chemin.equals(Cjeu)) {
+			try {
+				AudioPlayer SoundMenu = new AudioPlayer(chemin);
+				Sjeu = SoundMenu;
+
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			} finally {
+				return (AudioPlayer) Sjeu;
+			}
+		} else
+			return null;
+	}
+
 	/**
 	 * Teste si le menu est instancié
-	 * 
+	 *
 	 * @exception Renvoie
 	 *                MenuNotSet si le menu n'est pas instancié
 	 */
@@ -74,86 +104,23 @@ public class GameLauncher {
 		}
 	}
 
-	public static void menuBack() {
-		menu.back();
-	}
-
-	/**
-	 * Fermeture du serveur
-	 */
-	public static void serverClose() {
-		try {
-			server.finalize();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Mise en marche du serveur
-	 */
-	public static void serverStart() {
-		server.start();
-	}
-
-	public static void setMenu(Menu menu) {
-		GameLauncher.menu = menu;
-	}
-
-	public static void updateMenu(ArrayList<Player> players) {
-		menu.updatePlayers(players);
-	}
-
-
-	
-
-	public static AudioPlayer initialiserSon(String chemin) {
-	
-		if (chemin.equals(Cmenu)) { 
-			try {
-				AudioPlayer SoundMenu = new AudioPlayer(chemin);
-				Smenu = SoundMenu;
-				
-			} catch (Exception ex) {
-				System.out.println("Error with playing sound.");
-				ex.printStackTrace();
-			}
-			finally {
-				return (AudioPlayer) Smenu;
-			}
-		
-		}
-		else if  (chemin.equals(Cjeu)) { 
-			try {
-				AudioPlayer SoundMenu = new AudioPlayer(chemin);
-				Sjeu = SoundMenu;
-				
-			} catch (Exception ex) {
-				System.out.println("Error with playing sound.");
-				ex.printStackTrace();
-			}
-			finally {
-				return (AudioPlayer) Sjeu;
-			}
-		}
-		else return null;
-	}
-	
 	public static void lancerSon(AudioPlayer monSon) {
 		monSon.playConst();
 	}
-	public static void stoperSon(AudioPlayer monSon) {
-		monSon.pause();
+
+	public static void menuBack() {
+		menu.back();
 	}
 
 	/**
 	 * Affiche le menu
 	 *
 	 * @see Menu
-	 * @exception Lance une exception si le menu n'a pas été initialisé
+	 * @exception Lance
+	 *                une exception si le menu n'a pas été initialisé
 	 */
 	public static void menuDisplay() throws MenuNotSet {
-		
+
 		initialiserSon(Cmenu);
 		lancerSon((AudioPlayer) Smenu);
 		isMenuSet();
@@ -172,16 +139,21 @@ public class GameLauncher {
 		MainJPanel.setNewInstance();
 		Screen.setNewInstance();
 		menu.reset();
-		//On met arette la musique du jeu pour repasser sur la musique du menu
+		// On met arette la musique du jeu pour repasser sur la musique du menu
 		((AudioPlayer) Sjeu).pause();
 		((AudioPlayer) Smenu).playConst();
 	}
 
-//>>>>>>> mise a jour integration son
-	
-
-	
-	
+	/**
+	 * Fermeture du serveur
+	 */
+	public static void serverClose() {
+		try {
+			server.finalize();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Lance une partie
@@ -194,6 +166,25 @@ public class GameLauncher {
 
 	}
 
-	
+	/**
+	 * Mise en marche du serveur
+	 */
+	public static void serverStart() {
+		server.start();
+	}
+
+	public static void setMenu(Menu menu) {
+		GameLauncher.menu = menu;
+	}
+
+	public static void stoperSon(AudioPlayer monSon) {
+		monSon.pause();
+	}
+
+	// >>>>>>> mise a jour integration son
+
+	public static void updateMenu(ArrayList<Player> players) {
+		menu.updatePlayers(players);
+	}
 
 }
