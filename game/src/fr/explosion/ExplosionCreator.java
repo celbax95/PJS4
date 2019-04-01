@@ -6,6 +6,7 @@ import java.util.List;
 
 import fr.application.Application;
 import fr.itemsApp.bomb.IBomb;
+import fr.itemsApp.items.ItemFactory;
 import fr.map.MapTile;
 import fr.tiles.Floor;
 import fr.util.point.Point;
