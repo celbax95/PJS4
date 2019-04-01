@@ -43,11 +43,11 @@ public interface PlaceableItem extends Drawable {
 	/**
 	 * Ajoute un item a la liste d'items de l'appliçcation
 	 *
-	 * @param item        : item a ajouter
+	 * @param pa          : item a ajouter
 	 * @param application : application
 	 */
-	public static void addToLists(Item item, Application application) {
-		application.addItem(item);
-		application.addDrawable(item);
+	public static void addToLists(PlaceableItem pa, Application application) {
+		application.addItem(pa);
+		application.addDrawable(pa);
 	}
 }

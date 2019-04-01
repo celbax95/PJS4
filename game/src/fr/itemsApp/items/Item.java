@@ -1,12 +1,15 @@
 package fr.itemsApp.items;
 
 import java.awt.Graphics2D;
+import java.io.Serializable;
 
 import fr.application.Application;
 import fr.itemsApp.character.ICharacter;
 import fr.util.point.Point;
 
-public abstract class Item implements CollectableItem, PlaceableItem {
+public abstract class Item implements CollectableItem, PlaceableItem, Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	protected final int SIZE = 110;
 
@@ -35,7 +38,8 @@ public abstract class Item implements CollectableItem, PlaceableItem {
 	@Override
 	public void setTile(Point tile, int tileSize) {
 		this.tile = tile;
-		this.pos = new Point(tile.getIX() * tileSize, tile.getIY() * tileSize);
+		this.pos = new Point(tile.getIX() * tileSize + (tileSize - this.SIZE) / 2,
+				tile.getIY() * tileSize + (tileSize - this.SIZE) / 2);
 	}
 
 	@Override

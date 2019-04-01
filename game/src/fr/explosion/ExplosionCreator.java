@@ -8,7 +8,6 @@ import fr.application.Application;
 import fr.itemsApp.bomb.IBomb;
 import fr.itemsApp.items.ItemFactory;
 import fr.itemsApp.items.PlaceableItem;
-import fr.map.GameMap;
 import fr.map.MapTile;
 import fr.tiles.Floor;
 import fr.util.point.Point;
@@ -32,8 +31,6 @@ public class ExplosionCreator implements Serializable {
 
 		this.explosions = new ArrayList<>();
 
-		GameMap map = application.getMap();
-
 		// horizontal
 
 		Point tile = bombe.getTile();
@@ -49,13 +46,16 @@ public class ExplosionCreator implements Serializable {
 		this.explosions.add(explosion);
 
 		for (int i = 1; i <= sizeExplosion; i++) {
-			if (continueRight && (continueRight = this.setExplosion(map, bombe, 1, tile.getIX() + i, tile.getIY())))
+			if (continueRight
+					&& (continueRight = this.setExplosion(application, bombe, 1, tile.getIX() + i, tile.getIY())))
 				;
-			if (continueLeft && (continueLeft = this.setExplosion(map, bombe, 1, tile.getIX() - i, tile.getIY())))
+			if (continueLeft
+					&& (continueLeft = this.setExplosion(application, bombe, 1, tile.getIX() - i, tile.getIY())))
 				;
-			if (continueUp && (continueUp = this.setExplosion(map, bombe, 2, tile.getIX(), tile.getIY() - i)))
+			if (continueUp && (continueUp = this.setExplosion(application, bombe, 2, tile.getIX(), tile.getIY() - i)))
 				;
-			if (continueDown && (continueDown = this.setExplosion(map, bombe, 2, tile.getIX(), tile.getIY() + i)))
+			if (continueDown
+					&& (continueDown = this.setExplosion(application, bombe, 2, tile.getIX(), tile.getIY() + i)))
 				;
 		}
 		for (IExplosion e : this.explosions) {
@@ -77,9 +77,9 @@ public class ExplosionCreator implements Serializable {
 	 * @param x       : abscisse du point ou doit etre placee l'explosion
 	 * @param y       : ordonnée du point ou doit etre placee l'explosion
 	 */
-	private boolean setExplosion(GameMap map, IBomb bombe, int type, int x, int y) {
+	private boolean setExplosion(Application application, IBomb bombe, int type, int x, int y) {
 
-		MapTile[][] mapTiles = map.getMap();
+		MapTile[][] mapTiles = application.getMap().getMap();
 
 		if (x < 0 || x > mapTiles.length || y < 0 || y > mapTiles[0].length)
 			return false;
@@ -96,7 +96,8 @@ public class ExplosionCreator implements Serializable {
 			mapTiles[x][y] = new Floor(tile.getIX(), tile.getIY());
 			ItemFactory ifa = ItemFactory.getInstance();
 			PlaceableItem pa = ifa.createRandom();
-			pa.setTile(new Point(tile), map.getTileSize());
+			pa.setTile(new Point(tile), application.getMap().getTileSize());
+			PlaceableItem.addToLists(pa, application);
 		}
 
 		return !mapTiles[x][y].isDestroyable() || mapTiles[x][y].isWalkable();

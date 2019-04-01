@@ -8,6 +8,8 @@ import fr.itemsApp.items.Item;
 
 public class BombUpgrade extends Item {
 
+	private static final long serialVersionUID = 1L;
+
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.ORANGE);
