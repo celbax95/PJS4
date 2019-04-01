@@ -10,6 +10,8 @@ public class ItemFactory {
 
 	private static int NB_ITEM = 1;
 
+	private static double FREQUENCE = 0.3;
+
 	static {
 		instance = new ItemFactory();
 	}
@@ -41,6 +43,10 @@ public class ItemFactory {
 
 	public PlaceableItem createRandom() {
 		return this.create(new Random().nextInt(NB_ITEM));
+	}
+
+	public double getFrequence() {
+		return FREQUENCE;
 	}
 
 	public static ItemFactory getInstance() {

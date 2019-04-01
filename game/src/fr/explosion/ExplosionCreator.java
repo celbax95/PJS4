@@ -3,6 +3,7 @@ package fr.explosion;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import fr.application.Application;
 import fr.itemsApp.bomb.IBomb;
@@ -95,9 +96,11 @@ public class ExplosionCreator implements Serializable {
 			Point tile = mapTiles[x][y].getTile();
 			mapTiles[x][y] = new Floor(tile.getIX(), tile.getIY());
 			ItemFactory ifa = ItemFactory.getInstance();
-			PlaceableItem pa = ifa.createRandom();
-			pa.setTile(new Point(tile), application.getMap().getTileSize());
-			PlaceableItem.addToLists(pa, application);
+			if (new Random().nextDouble() < ifa.getFrequence()) {
+				PlaceableItem pa = ifa.createRandom();
+				pa.setTile(new Point(tile), application.getMap().getTileSize());
+				PlaceableItem.addToLists(pa, application);
+			}
 			return false;
 		}
 
