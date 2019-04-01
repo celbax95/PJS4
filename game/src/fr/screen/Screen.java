@@ -18,6 +18,38 @@ public class Screen extends JFrame {
 
 	private static Screen single = null;
 	private static boolean newGame;
+
+	/**
+	 * @return l'unique instance de Screen
+	 */
+	public static Screen getInstance() {
+		return single;
+	}
+
+	/**
+	 * Cree ou renvoie l'instance unique de Screen
+	 *
+	 * @param appScreen : Application a lancer dans la fenetre
+	 * @param width     : largeur de la fenetre
+	 * @param height    : hauteur de la fenetre
+	 * @param marginX   : marge horizontale dans la fenetre
+	 * @param marginY   : marge verticale dans la fenetre
+	 * @param margin    : marge totale dans la fenetre
+	 * @return la nouvelle instance ou l'instance existante
+	 */
+	public static Screen getInstance(AppliScreen appScreen, int width, int height, int marginX, int marginY,
+			int margin) {
+		if (single == null || Screen.newGame == true) {
+			single = new Screen(appScreen, width, height, marginX, marginY, margin);
+			return single;
+		} else
+			return single;
+	}
+
+	public static void setNewInstance() {
+		Screen.newGame = true;
+	}
+
 	@SuppressWarnings("unused")
 	private MainJPanel mainJpanel;
 
@@ -61,36 +93,5 @@ public class Screen extends JFrame {
 		jp.add((mainJpanel = MainJPanel.getInstance(this, appScreen, width, height, margin)));
 		this.setContentPane(jp);
 		this.setVisible(true);
-	}
-
-	/**
-	 * @return l'unique instance de Screen
-	 */
-	public static Screen getInstance() {
-		return single;
-	}
-
-	/**
-	 * Cree ou renvoie l'instance unique de Screen
-	 *
-	 * @param appScreen : Application a lancer dans la fenetre
-	 * @param width     : largeur de la fenetre
-	 * @param height    : hauteur de la fenetre
-	 * @param marginX   : marge horizontale dans la fenetre
-	 * @param marginY   : marge verticale dans la fenetre
-	 * @param margin    : marge totale dans la fenetre
-	 * @return la nouvelle instance ou l'instance existante
-	 */
-	public static Screen getInstance(AppliScreen appScreen, int width, int height, int marginX, int marginY,
-			int margin) {
-		if (single == null || Screen.newGame == true) {
-			single = new Screen(appScreen, width, height, marginX, marginY, margin);
-			return single;
-		} else
-			return single;
-	}
-	
-	public static void setNewInstance() {
-		Screen.newGame = true;
 	}
 }

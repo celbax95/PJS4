@@ -84,4 +84,10 @@ public interface IBomb extends Serializable, Manageable, fr.itemsApp.Drawable {
 		application.removeManageable(bomb);
 		application.removeBomb(bomb);
 	}
+	
+	/**
+	 * Déclenche l'animation sonore lors de l'explosion
+	 *
+	 */
+	void SonExplosion();
 }

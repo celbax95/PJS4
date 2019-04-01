@@ -51,8 +51,19 @@ public class MenuDisplay implements Menu {
 		GameLauncher.setMenu(MenuDisplay.getInstance());
 	}
 
-	private JFrame frame;
+	/**
+	 * Récupère l'instance unique du menu
+	 */
+	public static Menu getInstance() {
+		if (MenuDisplay.menu == null) {
+			MenuDisplay.menu = new MenuDisplay();
+			return MenuDisplay.menu;
+		} else {
+			return MenuDisplay.menu;
+		}
+	}
 
+	private JFrame frame;
 	private JPanel panel;
 	private JLabel nbPlayersLabel;
 	private ArrayList<JLabel> playersLabels;
@@ -524,18 +535,6 @@ public class MenuDisplay implements Menu {
 				changePlayersLabels(players);
 				this.players = players;
 			}
-		}
-	}
-
-	/**
-	 * Récupère l'instance unique du menu
-	 */
-	public static Menu getInstance() {
-		if (MenuDisplay.menu == null) {
-			MenuDisplay.menu = new MenuDisplay();
-			return MenuDisplay.menu;
-		} else {
-			return MenuDisplay.menu;
 		}
 	}
 }

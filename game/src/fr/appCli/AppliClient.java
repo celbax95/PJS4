@@ -2,7 +2,6 @@ package fr.appCli;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,7 +14,6 @@ import com.sun.glass.events.KeyEvent;
 import fr.camera.Camera;
 import fr.client.Client;
 import fr.gameLauncher.GameLauncher;
-import fr.hud.HUD;
 import fr.itemsApp.Drawable;
 import fr.itemsApp.character.ICharacter;
 import fr.map.GameMap;
@@ -51,8 +49,6 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	private double changingScale;
 
-	private HUD hud;
-
 	private boolean receiving;
 
 	/**
@@ -84,29 +80,23 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	/**
 	 * Change le scale suivant les touches du clavier pressees
-	 *
-	 * @param g
 	 */
-	private double changeScale() {
+	private void changeScale() {
 
 		KeyBoard keyBoard = KeyBoard.getInstance();
 
 		Scale scale = Scale.getInstance();
 
-		// reception de commande pour changer le scale
 		if (keyBoard.isPressed(KeyEvent.VK_ADD))
 			scale.increase();
 		else if (keyBoard.isPressed(KeyEvent.VK_SUBTRACT))
 			scale.decrease();
 		changingScale = scale.update();
-
 		if (changingScale != 0) {
-			// alignement de la camera
+			// camera.getPos();
 			camera.move(-changingScale * map.getHeight() * map.getTileSize() * 0.5,
 					-changingScale * map.getHeight() * map.getTileSize() * 0.5);
 		}
-
-		return scale.getScale();
 	}
 
 	/**
@@ -149,15 +139,10 @@ public class AppliClient implements AppliScreen, Runnable {
 		if (!receiving)
 			return;
 
-		AffineTransform oldGTransform = g.getTransform();
+		// Application d'un eventuel changement d'echelle
+		changeScale();
 
-		// Eventuel changement d'echelle
-		double scale = changeScale();
-
-		// Calcul de la position de la camera
 		setCamera(g);
-
-		g.scale(scale, scale);
 
 		// creation d'un cache
 		List<Drawable> ld;
@@ -180,13 +165,6 @@ public class AppliClient implements AppliScreen, Runnable {
 		// Affichage des elements
 		for (Drawable drawable : ld) {
 			drawable.draw(g);
-		}
-
-		g.setTransform(oldGTransform);
-
-		if (player != null) {
-			hud.setCharacter(player);
-			hud.draw(g);
 		}
 	}
 
@@ -241,9 +219,6 @@ public class AppliClient implements AppliScreen, Runnable {
 					camera = new Camera(new Point(Client.getWidth(), Client.getHeight()),
 							new Point(map.getWidth() * map.getTileSize(), map.getHeight() * map.getTileSize()),
 							player.getCenter());
-
-					hud = HUD.getInstance();
-
 					receiving = true;
 				}
 			}
@@ -263,7 +238,7 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	private void setCamera(Graphics2D g) {
 		synchronized (transferPlayer) {
-			camera.setA(player != null ? player.getCenter() : null);
+			camera.setA(player.getCenter());
 		}
 		camera.update();
 		Point camPos = camera.getPos();

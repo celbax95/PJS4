@@ -2,10 +2,12 @@ package fr.tiles;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.ImageIcon;
 
 import fr.application.Application;
+import fr.scale.Scale;
 
 /**
  * Sol
@@ -22,7 +24,7 @@ public class Floor extends MapTileSuper {
 
 	/**
 	 * constructeur Floor
-	 *
+	 * 
 	 * @param x : abscisse du point ou est placé le sol
 	 * @param y : ordonnée du point ou est placé le sol
 	 */
@@ -32,17 +34,24 @@ public class Floor extends MapTileSuper {
 
 	/**
 	 * affiche le sol
-	 *
+	 * 
 	 * @param g : permet l'affichage
 	 */
 	@Override
 	public void draw(Graphics2D g) {
-		g.drawImage(img, pos.getIX(), pos.getIY(), null);
+		Scale scale = Scale.getInstance();
+
+		AffineTransform af = new AffineTransform();
+
+		af.scale(scale.getScale(), scale.getScale());
+		af.translate(pos.getIX(), pos.getIY());
+
+		g.drawImage(img, af, null);
 	}
 
 	/**
 	 * permet d'interagir avec un element
-	 *
+	 * 
 	 * @param m : l'application
 	 */
 	@Override

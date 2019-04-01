@@ -36,18 +36,8 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	double getHealth();
 
 	/**
-	 * @return la vie max du ICharacter
-	 */
-	int getMaxHealth();
-
-	/**
-	 * @return Le temps max avant de pouvoir poser une bombe
-	 */
-	int maxTimeBeforeBomb();
-
-	/**
 	 * Fait regarder le ICharacter dans une direction
-	 *
+	 * 
 	 * @param angle : angle dans lequel le ICharacter doit regarder
 	 */
 	void setAngle(double angle);
@@ -86,9 +76,4 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	 * @param speed : nouvelle vitesse pour le ICharacter
 	 */
 	void setSpeed(int speed);
-
-	/**
-	 * @return Le temps avant de pouvoir poser une bombe
-	 */
-	int timeBeforeBomb();
 }

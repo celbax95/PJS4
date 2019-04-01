@@ -6,6 +6,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 import fr.application.Application;
+import fr.scale.Scale;
 
 /**
  * Zone d'apparition des joueurs

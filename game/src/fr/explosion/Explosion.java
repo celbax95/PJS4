@@ -3,7 +3,7 @@ package fr.explosion;
 import fr.application.Application;
 import fr.util.point.Point;
 import fr.util.time.Cooldown;
-
+import son.AudioPlayer;
 /**
  *
  * Classe abstraite Explosion
@@ -35,6 +35,16 @@ public abstract class Explosion implements IExplosion {
 		this.pos = getPosfromTile(tile);
 		this.damage = 0;
 		this.explosionTime = new Cooldown(0);
+		try {
+			String cheminBombe = ".\\BanqueSon\\bombe.wav";
+			AudioPlayer audioPlayerBombe = new AudioPlayer(cheminBombe);	
+			audioPlayerBombe.play();
+		}
+		catch (Exception ex) {
+			System.out.println("Error with playing sound.");
+			ex.printStackTrace();
+
+		}
 	}
 
 	/**

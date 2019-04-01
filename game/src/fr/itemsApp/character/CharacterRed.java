@@ -32,6 +32,7 @@ public class CharacterRed extends ACharacter {
 	@Override
 	public void draw(Graphics2D g) {
 
+
 		AffineTransform af = new AffineTransform();
 		af.translate(pos.x, pos.y);
 		af.rotate(angleOfView, DEFAULT_SIZE / 2, DEFAULT_SIZE / 2);
@@ -43,5 +44,4 @@ public class CharacterRed extends ACharacter {
 			g.drawImage(imgD[(walkStep < walkFrequence / 2) ? 0 : 1], af, null);
 		}
 	}
-
 }

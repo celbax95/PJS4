@@ -8,6 +8,7 @@ import fr.screen.MainJPanel;
 import fr.screen.Screen;
 import fr.server.Player;
 import fr.server.Server;
+import son.AudioPlayer;
 
 /**
  * Classe de lancement du jeu
@@ -16,7 +17,11 @@ public class GameLauncher {
 	private static Server server;
 	private static Client cli;
 	private static Menu menu;
+	static String Cmenu = ".\\BanqueSon\\menu.wav";
 
+	static String Cjeu = ".\\BanqueSon\\Yeah2.wav";
+	static Object Smenu = null;
+	static Object Sjeu = null;
 	/**
 	 * Fermeture du client
 	 */
@@ -74,32 +79,6 @@ public class GameLauncher {
 	}
 
 	/**
-	 * Affiche le menu
-	 * 
-	 * @see Menu
-	 * @exception Lance
-	 *                une exception si le menu n'a pas été initialisé
-	 */
-	public static void menuDisplay() throws MenuNotSet {
-		isMenuSet();
-		menu.display();
-	}
-
-	/**
-	 * Reset du menu
-	 */
-	public static void resetMenu() {
-		clientClose();
-		if (server != null) {
-			serverClose();
-		}
-		MainJPanel.setNewInstance();
-		Screen.setNewInstance();
-		menu.reset();
-
-	}
-
-	/**
 	 * Fermeture du serveur
 	 */
 	public static void serverClose() {
@@ -108,13 +87,6 @@ public class GameLauncher {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Lance une partie
-	 */
-	public static void serverSetGameOn() {
-		server.setGameOn();
 	}
 
 	/**
@@ -131,4 +103,97 @@ public class GameLauncher {
 	public static void updateMenu(ArrayList<Player> players) {
 		menu.updatePlayers(players);
 	}
+
+
+	
+
+	public static AudioPlayer initialiserSon(String chemin) {
+	
+		if (chemin.equals(Cmenu)) { 
+			try {
+				AudioPlayer SoundMenu = new AudioPlayer(chemin);
+				Smenu = SoundMenu;
+				
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			}
+			finally {
+				return (AudioPlayer) Smenu;
+			}
+		
+		}
+		else if  (chemin.equals(Cjeu)) { 
+			try {
+				AudioPlayer SoundMenu = new AudioPlayer(chemin);
+				Sjeu = SoundMenu;
+				
+			} catch (Exception ex) {
+				System.out.println("Error with playing sound.");
+				ex.printStackTrace();
+			}
+			finally {
+				return (AudioPlayer) Sjeu;
+			}
+		}
+		else return null;
+	}
+	
+	public static void lancerSon(AudioPlayer monSon) {
+		monSon.playConst();
+	}
+	public static void stoperSon(AudioPlayer monSon) {
+		monSon.pause();
+	}
+
+	/**
+	 * Affiche le menu
+	 *
+	 * @see Menu
+	 * @exception Lance une exception si le menu n'a pas été initialisé
+	 */
+	public static void menuDisplay() throws MenuNotSet {
+		
+		initialiserSon(Cmenu);
+		lancerSon((AudioPlayer) Smenu);
+		isMenuSet();
+		menu.display();
+	}
+
+	/**
+	 * Reset du menu
+	 */
+	public static void resetMenu() {
+
+		clientClose();
+		if (server != null) {
+			serverClose();
+		}
+		MainJPanel.setNewInstance();
+		Screen.setNewInstance();
+		menu.reset();
+		//On met arette la musique du jeu pour repasser sur la musique du menu
+		((AudioPlayer) Sjeu).pause();
+		((AudioPlayer) Smenu).playConst();
+	}
+
+//>>>>>>> mise a jour integration son
+	
+
+	
+	
+
+	/**
+	 * Lance une partie
+	 */
+	public static void serverSetGameOn() {
+		((AudioPlayer) Smenu).pause();
+		initialiserSon(Cjeu);
+		lancerSon((AudioPlayer) Sjeu);
+		server.setGameOn();
+
+	}
+
+	
+
 }
