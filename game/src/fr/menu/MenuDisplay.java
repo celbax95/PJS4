@@ -39,6 +39,7 @@ public class MenuDisplay implements Menu {
 	private static final Color PLAYER_GREEN_BACKGROUND_COLOR = new Color(33, 198, 99);
 	private static final Color PLAYER_YELLOW_BACKGROUND_COLOR = new Color(209, 197, 31);
 	private static final Color BUTTON_BACKGROUND_COLOR = new Color(59, 89, 182);
+	private static final Color MESSAGE_BACKGROUND_COLOR = new Color(102, 102, 153);
 	private static final Color ARROWS_BACKGROUND_COLOR = new Color(80, 100, 190);
 	private static final Font BUTTON_FONT = new Font("Tahoma", Font.BOLD, 20);
 	private static final int SIZE_BUTTON_X = 210, SIZE_BUTTON_Y = 45;
@@ -51,20 +52,10 @@ public class MenuDisplay implements Menu {
 		GameLauncher.setMenu(MenuDisplay.getInstance());
 	}
 
-	/**
-	 * Récupère l'instance unique du menu
-	 */
-	public static Menu getInstance() {
-		if (MenuDisplay.menu == null) {
-			MenuDisplay.menu = new MenuDisplay();
-			return MenuDisplay.menu;
-		} else {
-			return MenuDisplay.menu;
-		}
-	}
 
 	private JFrame frame;
 	private JPanel panel;
+	private JLabel message;
 	private JLabel nbPlayersLabel;
 	private ArrayList<JLabel> playersLabels;
 	private JTextField ipTextField;
@@ -81,6 +72,20 @@ public class MenuDisplay implements Menu {
 
 	private boolean sawIpAdress;
 	private boolean sawAlias;
+
+	private ArrayList<Integer> results;
+	
+	/**
+	 * Récupère l'instance unique du menu
+	 */
+	public static Menu getInstance() {
+		if (MenuDisplay.menu == null) {
+			MenuDisplay.menu = new MenuDisplay();
+			return MenuDisplay.menu;
+		} else {
+			return MenuDisplay.menu;
+		}
+	}
 
 	/**
 	 * Constructeur du menu (initialisation de tous ses composants)
@@ -114,6 +119,7 @@ public class MenuDisplay implements Menu {
 		this.mapL = new JButton("<");
 		this.mapR = new JButton(">");
 		this.nbPlayersLabel = new JLabel(String.valueOf(nbPlayers), SwingConstants.CENTER);
+		this.message = new JLabel("", SwingConstants.CENTER);
 		this.ipTextField = new JTextField("Ip Adress");
 		this.aliasTextField = new JTextField("Alias");
 		this.buttonList = new ArrayList<JButton>(
@@ -135,12 +141,14 @@ public class MenuDisplay implements Menu {
 		this.mapL.setBounds(145 - SIZE_BUTTON_X / 3, 110 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X / 3, SIZE_BUTTON_Y);
 		this.mapR.setBounds(145 + SIZE_BUTTON_X, 110 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X / 3, SIZE_BUTTON_Y);
 		this.nbPlayersLabel.setBounds(130 + SIZE_BUTTON_X / 3, 110, SIZE_BUTTON_X / 2, SIZE_BUTTON_Y);
+		this.message.setBounds(145, 335, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 		this.ipTextField.setBounds(145, 110, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 		this.aliasTextField.setBounds(145, 140 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 
 		setFocusPaintedButtons();
 
 		this.nbPlayersLabel.setOpaque(true);
+		this.message.setOpaque(true);
 		this.ipTextField.setHorizontalAlignment(JTextField.CENTER);
 		this.aliasTextField.setHorizontalAlignment(JTextField.CENTER);
 
@@ -155,16 +163,19 @@ public class MenuDisplay implements Menu {
 		this.mapL.setBackground(ARROWS_BACKGROUND_COLOR);
 		this.mapR.setBackground(ARROWS_BACKGROUND_COLOR);
 		this.nbPlayersLabel.setBackground(BUTTON_BACKGROUND_COLOR);
+		this.message.setBackground(MESSAGE_BACKGROUND_COLOR);
 		this.ipTextField.setBackground(BUTTON_BACKGROUND_COLOR);
 		this.aliasTextField.setBackground(BUTTON_BACKGROUND_COLOR);
 
 		setFontButtons();
 		this.nbPlayersLabel.setFont(BUTTON_FONT);
+		this.message.setFont(BUTTON_FONT);
 		this.ipTextField.setFont(BUTTON_FONT);
 		this.aliasTextField.setFont(BUTTON_FONT);
 
 		setForegroundButtons();
 		this.nbPlayersLabel.setForeground(Color.white);
+		this.message.setForeground(Color.white);
 		this.ipTextField.setForeground(Color.gray);
 		this.aliasTextField.setForeground(Color.gray);
 
@@ -250,8 +261,11 @@ public class MenuDisplay implements Menu {
 			for (JComponent jc : componentConnectList) {
 				jc.setVisible(false);
 			}
-		} else {
-			/* ÃƒÆ’Ã‚Â  faire */ }
+		} else if (menuPosition == 5){
+			
+		} else if (menuPosition == 6){
+			
+		} else {/* ÃƒÆ’Ã‚Â  faire */ }
 
 	}
 
@@ -319,6 +333,23 @@ public class MenuDisplay implements Menu {
 					break;
 				case 4:
 					GameLauncher.clientClose();
+					menuPosition = 2;
+					break;
+				case 5:
+					for(int i = 0; i < players.size(); i++) {
+						playersLabels.get(i).setVisible(false);
+					}
+					nbPlayersLabel.setText(String.valueOf(nbPlayers));
+					message.setVisible(false);
+					System.out.println(menuPosition);
+					menuPosition = 1;
+					break;
+				case 6:
+					for(int i = 0; i < players.size(); i++) {
+						playersLabels.get(i).setVisible(false);
+					}
+					message.setVisible(false);
+					connect.requestFocusInWindow();
 					menuPosition = 2;
 					break;
 				}
@@ -434,6 +465,8 @@ public class MenuDisplay implements Menu {
 		for (JLabel jl : playersLabels) {
 			this.frame.getContentPane().add(jl);
 		}
+		this.message.setVisible(false);
+		this.frame.getContentPane().add(message);
 		this.frame.add(panel);
 		this.frame.pack();
 		this.frame.setVisible(true);
@@ -452,16 +485,25 @@ public class MenuDisplay implements Menu {
 	 */
 	@Override
 	public void reset() {
-		hideComponents();
-
+		start.setVisible(false);
 		if (menuPosition == 3) {
-			nbPlayersLabel.setText(String.valueOf(nbPlayers));
-			menuPosition = 1;
+			menuPosition = 5;
 		} else if (menuPosition == 4) {
-			menuPosition = 2;
-			connect.requestFocusInWindow();
+			menuPosition = 6;
 		}
-		showComponents();
+		if(results.size() == 0) {
+			for(int i = 0; i < this.players.size(); i++) {
+				this.playersLabels.get(i).setVisible(true);
+			}
+			this.message.setText("Personne n'a gagné !");
+			this.message.setVisible(true);
+		}
+		for(int i = 0; i < this.players.size(); i++) {
+			if(new Integer(this.players.get(i).getNo()).equals(this.results.get(0))) {
+				this.playersLabels.get(i).setText(this.playersLabels.get(i).getText()+" has won !");
+			}
+			this.playersLabels.get(i).setVisible(true);
+		}
 		MenuDisplay.menu.frame.setVisible(true);
 	}
 
@@ -536,5 +578,11 @@ public class MenuDisplay implements Menu {
 				this.players = players;
 			}
 		}
+	}
+
+	@Override
+	public void giveResults(ArrayList<Integer> results) {
+		this.results = results;
+		
 	}
 }

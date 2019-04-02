@@ -56,7 +56,6 @@ public class Client implements Runnable {
 
 	public void close() {
 		myThread.interrupt();
-		GameLauncher.updateMenu(new ArrayList<Player>());
 		try {
 			socket.close();
 		} catch (IOException e) {
@@ -114,6 +113,7 @@ public class Client implements Runnable {
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 
 		} catch (IOException e) {
+			GameLauncher.updateMenu(new ArrayList<Player>());
 			GameLauncher.menuBack();
 			close();
 			System.err.println("Client ferme");

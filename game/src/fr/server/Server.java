@@ -65,7 +65,7 @@ public class Server implements Runnable {
 			if (i == 1 && player.getAlias().equals(p.getAlias())) {
 				i++;
 			}
-			System.out.println(player.getAlias() + " ? " +(p.getAlias()+" "+i));
+			//System.out.println(player.getAlias() + " ? " +(p.getAlias()+" "+i));
 			if(i > 1 && player.getAlias().equals(p.getAlias()+" "+i)) {
 				i++;
 			}
@@ -90,7 +90,6 @@ public class Server implements Runnable {
 				this.application.stop();
 			}
 			server.close();
-			GameLauncher.updateMenu(new ArrayList<Player>());
 		} catch (IOException e) {
 		}
 	}

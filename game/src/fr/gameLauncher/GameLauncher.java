@@ -129,7 +129,7 @@ public class GameLauncher {
 		MainJPanel.setNewInstance();
 		Screen.setNewInstance();
 		menu.reset();
-		// On met arette la musique du jeu pour repasser sur la musique du menu
+		// On met arrete la musique du jeu pour repasser sur la musique du menu
 		((AudioPlayer) Sjeu).pause();
 		((AudioPlayer) Smenu).playConst();
 	}
@@ -171,10 +171,12 @@ public class GameLauncher {
 		monSon.pause();
 	}
 
-	// >>>>>>> mise a jour integration son
-
 	public static void updateMenu(ArrayList<Player> players) {
 		menu.updatePlayers(players);
+	}
+
+	public static void giveResults(ArrayList<Integer> results) {
+		menu.giveResults(results);
 	}
 
 }

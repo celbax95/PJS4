@@ -14,4 +14,6 @@ public interface Menu {
 	public void updatePlayers(ArrayList<Player> players);
 
 	public void back();
+
+	public void giveResults(ArrayList<Integer> results);
 }

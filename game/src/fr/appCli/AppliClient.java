@@ -228,7 +228,8 @@ public class AppliClient implements AppliScreen, Runnable {
 				nbPlayers = (int) this.sIn.readUnshared();
 				if(nbPlayers <= 1) {
 					results = (ArrayList<Integer>) this.sIn.readUnshared();
-					
+					GameLauncher.giveResults(results);
+					throw new IOException();
 				}
 
 				if (!this.receiving) {
