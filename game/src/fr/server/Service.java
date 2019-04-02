@@ -128,17 +128,12 @@ public class Service implements Runnable {
 				}
 				application.addPlayer(this.myPlayer.getNo());
 			}
-			// int i = 0;
 			while (!Thread.currentThread().isInterrupted()) {
-				synchronized (application) {
-					sOut.writeUnshared(application.getPlayer(myPlayer.getNo()));
-					sOut.flush();
-				}
+				sOut.writeUnshared(application.getPlayer(myPlayer.getNo()));
+				sOut.flush();
 				sOut.reset();
-				synchronized (application) {
-					sOut.writeUnshared(new Object[] { application.getMap(), application.getDrawables() });
-					sOut.flush();
-				}
+				sOut.writeUnshared(new Object[] { application.getMap(), application.getDrawables() });
+				sOut.flush();
 				sOut.flush();
 				sOut.reset();
 
