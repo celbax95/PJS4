@@ -60,14 +60,17 @@ public class Server implements Runnable {
 	}
 
 	public void addPlayer(Player p) {
-		int i = 0;
+		int i = 1;
 		for (Player player : players) {
-			if (player.getAlias().equals(p.getAlias())) {
+			if (i == 1 && player.getAlias().equals(p.getAlias())) {
+				i++;
+			}
+			System.out.println(player.getAlias() + " ? " +(p.getAlias()+" "+i));
+			if(i > 1 && player.getAlias().equals(p.getAlias()+" "+i)) {
 				i++;
 			}
 		}
-		if (i != 0) {
-			i++;
+		if (i != 1) {
 			p.setAlias(p.getAlias() + " " + i);
 		}
 		players.add(p);

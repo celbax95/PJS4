@@ -1,5 +1,6 @@
 package fr.application;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -144,7 +145,13 @@ public class Application implements Runnable {
 			this.removeManageable(character);
 		}
 	}
-
+	
+	/**
+	 * Renvoie le nombre de joueurs en vie
+	 */
+	public int getPlayersNb() {
+		return this.players.size();
+	}
 	/**
 	 * @return La liste de toutes les bombes
 	 */
@@ -288,5 +295,9 @@ public class Application implements Runnable {
 
 	public void stop() {
 		this.myThread.interrupt();
+	}
+
+	public ArrayList<Integer> getPlayersKeys() {
+		return new ArrayList<Integer>(this.players.keySet());
 	}
 }

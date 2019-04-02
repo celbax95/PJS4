@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.application.Application;
@@ -134,7 +135,6 @@ public class Service implements Runnable {
 				sOut.reset();
 				sOut.writeUnshared(new Object[] { application.getMap(), application.getDrawables() });
 				sOut.flush();
-				sOut.flush();
 				sOut.reset();
 
 				List<Integer> cliKeys = (List<Integer>) sIn.readUnshared();
@@ -142,6 +142,17 @@ public class Service implements Runnable {
 					if (!application.managePlayer(myPlayer.getNo(), cliKeys)) {
 						// Quand le joueur est mort
 					}
+				}
+				sOut.writeUnshared(application.getPlayersNb());
+				sOut.flush();
+				sOut.reset();
+				if(application.getPlayersNb() <= 1) {
+					synchronized(application) {
+						sOut.writeUnshared(application.getPlayersKeys());
+						sOut.flush();
+						sOut.reset();
+					}
+					throw new IOException();
 				}
 			}
 		} catch (IOException e) {

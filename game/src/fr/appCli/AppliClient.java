@@ -198,7 +198,10 @@ public class AppliClient implements AppliScreen, Runnable {
 			List<Drawable> listDrawables;
 
 			KeyBoard keyBoard = KeyBoard.getInstance();
-
+			
+			int nbPlayers = 4;
+			ArrayList<Integer> results;
+			
 			// Tant que l'application n'est pas terminee
 			while (!Thread.currentThread().isInterrupted()) {
 
@@ -221,6 +224,12 @@ public class AppliClient implements AppliScreen, Runnable {
 				this.sOut.writeUnshared(keyBoard.getKeys());
 				this.sOut.flush();
 				this.sOut.reset();
+				
+				nbPlayers = (int) this.sIn.readUnshared();
+				if(nbPlayers <= 1) {
+					results = (ArrayList<Integer>) this.sIn.readUnshared();
+					
+				}
 
 				if (!this.receiving) {
 					this.camera = new Camera(new Point(Client.getWidth(), Client.getHeight()),
