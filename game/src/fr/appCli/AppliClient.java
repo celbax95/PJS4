@@ -55,7 +55,9 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	private boolean receiving;
 
-	public AppliClient(String name, Socket socket) {
+	private int nbPlayers;
+
+	public AppliClient(String name, Socket socket, int nbPlayers) {
 		this.transfer = new Object();
 		this.transferPlayer = new Object();
 
@@ -67,14 +69,16 @@ public class AppliClient implements AppliScreen, Runnable {
 
 		this.myThread = new Thread(this);
 		this.listD = new ArrayList<>();
+		
+		this.nbPlayers = nbPlayers;
 	}
 
 	/**
 	 * @param name   : Nom de la fenetre de jeu
 	 * @param socket : Socket liee au serveur
 	 */
-	public AppliClient(String name, Socket socket, ObjectInputStream sIn, ObjectOutputStream sOut) {
-		this(name, socket);
+	public AppliClient(String name, Socket socket, ObjectInputStream sIn, ObjectOutputStream sOut, int nbPlayers) {
+		this(name, socket, nbPlayers);
 
 		this.sIn = sIn;
 		this.sOut = sOut;
@@ -226,7 +230,7 @@ public class AppliClient implements AppliScreen, Runnable {
 				this.sOut.reset();
 				
 				nbPlayers = (int) this.sIn.readUnshared();
-				if(nbPlayers <= 1) {
+				if((nbPlayers == 1 && this.nbPlayers > 1) || nbPlayers < 1) {
 					results = (ArrayList<Integer>) this.sIn.readUnshared();
 					GameLauncher.giveResults(results);
 					throw new IOException();

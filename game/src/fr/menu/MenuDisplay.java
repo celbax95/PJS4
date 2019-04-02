@@ -341,7 +341,6 @@ public class MenuDisplay implements Menu {
 					}
 					nbPlayersLabel.setText(String.valueOf(nbPlayers));
 					message.setVisible(false);
-					System.out.println(menuPosition);
 					menuPosition = 1;
 					break;
 				case 6:
@@ -491,18 +490,19 @@ public class MenuDisplay implements Menu {
 		} else if (menuPosition == 4) {
 			menuPosition = 6;
 		}
-		if(results.size() == 0) {
+		if(results.isEmpty()) {
 			for(int i = 0; i < this.players.size(); i++) {
 				this.playersLabels.get(i).setVisible(true);
 			}
-			this.message.setText("Personne n'a gagné !");
+			this.message.setText("No one has won...");
 			this.message.setVisible(true);
-		}
-		for(int i = 0; i < this.players.size(); i++) {
-			if(new Integer(this.players.get(i).getNo()).equals(this.results.get(0))) {
-				this.playersLabels.get(i).setText(this.playersLabels.get(i).getText()+" has won !");
+		} else {
+			for(int i = 0; i < this.players.size(); i++) {
+				if(new Integer(this.players.get(i).getNo()).equals(this.results.get(0))) {
+					this.playersLabels.get(i).setText(this.playersLabels.get(i).getText()+" has won!");
+				}
+				this.playersLabels.get(i).setVisible(true);
 			}
-			this.playersLabels.get(i).setVisible(true);
 		}
 		MenuDisplay.menu.frame.setVisible(true);
 	}

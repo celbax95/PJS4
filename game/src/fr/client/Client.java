@@ -85,6 +85,7 @@ public class Client implements Runnable {
 	@Override
 	public void run() {
 		try {
+			ArrayList<Player> players = new ArrayList<Player>();
 			ObjectOutputStream sOut = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
 			sOut.writeUnshared(this.alias);
 			sOut.flush();
@@ -103,13 +104,14 @@ public class Client implements Runnable {
 				}
 				synchronized(this) {
 					if (!Thread.currentThread().isInterrupted()) {
-						GameLauncher.updateMenu((ArrayList<Player>) sIn.readUnshared());
+						players = (ArrayList<Player>) sIn.readUnshared();
+						GameLauncher.updateMenu(players);
 					}
 				}
 			}
 			menu.hideWindow();
 
-			AppliScreen appScr = new AppliClient(NAME, socket, sIn, sOut);
+			AppliScreen appScr = new AppliClient(NAME, socket, sIn, sOut, players.size());
 			Screen.getInstance(appScr, WIDTH, HEIGHT, MARGE_W, MARGE_H, MARGE_T);
 
 		} catch (IOException e) {

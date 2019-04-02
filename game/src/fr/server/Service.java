@@ -146,7 +146,7 @@ public class Service implements Runnable {
 				sOut.writeUnshared(application.getPlayersNb());
 				sOut.flush();
 				sOut.reset();
-				if(application.getPlayersNb() <= 1) {
+				if((application.getPlayersNb() == 1 && server.getNbPlayers() > 1) || application.getPlayersNb() < 1) {
 					synchronized(application) {
 						sOut.writeUnshared(application.getPlayersKeys());
 						sOut.flush();
