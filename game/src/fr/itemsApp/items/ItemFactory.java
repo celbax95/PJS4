@@ -9,7 +9,7 @@ public class ItemFactory {
 
 	private static ItemFactory instance;
 
-	private static double FREQUENCE = 0.3;
+	private static double FREQUENCE = 0.4;
 
 	static {
 		instance = new ItemFactory();
@@ -19,7 +19,7 @@ public class ItemFactory {
 	}
 
 	public PlaceableItem create(double freq) {
-		if (freq < 0)
+		if (freq < 0.7)
 			return new BombUpgrade();
 		else
 			return new HealPotion();

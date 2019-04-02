@@ -15,9 +15,6 @@ public class BombUpgrade extends Item {
 	private static Image img = new ImageIcon(
 			BombUpgrade.class.getResource("/images/items/bombUpgrade/placeableBombUpgrade.png")).getImage()
 					.getScaledInstance(120, 120, Image.SCALE_FAST);
-	private static Image icon = new ImageIcon(
-			BombUpgrade.class.getResource("/images/items/bombUpgrade/collectableBombUpgrade.png")).getImage()
-					.getScaledInstance(160, 160, Image.SCALE_FAST);
 
 	private static boolean USE_NOW = true;
 
@@ -28,7 +25,7 @@ public class BombUpgrade extends Item {
 
 	@Override
 	public Image getIcon() {
-		return icon;
+		return null;
 	}
 
 	@Override
