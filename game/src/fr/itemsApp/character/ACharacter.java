@@ -7,6 +7,7 @@ import fr.application.Application;
 import fr.explosion.IExplosion;
 import fr.itemsApp.bomb.BombFactory;
 import fr.itemsApp.bomb.IBomb;
+import fr.itemsApp.items.CollectableItem;
 import fr.itemsApp.items.PlaceableItem;
 import fr.map.GameMap;
 import fr.map.MapTile;
@@ -53,6 +54,8 @@ public abstract class ACharacter implements ICharacter {
 
 	private int explosionSize;
 
+	private CollectableItem item;
+
 	/**
 	 * @param x            : Position x
 	 * @param y            : Position y
@@ -68,6 +71,7 @@ public abstract class ACharacter implements ICharacter {
 		this.walkStep = 0;
 		this.bombCoolDown = new Cooldown(bombCoolDown);
 		this.explosionSize = 1;
+		this.item = null;
 		this.defaultBomb = "std";
 	}
 
@@ -75,6 +79,7 @@ public abstract class ACharacter implements ICharacter {
 	public void actions(Application application, List<Integer> clickedKeys) {
 		this.setMoves(clickedKeys);
 		this.dropBomb(application, clickedKeys);
+		this.useItem(application, clickedKeys);
 	}
 
 	private void collectItem(Application application) {
@@ -90,12 +95,13 @@ public abstract class ACharacter implements ICharacter {
 			if (tile.x == item.getTile().x && tile.y == item.getTile().y)
 				itemToUse = item;
 
-		if (itemToUse != null)
-			if (itemToUse.useNow()) {
-				PlaceableItem.removeFromLists(itemToUse, application);
+		if (itemToUse != null) {
+			PlaceableItem.removeFromLists(itemToUse, application);
+			if (itemToUse.useNow())
 				itemToUse.collect(application, this).use(application);
-			}
-
+			else
+				this.item = itemToUse.collect(application, this);
+		}
 	}
 
 	@Override
@@ -369,6 +375,11 @@ public abstract class ACharacter implements ICharacter {
 	@Override
 	public int timeBeforeBomb() {
 		return (int) this.bombCoolDown.timeBefore();
+	}
+
+	private void useItem(Application application, List<Integer> clickedKeys) {
+		if (clickedKeys.contains(KeyEvent.VK_T))
+			this.item.use(application);
 	}
 
 	/**
