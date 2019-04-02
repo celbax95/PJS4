@@ -39,8 +39,6 @@ public abstract class ACharacter implements ICharacter {
 
 	protected int walkStep;
 
-	protected Cooldown lastDamage;
-
 	protected String defaultBomb;
 
 	protected Cooldown bombCoolDown;
@@ -65,7 +63,6 @@ public abstract class ACharacter implements ICharacter {
 		this.pos = new Point(x, y);
 		this.speed = speed;
 		this.health = health;
-		this.lastDamage = new Cooldown(timeBetweenDamages);
 		this.moves = new Point(0, 0);
 		this.angleOfView = 0;
 		this.walkStep = 0;
@@ -104,7 +101,6 @@ public abstract class ACharacter implements ICharacter {
 	@Override
 	public void damage(double health) {
 		this.health -= health;
-		this.lastDamage.reset();
 	}
 
 	/**
@@ -176,7 +172,7 @@ public abstract class ACharacter implements ICharacter {
 	@Override
 	public void manage(Application application, double timeSinceLastCall) {
 		this.move(application, timeSinceLastCall);
-		this.setDamage(application);
+		this.setDamage(application, timeSinceLastCall);
 		this.death(application);
 		this.collectItem(application);
 		this.regen(timeSinceLastCall);
@@ -308,11 +304,7 @@ public abstract class ACharacter implements ICharacter {
 	 *
 	 * @param application
 	 */
-	private void setDamage(Application application) {
-
-		if (!this.lastDamage.isDone())
-			return;
-
+	private void setDamage(Application application, double timeSinceLastCall) {
 		// Explosion Damage
 		List<IExplosion> explosions = application.getExplosions();
 
@@ -322,7 +314,7 @@ public abstract class ACharacter implements ICharacter {
 		for (IExplosion e : explosions) {
 			Point eTile = e.getTile();
 			if (tile.x == eTile.x && tile.y == eTile.y)
-				this.damage(e.getDamage());
+				this.damage(e.getDamage() * timeSinceLastCall);
 		}
 	}
 
