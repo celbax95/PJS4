@@ -32,7 +32,7 @@ public abstract class ACharacter implements ICharacter {
 
 	protected static final int MAX_EXPLOSION_SIZE = 5;
 
-	protected static final double REGEN = 2;
+	protected static final double REGEN = 0.5;
 
 	protected int speed;
 
@@ -336,7 +336,7 @@ public abstract class ACharacter implements ICharacter {
 
 	@Override
 	public void setHealth(double health) {
-		this.health = health;
+		this.health = health <= MAX_HEALTH ? health : MAX_HEALTH;
 	}
 
 	@Override
@@ -389,8 +389,10 @@ public abstract class ACharacter implements ICharacter {
 	 * @param clickedKeys : touches pressees par l'utilisateur
 	 */
 	private void useItem(Application application, List<Integer> clickedKeys) {
-		if (clickedKeys.contains(KeyEvent.VK_T) && this.item != null)
+		if (clickedKeys.contains(KeyEvent.VK_T) && this.item != null) {
 			this.item.use(application);
+			this.item = null;
+		}
 	}
 
 	/**

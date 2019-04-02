@@ -22,6 +22,8 @@ public class HealPotion extends Item {
 
 	private static boolean USE_NOW = false;
 
+	private static double HEAL_AMOUNT = 50;
+
 	@Override
 	public void draw(Graphics2D g) {
 		g.drawImage(img, this.pos.getIX(), this.pos.getIY(), null);
@@ -34,7 +36,7 @@ public class HealPotion extends Item {
 
 	@Override
 	public void use(Application application) {
-		this.holder.setHealth(this.holder.getHealth() + 60);
+		this.holder.setHealth(this.holder.getHealth() + HEAL_AMOUNT);
 	}
 
 	@Override
