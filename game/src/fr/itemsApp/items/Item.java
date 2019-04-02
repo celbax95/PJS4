@@ -11,8 +11,6 @@ public abstract class Item implements CollectableItem, PlaceableItem, Serializab
 
 	private static final long serialVersionUID = 1L;
 
-	protected final int SIZE = 110;
-
 	protected Point pos, tile;
 	protected ICharacter holder;
 
@@ -38,8 +36,7 @@ public abstract class Item implements CollectableItem, PlaceableItem, Serializab
 	@Override
 	public void setTile(Point tile, int tileSize) {
 		this.tile = tile;
-		this.pos = new Point(tile.getIX() * tileSize + (tileSize - this.SIZE) / 2,
-				tile.getIY() * tileSize + (tileSize - this.SIZE) / 2);
+		this.pos = new Point(tile.getIX() * tileSize, tile.getIY() * tileSize);
 	}
 
 	@Override
