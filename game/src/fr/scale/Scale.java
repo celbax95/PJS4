@@ -37,20 +37,20 @@ public class Scale implements Runnable {
 	 */
 	private Scale(double scale) {
 		this.scale = scale;
-		tmpScale = scale;
-		aimedScale = scale;
-		lock = new Object();
-		(myThread = new Thread(this)).start();
+		this.tmpScale = scale;
+		this.aimedScale = scale;
+		this.lock = new Object();
+		(this.myThread = new Thread(this)).start();
 	}
 
 	/**
 	 * diminue le scale
 	 */
 	public void decrease() {
-		aimedScale -= changingStep;
-		if (aimedScale < minScale)
-			aimedScale = minScale;
-		unLock();
+		this.aimedScale -= changingStep;
+		if (this.aimedScale < minScale)
+			this.aimedScale = minScale;
+		this.unLock();
 		try {
 			Thread.sleep(holdDelay);
 		} catch (InterruptedException e) {
@@ -61,7 +61,7 @@ public class Scale implements Runnable {
 	 * @return l'echelle
 	 */
 	public double getScale() {
-		return scale;
+		return this.scale;
 	}
 
 	/**
@@ -75,10 +75,10 @@ public class Scale implements Runnable {
 	 * augmente le scale
 	 */
 	public void increase() {
-		aimedScale += changingStep;
-		if (aimedScale > maxScale)
-			aimedScale = maxScale;
-		unLock();
+		this.aimedScale += changingStep;
+		if (this.aimedScale > maxScale)
+			this.aimedScale = maxScale;
+		this.unLock();
 		try {
 			Thread.sleep(holdDelay);
 		} catch (InterruptedException e) {
@@ -94,17 +94,17 @@ public class Scale implements Runnable {
 			double difference = 0.;
 
 			while (!Thread.currentThread().isInterrupted()) {
-				while ((difference = Math.abs(tmpScale - aimedScale)) > 0.02) {
+				while ((difference = Math.abs(this.tmpScale - this.aimedScale)) > 0.02) {
 
-					if (scale < aimedScale)
-						tmpScale += step * difference * animationSpeedFactor;
+					if (this.scale < this.aimedScale)
+						this.tmpScale += step * difference * animationSpeedFactor;
 					else
-						tmpScale -= step * difference * animationSpeedFactor;
+						this.tmpScale -= step * difference * animationSpeedFactor;
 
 					Thread.sleep(16);
 				}
-				synchronized (lock) {
-					lock.wait();
+				synchronized (this.lock) {
+					this.lock.wait();
 				}
 			}
 		} catch (InterruptedException e) {
@@ -116,16 +116,16 @@ public class Scale implements Runnable {
 	 * @param s : l'echelle
 	 */
 	public void setScale(double s) {
-		scale = s;
-		unLock();
+		this.scale = s;
+		this.unLock();
 	}
 
 	/**
 	 * Declanche l'animation
 	 */
 	private void unLock() {
-		synchronized (lock) {
-			lock.notifyAll();
+		synchronized (this.lock) {
+			this.lock.notifyAll();
 		}
 	}
 
@@ -133,8 +133,8 @@ public class Scale implements Runnable {
 	 * met a jour la valeur reelle de scale par rapport a l'animation
 	 */
 	public double update() {
-		double tmp = tmpScale - scale;
-		scale = tmpScale;
+		double tmp = this.tmpScale - this.scale;
+		this.scale = this.tmpScale;
 		return tmp;
 	}
 
