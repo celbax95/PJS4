@@ -1,7 +1,9 @@
 package fr.gameLauncher;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import fr.client.Client;
 import fr.screen.MainJPanel;
@@ -49,8 +51,8 @@ public class GameLauncher {
 	 * @param port     Port du serveur
 	 * @param nbPlayer Nombres de joueurs supportés par le serveur
 	 */
-	public static void createServer(String title, int port, int nbPlayers) {
-		server = new Server(title, port, nbPlayers);
+	public static void createServer(String title, int port, int nbPlayers, String mapName) {
+		server = new Server(title, port, nbPlayers, mapName);
 	}
 
 	public static int getServerNbPlayers() {
@@ -177,6 +179,16 @@ public class GameLauncher {
 
 	public static void giveResults(ArrayList<Integer> results) {
 		menu.giveResults(results);
+	}
+
+	public static ArrayList<String> getMapsNames() {
+		File folder = new File(".\\game\\src\\maps");
+		ArrayList<String> mapsNames = new ArrayList<String>();
+		ArrayList<File> maps = new ArrayList<File>(Arrays.asList(folder.listFiles()));
+		for(File f : maps) {
+			mapsNames.add(f.getName().split("\\.")[0]);
+		}
+		return mapsNames;
 	}
 
 }

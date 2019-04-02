@@ -45,7 +45,7 @@ public class Application implements Runnable {
 	 * @param width  : Largeur de la fenetre
 	 * @param height : Hauteur de la fenetre
 	 */
-	public Application(int width, int height) {
+	public Application(int width, int height, String mapName) {
 		this.players = new HashMap<>();
 		this.drawables = new Vector<>();
 		this.manageables = new Vector<>();
@@ -56,7 +56,7 @@ public class Application implements Runnable {
 		this.myThread = new Thread(this);
 
 		// Chargement de la map depuis le fichier "/maps/1.bmap"
-		this.map = new GameMap("/maps/2.bmap");
+		this.map = new GameMap("/maps/"+mapName+".bmap");
 		this.spawnPlaces = this.map.getSpawnPoints();
 		this.currentSpawnPoint = 0;
 	}

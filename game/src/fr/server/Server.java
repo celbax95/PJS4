@@ -31,6 +31,7 @@ public class Server implements Runnable {
 	private Thread threadServ;
 	private Socket socketHost;
 	private Application application;
+	private String mapName;
 
 	/**
 	 * constructeur Server
@@ -42,7 +43,7 @@ public class Server implements Runnable {
 	 * @param nbPlayers
 	 *            : nombre de joueurs acceptables par le serveur
 	 */
-	public Server(String title, int port, int nbPlayers) {
+	public Server(String title, int port, int nbPlayers, String mapName) {
 
 		try {
 			this.server = new ServerSocket(port);
@@ -52,6 +53,7 @@ public class Server implements Runnable {
 			this.nbPlayers = 0;
 			this.gameOn = false;
 			this.players = new ArrayList<Player>();
+			this.mapName = mapName;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -219,7 +221,7 @@ public class Server implements Runnable {
 		synchronized (this) {
 			this.threadServ.interrupt();
 			this.gameOn = true;
-			(this.application = new Application(WIDTH, HEIGHT)).start();
+			(this.application = new Application(WIDTH, HEIGHT, mapName)).start();
 			synchronized (this.application) {
 				Service.setApplication(application);
 			}
