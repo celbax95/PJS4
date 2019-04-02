@@ -171,8 +171,10 @@ public class AppliClient implements AppliScreen, Runnable {
 
 		g.setTransform(oldTransform);
 
-		this.hud.setCharacter(this.player);
-		this.hud.draw(g);
+		if (this.player != null) {
+			this.hud.setCharacter(this.player);
+			this.hud.draw(g);
+		}
 	}
 
 	@Override
@@ -201,8 +203,9 @@ public class AppliClient implements AppliScreen, Runnable {
 			while (!Thread.currentThread().isInterrupted()) {
 
 				// Recuperation de la camera
+				ICharacter tmpPlayer = (ICharacter) this.sIn.readUnshared();
 				synchronized (this.transferPlayer) {
-					this.player = (ICharacter) this.sIn.readUnshared();
+					this.player = tmpPlayer;
 				}
 
 				Object[] envoiClient = (Object[]) this.sIn.readUnshared();
@@ -244,7 +247,7 @@ public class AppliClient implements AppliScreen, Runnable {
 
 	private void setCamera(Graphics2D g) {
 		synchronized (this.transferPlayer) {
-			this.camera.setA(this.player.getCenter());
+			this.camera.setA(this.player != null ? this.player.getCenter() : null);
 		}
 		this.camera.update();
 		Point camPos = this.camera.getPos();
