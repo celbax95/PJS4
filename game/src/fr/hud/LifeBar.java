@@ -13,9 +13,9 @@ import fr.util.point.Point;
 /**
  * singleton barre d'affichage du cooldown
  */
-public class LifeBar implements IBar {
+public class LifeBar implements HUDElement {
 
-	private static IBar instance;
+	private static HUDElement instance;
 
 	private static Image image = new ImageIcon(HUD.class.getResource("/images/HUD/lifeBar.gif")).getImage();
 
@@ -71,7 +71,7 @@ public class LifeBar implements IBar {
 	/**
 	 * @return l'instance unique de LifeBar
 	 */
-	public static IBar getInstance() {
+	public static HUDElement getInstance() {
 		return instance;
 	}
 

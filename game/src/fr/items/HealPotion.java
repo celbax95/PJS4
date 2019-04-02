@@ -12,8 +12,13 @@ public class HealPotion extends Item {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Image img = new ImageIcon(HealPotion.class.getResource("/images/items/healPotion/healPotion.png"))
-			.getImage().getScaledInstance(120, 120, Image.SCALE_FAST);
+	private static Image img = new ImageIcon(
+			HealPotion.class.getResource("/images/items/healPotion/placeableHealPotion.png")).getImage()
+					.getScaledInstance(120, 120, Image.SCALE_FAST);
+
+	private static Image icon = new ImageIcon(
+			BombUpgrade.class.getResource("/images/items/healPotion/collectableHealPotion.png")).getImage()
+					.getScaledInstance(160, 160, Image.SCALE_FAST);
 
 	private static boolean USE_NOW = false;
 
@@ -23,8 +28,8 @@ public class HealPotion extends Item {
 	}
 
 	@Override
-	public Image getImage() {
-		return img;
+	public Image getIcon() {
+		return icon;
 	}
 
 	@Override

@@ -4,7 +4,7 @@ import fr.itemsApp.Drawable;
 import fr.itemsApp.character.ICharacter;
 import fr.util.point.Point;
 
-public interface IBar extends Drawable {
+public interface HUDElement extends Drawable {
 
 	/**
 	 * Change le ICharacter

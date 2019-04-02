@@ -9,7 +9,7 @@ public interface CollectableItem {
 	/**
 	 * @return l'image de l'objet
 	 */
-	Image getImage();
+	Image getIcon();
 
 	/**
 	 * Utilisation de l'item
