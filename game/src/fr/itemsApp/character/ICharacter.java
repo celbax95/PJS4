@@ -6,6 +6,7 @@ import java.util.List;
 import fr.application.Application;
 import fr.itemsApp.Drawable;
 import fr.itemsApp.Manageable;
+import fr.itemsApp.items.CollectableItem;
 import fr.util.point.Point;
 
 public interface ICharacter extends Drawable, Serializable, Manageable {
@@ -39,6 +40,11 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	 * @return vie du IChraracter
 	 */
 	double getHealth();
+
+	/**
+	 * @return l'item tenu par le joueur
+	 */
+	CollectableItem getItem();
 
 	/**
 	 * @return taille d'explosion standard maximale

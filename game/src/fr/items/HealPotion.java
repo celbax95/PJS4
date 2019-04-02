@@ -23,6 +23,11 @@ public class HealPotion extends Item {
 	}
 
 	@Override
+	public Image getImage() {
+		return img;
+	}
+
+	@Override
 	public void use(Application application) {
 		this.holder.setHealth(this.holder.getHealth() + 60);
 	}

@@ -166,6 +166,11 @@ public abstract class ACharacter implements ICharacter {
 	}
 
 	@Override
+	public CollectableItem getItem() {
+		return this.item;
+	}
+
+	@Override
 	public int getMaxExplosionSize() {
 		return MAX_EXPLOSION_SIZE;
 	}
@@ -377,8 +382,14 @@ public abstract class ACharacter implements ICharacter {
 		return (int) this.bombCoolDown.timeBefore();
 	}
 
+	/**
+	 * Utilise l'item tenu
+	 *
+	 * @param application : application
+	 * @param clickedKeys : touches pressees par l'utilisateur
+	 */
 	private void useItem(Application application, List<Integer> clickedKeys) {
-		if (clickedKeys.contains(KeyEvent.VK_T))
+		if (clickedKeys.contains(KeyEvent.VK_T) && this.item != null)
 			this.item.use(application);
 	}
 

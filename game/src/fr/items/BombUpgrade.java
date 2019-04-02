@@ -23,6 +23,11 @@ public class BombUpgrade extends Item {
 	}
 
 	@Override
+	public Image getImage() {
+		return img;
+	}
+
+	@Override
 	public void use(Application application) {
 		if (this.holder.getExplosionSize() < this.holder.getMaxExplosionSize())
 			this.holder.setExplosionSize(this.holder.getExplosionSize() + 1);
