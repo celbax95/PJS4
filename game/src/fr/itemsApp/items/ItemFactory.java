@@ -3,12 +3,11 @@ package fr.itemsApp.items;
 import java.util.Random;
 
 import fr.items.BombUpgrade;
+import fr.items.HealPotion;
 
 public class ItemFactory {
 
 	private static ItemFactory instance;
-
-	private static int NB_ITEM = 1;
 
 	private static double FREQUENCE = 0.3;
 
@@ -19,15 +18,11 @@ public class ItemFactory {
 	private ItemFactory() {
 	}
 
-	public PlaceableItem create(int type) {
-
-		switch (type % NB_ITEM) {
-		case 0:
+	public PlaceableItem create(double freq) {
+		if (freq < 0)
 			return new BombUpgrade();
-
-		default:
-			return null;
-		}
+		else
+			return new HealPotion();
 	}
 
 	public PlaceableItem create(String type) {
@@ -35,6 +30,8 @@ public class ItemFactory {
 		switch (type.toLowerCase()) {
 		case "bombupgrade":
 			return this.create(0);
+		case "healpotion":
+			return this.create(1);
 
 		default:
 			return null;
@@ -42,7 +39,7 @@ public class ItemFactory {
 	}
 
 	public PlaceableItem createRandom() {
-		return this.create(new Random().nextInt(NB_ITEM));
+		return this.create(new Random().nextDouble());
 	}
 
 	public double getFrequence() {

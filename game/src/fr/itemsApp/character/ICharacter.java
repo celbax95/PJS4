@@ -81,7 +81,7 @@ public interface ICharacter extends Drawable, Serializable, Manageable {
 	 *
 	 * @param health : nouvelle health du ICharacter
 	 */
-	void setHealth(int health);
+	void setHealth(double health);
 
 	/**
 	 * Change l'id du ICharacter

@@ -324,7 +324,7 @@ public abstract class ACharacter implements ICharacter {
 	}
 
 	@Override
-	public void setHealth(int health) {
+	public void setHealth(double health) {
 		this.health = health;
 	}
 
