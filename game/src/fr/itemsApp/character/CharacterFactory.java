@@ -31,6 +31,12 @@ public class CharacterFactory {
 	public ICharacter create(String type) {
 		switch (type.toLowerCase()) {
 		case "red":
+			return new CharacterRed(0, 0, 100, 1400, 500);
+		case "blue":
+			return new CharacterBlue(0, 0, 100, 1400, 500);
+		case "green":
+			return new CharacterGreen(0, 0, 100, 1400, 500);
+		case "yellow":
 			return new CharacterYellow(0, 0, 100, 1400, 500);
 		}
 		return null;

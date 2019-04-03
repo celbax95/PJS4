@@ -42,8 +42,10 @@ public class Application implements Runnable {
 	private Thread myThread;
 
 	/**
-	 * @param width  : Largeur de la fenetre
-	 * @param height : Hauteur de la fenetre
+	 * @param width
+	 *            : Largeur de la fenetre
+	 * @param height
+	 *            : Hauteur de la fenetre
 	 */
 	public Application(int width, int height, String mapName) {
 		this.players = new HashMap<>();
@@ -56,7 +58,7 @@ public class Application implements Runnable {
 		this.myThread = new Thread(this);
 
 		// Chargement de la map depuis le fichier "/maps/1.bmap"
-		this.map = new GameMap("/maps/"+mapName+".bmap");
+		this.map = new GameMap("/maps/" + mapName + ".bmap");
 		this.spawnPlaces = this.map.getSpawnPoints();
 		this.currentSpawnPoint = 0;
 	}
@@ -64,7 +66,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajoute une bombe a la liste des bombes
 	 *
-	 * @param bomb : bombe a ajouter
+	 * @param bomb
+	 *            : bombe a ajouter
 	 */
 	public void addBomb(IBomb bomb) {
 		this.bombs.add(bomb);
@@ -73,7 +76,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajout d'un element Drawable a l'application
 	 *
-	 * @param drawable : Drawable a ajouter
+	 * @param drawable
+	 *            : Drawable a ajouter
 	 */
 	public void addDrawable(Drawable drawable) {
 		this.drawables.add(drawable);
@@ -82,7 +86,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajoute une Explosion
 	 *
-	 * @param explosion : Explosion a ajouter
+	 * @param explosion
+	 *            : Explosion a ajouter
 	 */
 	public void addExplosion(IExplosion explosion) {
 		this.explosions.add(explosion);
@@ -91,7 +96,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajoute un Item
 	 *
-	 * @param item : Item a ajouter
+	 * @param item
+	 *            : Item a ajouter
 	 */
 	public void addItem(PlaceableItem item) {
 		this.items.add(item);
@@ -100,7 +106,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajout d'un element Manageable a l'application
 	 *
-	 * @param manageable : Manageable a ajouter
+	 * @param manageable
+	 *            : Manageable a ajouter
 	 */
 	public void addManageable(Manageable manageable) {
 		this.manageables.add(manageable);
@@ -109,7 +116,8 @@ public class Application implements Runnable {
 	/**
 	 * Ajout d'un joueur a l'application
 	 *
-	 * @param c : Couleur aleatoire du joueur
+	 * @param c
+	 *            : Couleur aleatoire du joueur
 	 * @return : Id du joueur cree
 	 */
 	public void addPlayer(int no) {
@@ -119,7 +127,23 @@ public class Application implements Runnable {
 		Point spawnPlace = this.spawnPlaces.get(this.currentSpawnPoint);
 		this.currentSpawnPoint = (this.currentSpawnPoint + 1) % this.spawnPlaces.size();
 
-		ICharacter character = CharacterFactory.getInstance().create("red");
+		ICharacter character = null;
+		switch (players.size()) {
+		case 0:
+			character = CharacterFactory.getInstance().create("red");
+			break;
+		case 1:
+			character = CharacterFactory.getInstance().create("blue");
+			break;
+		case 2:
+			character = CharacterFactory.getInstance().create("green");
+			break;
+		case 3:
+			character = CharacterFactory.getInstance().create("yellow");
+			break;
+
+		}
+
 		character.setPos(new Point(spawnPlace.x, spawnPlace.y));
 		character.setId(id);
 
@@ -145,13 +169,7 @@ public class Application implements Runnable {
 			this.removeManageable(character);
 		}
 	}
-	
-	/**
-	 * Renvoie le nombre de joueurs en vie
-	 */
-	public int getPlayersNb() {
-		return this.players.size();
-	}
+
 	/**
 	 * @return La liste de toutes les bombes
 	 */
@@ -202,11 +220,24 @@ public class Application implements Runnable {
 		return null;
 	}
 
+	public ArrayList<Integer> getPlayersKeys() {
+		return new ArrayList<Integer>(this.players.keySet());
+	}
+
+	/**
+	 * Renvoie le nombre de joueurs en vie
+	 */
+	public int getPlayersNb() {
+		return this.players.size();
+	}
+
 	/**
 	 * Gere les actions du Joueur
 	 *
-	 * @param id          : Id du joueur
-	 * @param clickedKeys : Touches active du clavier du joueur
+	 * @param id
+	 *            : Id du joueur
+	 * @param clickedKeys
+	 *            : Touches active du clavier du joueur
 	 */
 	public boolean managePlayer(int id, List<Integer> clickedKeys) {
 		ICharacter character = this.players.get(id);
@@ -220,7 +251,8 @@ public class Application implements Runnable {
 	/**
 	 * Supprime une bombe de la liste des bombes
 	 *
-	 * @param bomb : la bombe a supprimer
+	 * @param bomb
+	 *            : la bombe a supprimer
 	 */
 	public void removeBomb(IBomb bomb) {
 		this.bombs.remove(bomb);
@@ -229,7 +261,8 @@ public class Application implements Runnable {
 	/**
 	 * Supprime un Drawable de l'application
 	 *
-	 * @param drawable : Drawable a supprimer
+	 * @param drawable
+	 *            : Drawable a supprimer
 	 */
 	public void removeDrawable(Drawable drawable) {
 		this.drawables.remove(drawable);
@@ -238,7 +271,8 @@ public class Application implements Runnable {
 	/**
 	 * Enleve une explosion de la liste d'explosions
 	 *
-	 * @param explosion : explosion a enlever
+	 * @param explosion
+	 *            : explosion a enlever
 	 */
 	public void removeExplosion(IExplosion explosion) {
 		this.explosions.remove(explosion);
@@ -247,7 +281,8 @@ public class Application implements Runnable {
 	/**
 	 * Enleve un item de la liste d'item
 	 *
-	 * @param item : item a enlever
+	 * @param item
+	 *            : item a enlever
 	 */
 	public void removeItem(PlaceableItem item) {
 		this.items.remove(item);
@@ -256,7 +291,8 @@ public class Application implements Runnable {
 	/**
 	 * Supprime un Manageable de l'application
 	 *
-	 * @param manageable : Manageable a supprimer
+	 * @param manageable
+	 *            : Manageable a supprimer
 	 */
 	public void removeManageable(Manageable manageable) {
 		this.manageables.remove(manageable);
@@ -295,9 +331,5 @@ public class Application implements Runnable {
 
 	public void stop() {
 		this.myThread.interrupt();
-	}
-
-	public ArrayList<Integer> getPlayersKeys() {
-		return new ArrayList<Integer>(this.players.keySet());
 	}
 }
