@@ -531,7 +531,14 @@ public class MenuDisplay implements Menu {
 		} else if (menuPosition == 4) {
 			menuPosition = 6;
 		}
-		if(results.isEmpty()) {
+		if(results == null) {
+			for(int i = 0; i < this.players.size(); i++) {
+				this.playersLabels.get(i).setVisible(true);
+			}
+			this.message.setText("No one has won...");
+			this.message.setVisible(true);
+		}
+		else if(results.isEmpty()) {
 			for(int i = 0; i < this.players.size(); i++) {
 				this.playersLabels.get(i).setVisible(true);
 			}
