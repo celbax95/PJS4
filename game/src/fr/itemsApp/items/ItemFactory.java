@@ -19,7 +19,7 @@ public class ItemFactory {
 	}
 
 	public PlaceableItem create(double freq) {
-		if (freq < 0.7)
+		if (freq < 0.65)
 			return new BombUpgrade();
 		else
 			return new HealPotion();
