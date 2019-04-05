@@ -30,7 +30,7 @@ public class MenuDisplay implements Menu {
 
 	private static MenuDisplay menu;
 
-	private static String TITLE = "TEST PJS4";
+	private static String TITLE = "BOOM";
 	private static int windowSize = 500;
 
 	private static final Color BACKGROUND_COLOR = new Color(50, 54, 57);
@@ -370,9 +370,9 @@ public class MenuDisplay implements Menu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GameLauncher.createServer(TITLE, PORT, nbPlayers, mapsNames.get(mapPosition));
+					GameLauncher.createServer(MenuDisplay.TITLE, PORT, nbPlayers, mapsNames.get(mapPosition));
 					GameLauncher.serverStart();
-					GameLauncher.createClient(IP, PORT, aliasTextField.getText(), MenuDisplay.menu);
+					GameLauncher.createClient(IP, PORT, aliasTextField.getText(), MenuDisplay.TITLE, MenuDisplay.menu);
 					hideComponents();
 					menuPosition = 3;
 					showComponents();
@@ -387,7 +387,7 @@ public class MenuDisplay implements Menu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GameLauncher.createClient(ipTextField.getText(), PORT, aliasTextField.getText(), MenuDisplay.menu);
+					GameLauncher.createClient(ipTextField.getText(), PORT, aliasTextField.getText(), MenuDisplay.TITLE, MenuDisplay.menu);
 					hideComponents();
 					menuPosition = 4;
 					showComponents();

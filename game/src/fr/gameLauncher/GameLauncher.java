@@ -40,8 +40,8 @@ public class GameLauncher {
 	 * @param menu Menu actuellement utilisé
 	 * @throws IOException
 	 */
-	public static void createClient(String ip, int port, String alias, Menu menu) throws IOException {
-		cli = new Client(ip, port, alias, menu);
+	public static void createClient(String ip, int port, String alias, String name, Menu menu) throws IOException {
+		cli = new Client(ip, port, alias, name, menu);
 	}
 
 	/**

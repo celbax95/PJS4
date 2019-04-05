@@ -17,7 +17,7 @@ import fr.server.Player;
 
 public class Client implements Runnable {
 
-	private static final String NAME = "TEST PJS4";
+	private static String NAME;
 	private static final int MARGE_H = 35;
 	private static final int MARGE_T = 2;
 
@@ -32,7 +32,7 @@ public class Client implements Runnable {
 
 	private String alias;
 
-	public Client(String ip, int port, String alias, Menu menu) throws IOException {
+	public Client(String ip, int port, String alias, String name, Menu menu) throws IOException {
 		if(ip.equals("Ip Adress")) {
 			socket = connexion("localhost", port);
 		}
@@ -50,7 +50,7 @@ public class Client implements Runnable {
 		else {
 			this.alias = "Player";
 		}
-
+		NAME = name;
 		this.start();
 	}
 
