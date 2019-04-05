@@ -67,7 +67,7 @@ public class MenuDisplay implements Menu {
 	private ArrayList<JComponent> componentStartList;
 	private ArrayList<JComponent> componentJoinList;
 	private ArrayList<JComponent> componentConnectList;
-	private int menuPosition;
+	private String menuPosition;
 	private int nbPlayers;
 	private ArrayList<Player> players;
 	private int mapPosition;
@@ -81,7 +81,7 @@ public class MenuDisplay implements Menu {
 	/**
 	 * R�cup�re l'instance unique du menu
 	 */
-	public static Menu getInstance() {
+	public static MenuDisplay getInstance() {
 		if (MenuDisplay.menu == null) {
 			MenuDisplay.menu = new MenuDisplay();
 			return MenuDisplay.menu;
@@ -105,7 +105,7 @@ public class MenuDisplay implements Menu {
 		players = new ArrayList<Player>();
 		mapsNames = GameLauncher.getMapsNames();
 		
-		this.menuPosition = 0;
+		this.menuPosition = "menu";
 		this.mapPosition = 0;
 		this.nbPlayers = NB_INIT_PLAYERS;
 		this.sawIpAdress = false;
@@ -246,7 +246,7 @@ public class MenuDisplay implements Menu {
 	 * du menu
 	 */
 	private void hideComponents() {
-		if (menuPosition == 0) {
+		if (menuPosition == "menu") {
 			for (JComponent jc : componentHostList) {
 				jc.setVisible(false);
 			}
@@ -256,25 +256,25 @@ public class MenuDisplay implements Menu {
 			for (JComponent jc : componentStartList) {
 				jc.setVisible(false);
 			}
-		} else if (menuPosition == 1) {
+		} else if (menuPosition == "host") {
 			for (JComponent jc : componentHostList) {
 				jc.setVisible(false);
 			}
-		} else if (menuPosition == 2) {
+		} else if (menuPosition == "join") {
 			for (JComponent jc : componentJoinList) {
 				jc.setVisible(false);
 			}
-		} else if (menuPosition == 3) {
+		} else if (menuPosition == "start") {
 			for (JComponent jc : componentStartList) {
 				jc.setVisible(false);
 			}
-		} else if (menuPosition == 4) {
+		} else if (menuPosition == "connect") {
 			for (JComponent jc : componentConnectList) {
 				jc.setVisible(false);
 			}
-		} else if (menuPosition == 5){
+		} else if (menuPosition == "result1"){
 			
-		} else if (menuPosition == 6){
+		} else if (menuPosition == "result2"){
 			
 		} else {/* ÃƒÂ  faire */ }
 
@@ -293,7 +293,7 @@ public class MenuDisplay implements Menu {
 		this.host.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menuPosition = 1;
+				menuPosition = "host";
 				aliasTextField.setBounds(145, nbPlayersLabel.getY()-(SIZE_BUTTON_Y+SIZE_BUTTON_Y/2), SIZE_BUTTON_X, SIZE_BUTTON_Y);
 				showComponents();
 				search.requestFocusInWindow();
@@ -305,7 +305,7 @@ public class MenuDisplay implements Menu {
 		this.join.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				menuPosition = 2;
+				menuPosition = "join";
 				aliasTextField.setBounds(145, 140 + SIZE_BUTTON_Y * 2, SIZE_BUTTON_X, SIZE_BUTTON_Y);
 				showComponents();
 				connect.requestFocusInWindow();
@@ -319,15 +319,15 @@ public class MenuDisplay implements Menu {
 			public void actionPerformed(ActionEvent e) {
 				hideComponents();
 				switch (menuPosition) {
-				case 1:
+				case "host":
 					nbPlayers = NB_INIT_PLAYERS;
 					nbPlayersLabel.setText(String.valueOf(nbPlayers));
 					aliasTextField.setForeground(Color.gray);
 					aliasTextField.setText("Alias");
-					menuPosition = 0;
+					menuPosition = "menu";
 					break;
-				case 2:
-					menuPosition = 0;
+				case "join":
+					menuPosition = "menu";
 					ipTextField.setForeground(Color.gray);
 					ipTextField.setText("Ip Adress");
 					aliasTextField.setForeground(Color.gray);
@@ -335,32 +335,32 @@ public class MenuDisplay implements Menu {
 					sawIpAdress = false;
 					sawAlias = false;
 					break;
-				case 3:
+				case "start":
 					GameLauncher.clientClose();
 					GameLauncher.serverClose();
 					nbPlayersLabel.setText(String.valueOf(nbPlayers));
 					GameLauncher.updateMenu(new ArrayList<Player>());
-					menuPosition = 1;
+					menuPosition = "host";
 					break;
-				case 4:
+				case "connect":
 					GameLauncher.clientClose();
-					menuPosition = 2;
+					menuPosition = "join";
 					break;
-				case 5:
+				case "result1":
 					for(int i = 0; i < players.size(); i++) {
 						playersLabels.get(i).setVisible(false);
 					}
 					nbPlayersLabel.setText(String.valueOf(nbPlayers));
 					message.setVisible(false);
-					menuPosition = 1;
+					menuPosition = "host";
 					break;
-				case 6:
+				case "result2":
 					for(int i = 0; i < players.size(); i++) {
 						playersLabels.get(i).setVisible(false);
 					}
 					message.setVisible(false);
 					connect.requestFocusInWindow();
-					menuPosition = 2;
+					menuPosition = "join";
 					break;
 				}
 				showComponents();
@@ -374,7 +374,7 @@ public class MenuDisplay implements Menu {
 					GameLauncher.serverStart();
 					GameLauncher.createClient(IP, PORT, aliasTextField.getText(), MenuDisplay.TITLE, MenuDisplay.menu);
 					hideComponents();
-					menuPosition = 3;
+					menuPosition = "start";
 					showComponents();
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -389,7 +389,7 @@ public class MenuDisplay implements Menu {
 				try {
 					GameLauncher.createClient(ipTextField.getText(), PORT, aliasTextField.getText(), MenuDisplay.TITLE, MenuDisplay.menu);
 					hideComponents();
-					menuPosition = 4;
+					menuPosition = "connect";
 					showComponents();
 				} catch (IOException e1) {
 					System.err.println("Impossible de se connecter au serveur");
@@ -412,6 +412,9 @@ public class MenuDisplay implements Menu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				nbPlayers--;
+				if(nbPlayers < NB_MIN_PLAYERS) {
+					nbPlayers++;
+				}
 				nbPlayersLabel.setText(String.valueOf(nbPlayers));
 				if (nbPlayers == NB_MIN_PLAYERS) {
 					decNbPlayers.setVisible(false);
@@ -427,6 +430,9 @@ public class MenuDisplay implements Menu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				nbPlayers++;
+				if(nbPlayers > NB_MAX_PLAYERS) {
+					nbPlayers--;
+				}
 				nbPlayersLabel.setText(String.valueOf(nbPlayers));
 				if (nbPlayers == NB_MAX_PLAYERS) {
 					incNbPlayers.setVisible(false);
@@ -442,6 +448,9 @@ public class MenuDisplay implements Menu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				mapPosition--;
+				if(mapPosition < 0) {
+					mapPosition++;
+				}
 				mapLabel.setText("Map: "+mapsNames.get(mapPosition));
 				if (mapPosition == 0) {
 					mapL.setVisible(false);
@@ -457,6 +466,9 @@ public class MenuDisplay implements Menu {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				mapPosition++;
+				if(mapPosition > mapsNames.size()-1) {
+					mapPosition--;
+				}
 				mapLabel.setText("Map: "+mapsNames.get(mapPosition));
 				if (mapPosition == mapsNames.size()-1) {
 					mapR.setVisible(false);
@@ -526,10 +538,10 @@ public class MenuDisplay implements Menu {
 	@Override
 	public void reset() {
 		start.setVisible(false);
-		if (menuPosition == 3) {
-			menuPosition = 5;
-		} else if (menuPosition == 4) {
-			menuPosition = 6;
+		if (menuPosition == "start") {
+			menuPosition = "result1";
+		} else if (menuPosition == "connect") {
+			menuPosition = "result2";
 		}
 		if(results == null) {
 			for(int i = 0; i < this.players.size(); i++) {
@@ -578,11 +590,11 @@ public class MenuDisplay implements Menu {
 	 * du menu
 	 */
 	private void showComponents() {
-		if (menuPosition == 0) {
+		if (menuPosition == "menu") {
 			host.setVisible(true);
 			join.setVisible(true);
 			back.setVisible(false);
-		} else if (menuPosition == 1) {
+		} else if (menuPosition == "host") {
 			for (JComponent jc : componentHostList) {
 				if (jc == this.decNbPlayers && this.nbPlayers == NB_MIN_PLAYERS) {
 					continue;
@@ -599,15 +611,15 @@ public class MenuDisplay implements Menu {
 				jc.setVisible(true);
 			}
 			GameLauncher.updateMenu(new ArrayList<Player>());
-		} else if (menuPosition == 2) {
+		} else if (menuPosition == "join") {
 			for (JComponent jc : componentJoinList) {
 				jc.setVisible(true);
 			}
-		} else if (menuPosition == 3) {
+		} else if (menuPosition == "start") {
 			for (JComponent jc : componentStartList) {
 				jc.setVisible(true);
 			}
-		} else if (menuPosition == 4) {
+		} else if (menuPosition == "connect") {
 			for (JComponent jc : componentConnectList) {
 				jc.setVisible(true);
 			}
@@ -638,5 +650,117 @@ public class MenuDisplay implements Menu {
 	public void giveResults(ArrayList<Integer> results) {
 		this.results = results;
 		
+	}
+
+	public static String getTITLE() {
+		return TITLE;
+	}
+
+	public static int getWindowSize() {
+		return windowSize;
+	}
+
+	public JFrame getFrame() {
+		return frame;
+	}
+
+	public JPanel getPanel() {
+		return panel;
+	}
+
+	public JLabel getMessage() {
+		return message;
+	}
+
+	public JLabel getNbPlayersLabel() {
+		return nbPlayersLabel;
+	}
+
+	public JLabel getMapLabel() {
+		return mapLabel;
+	}
+
+	public ArrayList<JLabel> getPlayersLabels() {
+		return playersLabels;
+	}
+
+	public JTextField getIpTextField() {
+		return ipTextField;
+	}
+
+	public JTextField getAliasTextField() {
+		return aliasTextField;
+	}
+
+	public JButton getHost() {
+		return host;
+	}
+
+	public JButton getJoin() {
+		return join;
+	}
+
+	public JButton getBack() {
+		return back;
+	}
+
+	public JButton getDecNbPlayers() {
+		return decNbPlayers;
+	}
+
+	public JButton getIncNbPlayers() {
+		return incNbPlayers;
+	}
+
+	public JButton getMapL() {
+		return mapL;
+	}
+
+	public JButton getMapR() {
+		return mapR;
+	}
+
+	public JButton getSearch() {
+		return search;
+	}
+
+	public JButton getStart() {
+		return start;
+	}
+
+	public JButton getConnect() {
+		return connect;
+	}
+
+	public String getMenuPosition() {
+		return menuPosition;
+	}
+
+	public int getNbPlayers() {
+		return nbPlayers;
+	}
+
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+
+	public int getMapPosition() {
+		return mapPosition;
+	}
+
+	public boolean isSawIpAdress() {
+		return sawIpAdress;
+	}
+
+	public boolean isSawAlias() {
+		return sawAlias;
+	}
+
+	public ArrayList<String> getMapsNames() {
+		return mapsNames;
+	}
+
+	public ArrayList<Integer> getResults() {
+		return results;
 	}
 }
